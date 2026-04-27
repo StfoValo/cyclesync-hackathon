@@ -28,7 +28,7 @@ class FleetTelemetryWidget(QWidget):
         # The View Toggle
         self.view_toggle = SegmentedWidget(self)
         self.view_toggle.addItem(routeKey='fleet', text='Live Fleet Telemetry')
-        self.view_toggle.addItem(routeKey='suppliers', text='Battery Supplier Network')
+        self.view_toggle.addItem(routeKey='suppliers', text='Supplier Network')
         self.view_toggle.setCurrentItem('fleet')
 
         top_bar.addWidget(self.view_toggle)
