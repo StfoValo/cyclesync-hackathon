@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse
 import folium
 from models.insurer_models.actuarial_model import ActuarialModel
 from models.insurer_models.fleet_model import FleetModel
+from functools import lru_cache
 
 SERVICE_PROVIDERS = [
     {"name": "Autofficina Sprint", "type": "Officina", "lat": 45.5421, "lon": 9.2014, "region": "Lombardia"},
@@ -32,16 +33,24 @@ actuarial_model = ActuarialModel()
 fleet_model = FleetModel()
 
 @router.get("/api/actuarial/summary")
+@lru_cache(maxsize=10)
 def get_actuarial_summary():
     return actuarial_model.generate_executive_summary(account_id=0)
 
 @router.get("/api/actuarial/deep-dive")
+@lru_cache(maxsize=10)
 def get_demographic_deep_dive():
     return actuarial_model.get_demographic_deep_dive()
 
 @router.get("/api/actuarial/vsi")
+@lru_cache(maxsize=10)
 def get_asset_risk_portfolio():
     return actuarial_model.get_asset_risk_portfolio()
+
+@router.get("/api/actuarial/esg")
+@lru_cache(maxsize=10)
+def get_esg_metrics():
+    return actuarial_model.get_esg_sustainability_metrics()
 
 @router.get("/api/fleet/map", response_class=HTMLResponse)
 def get_fleet_map(view: str = 'fleet'):
