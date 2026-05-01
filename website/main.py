@@ -2,12 +2,15 @@ import os
 import sys
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse # <--- Changed from RedirectResponse
+from fastapi.responses import FileResponse 
 
 # Setup path for models
 current_dir = os.path.dirname(os.path.abspath(__file__))
 cycle_sync_app_dir = os.path.abspath(os.path.join(current_dir, "..", "cycle_sync_app"))
 sys.path.insert(0, cycle_sync_app_dir)
+
+# --- THE FIX: Tell Python to look inside the current 'website' folder for routers ---
+sys.path.insert(0, current_dir)
 
 from routers.insurer_api import router as insurer_router
 from routers.ai_api import router as ai_router
