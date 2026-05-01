@@ -2,13 +2,14 @@ import os
 import json
 from fastapi import APIRouter, Request
 from fastapi.responses import StreamingResponse
-from cache_manager import get_cache
+from models.insurer_models.actuarial_model import ActuarialModel
 from mcp_agent_server.ai_orchestrator import AIOrchestrator
 from models.insurer_models.actuarial_model import ActuarialModel
 from models.insurer_models.fleet_model import FleetModel
 
 router = APIRouter()
 orchestrator = AIOrchestrator()
+actuarial_model = ActuarialModel()
 
 @router.get("/api/ai/orchestrate/{region}")
 async def orchestrate_ai(request: Request, region: str): 
