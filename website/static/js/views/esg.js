@@ -57,7 +57,6 @@ function renderESG(data) {
         maintainAspectRatio: false,
         plugins: {
             legend: { position: 'bottom', labels: { color: '#cbd5e1', padding: 20 } },
-            datalabels: { display: false }
         }
     };
 

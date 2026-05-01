@@ -1,18 +1,18 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi.responses import StreamingResponse
-from models.insurer_models.actuarial_model import ActuarialModel
+from cache_manager import get_cache
 from mcp_agent_server.ai_orchestrator import AIOrchestrator
 import json
-from models.insurer_models.fleet_model import FleetModel
 
 router = APIRouter()
 orchestrator = AIOrchestrator()
-actuarial_model = ActuarialModel()
 
 @router.get("/api/ai/orchestrate/{region}")
-async def orchestrate_ai(region: str):
+async def orchestrate_ai(request: Request, region: str): # <-- Inject request
+    client_ip = request.client.host
+    print(f"🧠 USER {client_ip} triggered AI Strategy for region: {region}")
     # Fetch portfolio to feed into prompt
-    portfolio = actuarial_model.get_asset_risk_portfolio()
+    portfolio = get_cache('asset_risk_portfolio')
     region_data = next((r for r in portfolio.get("regional", []) if r["region"] == region), None)
     
     payload = json.dumps(region_data) if region_data else f'{{"region": "{region}", "status": "no data"}}'
@@ -38,15 +38,12 @@ def build_reverse_logistics_payload(target_region: str) -> str:
     Merges data from ActuarialModel (Brakes/Tires) and FleetModel (Batteries) 
     to create a hyper-local ESG routing payload for the AI.
     """
-    actuarial_model = ActuarialModel()
-    fleet_model = FleetModel()
-
     # 1. Fetch Actuarial Risk Portfolio (Tires & Brakes)
-    portfolio = actuarial_model.get_asset_risk_portfolio()
+    portfolio = get_cache('asset_risk_portfolio')
     region_actuarial = next((r for r in portfolio.get("regional", []) if r["region"] == target_region), None)
 
     # 2. Fetch BEV Telemetry (Batteries 0-3 months from End-of-Life)
-    bev_analytics = fleet_model.get_bev_regional_analytics(account_id=0)
+    bev_analytics = get_cache('bev_regional_analytics')
     region_bev = next((r for r in bev_analytics if r["region_name"] == target_region), None)
 
     # 3. Handle missing data gracefully

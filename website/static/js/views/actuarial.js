@@ -2,7 +2,23 @@ let cachedSummaryData = null;
 let cachedDemographicsData = null;
 let riskChart, ageChart, genderChart, vehicleChart, behaviorChart, vehicleAgeChart;
 
+let isInitialized = false;
+
 export function initActuarial() {
+    console.log("🚀 [Actuarial] initActuarial called. isInitialized:", isInitialized);
+
+    if (isInitialized) {
+        const regionalCharts = document.getElementById('regional-charts');
+        if (regionalCharts && !regionalCharts.classList.contains('hidden')) {
+            console.log("🔄 [Actuarial] Re-rendering Regional Charts from main tab switch.");
+            loadRegionalCharts();
+        } else {
+            console.log("🔄 [Actuarial] Re-rendering Demographic Charts from main tab switch.");
+            loadDemographics();
+        }
+        return;
+    }
+
     const btnViewRegional = document.getElementById('btn-view-regional');
     const btnViewDemographic = document.getElementById('btn-view-demographic');
     const regionalCharts = document.getElementById('regional-charts');
@@ -10,6 +26,7 @@ export function initActuarial() {
 
     if (btnViewRegional && btnViewDemographic && regionalCharts && demographicCharts) {
         btnViewRegional.addEventListener('click', () => {
+            console.log("🖱️ [Actuarial] 'Regional Overview' button clicked.");
             btnViewRegional.classList.add('bg-brand-600', 'text-white', 'shadow');
             btnViewRegional.classList.remove('text-slate-400', 'hover:text-white');
 
@@ -18,16 +35,11 @@ export function initActuarial() {
 
             regionalCharts.classList.remove('hidden');
             demographicCharts.classList.add('hidden');
-            setTimeout(() => {
-                if (typeof window.Chart !== 'undefined') {
-                    for (let id in window.Chart.instances) {
-                        window.Chart.instances[id].resize();
-                    }
-                }
-            }, 50);
+            loadRegionalCharts();
         });
 
         btnViewDemographic.addEventListener('click', () => {
+            console.log("🖱️ [Actuarial] 'Demographic Deep Dive' button clicked.");
             btnViewDemographic.classList.add('bg-brand-600', 'text-white', 'shadow');
             btnViewDemographic.classList.remove('text-slate-400', 'hover:text-white');
 
@@ -36,146 +48,185 @@ export function initActuarial() {
 
             demographicCharts.classList.remove('hidden');
             regionalCharts.classList.add('hidden');
-            setTimeout(() => {
-                if (typeof window.Chart !== 'undefined') {
-                    for (let id in window.Chart.instances) {
-                        window.Chart.instances[id].resize();
-                    }
-                }
-            }, 50);
+            loadDemographics();
         });
-    }
 
-    loadExecutiveSummary();
-    loadDemographics();
+        isInitialized = true;
+        console.log("✅ [Actuarial] Event listeners attached. Loading initial Regional Charts.");
+        loadRegionalCharts();
+    } else {
+        console.warn("⚠️ [Actuarial] Could not find DOM elements! Check your HTML IDs.");
+    }
 }
 
-async function loadExecutiveSummary() {
+// ---------------------------------------------------------
+// REGIONAL CHARTS LOGIC
+// ---------------------------------------------------------
+async function loadRegionalCharts() {
+    console.log("📡 [Actuarial] loadRegionalCharts requested...");
     try {
         if (cachedSummaryData) {
-            renderExecutiveSummary(cachedSummaryData);
+            console.log("⚡ [Actuarial] Serving Regional data from JS cache.");
+            renderRegionalCharts(cachedSummaryData);
             return;
         }
 
-        document.getElementById('kpi-total-fleet').innerText = 'Loading...';
-        document.getElementById('kpi-avg-premium').innerText = 'Loading...';
-        document.getElementById('kpi-discount').innerText = 'Loading...';
-        document.getElementById('kpi-claims-reduction').innerText = 'Loading...';
-
+        console.log("🌐 [Actuarial] Fetching Regional data from API...");
         const res = await fetch('/api/actuarial/summary');
         if (!res.ok) throw new Error("HTTP error " + res.status);
         const data = await res.json();
 
+        console.log("📦 [Actuarial] API Regional Data received:", data);
         cachedSummaryData = data;
-        renderExecutiveSummary(data);
+        renderRegionalCharts(data);
     } catch (error) {
-        console.error("Failed to load executive summary:", error);
+        console.error("❌ [Actuarial] Error loading regional charts:", error);
     }
 }
 
-function renderExecutiveSummary(data) {
+function renderRegionalCharts(data) {
+    console.log("🎨 [Actuarial] Rendering Regional Charts...");
     const kpis = data.kpis;
-    const regional = data.regional_breakdown;
-
     document.getElementById('kpi-total-fleet').innerText = kpis.total_monitored_fleet.toLocaleString();
-    document.getElementById('kpi-avg-premium').innerText = '€' + kpis.average_premium_eur.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('kpi-avg-premium').innerText = '€' + kpis.average_premium_eur.toLocaleString(undefined, { maximumFractionDigits: 0 });
+    document.getElementById('kpi-discount').innerText = kpis.average_discount_pct.toLocaleString(undefined, { maximumFractionDigits: 1 }) + '%';
+    document.getElementById('kpi-claims-reduction').innerText = kpis.claims_reduction_pct.toLocaleString(undefined, { maximumFractionDigits: 1 }) + '%';
 
-    const discountElem = document.getElementById('kpi-discount');
-    discountElem.innerText = kpis.average_discount_pct.toFixed(1) + '%';
-    if (kpis.average_discount_pct < 0) {
-        discountElem.classList.replace('text-emerald-400', 'text-emerald-500');
-    } else {
-        discountElem.classList.replace('text-emerald-400', 'text-red-500');
-    }
+    if (!riskChart) {
+        console.log("🏗️ [Actuarial] Creating NEW riskChart instance.");
+        const regions = data.regional_breakdown.map(r => r.region);
+        const registered = data.regional_breakdown.map(r => r.registered_claims);
+        const projected = data.regional_breakdown.map(r => r.projected_accidents);
 
-    document.getElementById('kpi-claims-reduction').innerText = kpis.claims_reduction_pct.toFixed(1) + '%';
+        Chart.defaults.color = '#aaa';
+        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
 
-    // Render Regional Chart
-    const regions = regional.map(r => r.region);
-    const projected = regional.map(r => r.projected_accidents);
-    const registered = regional.map(r => r.registered_claims);
-
-    Chart.defaults.color = '#aaa';
-    Chart.defaults.borderColor = '#333';
-
-    if (riskChart) riskChart.destroy();
-    riskChart = new Chart(document.getElementById('riskChart'), {
-        type: 'bar',
-        data: {
-            labels: regions,
-            datasets: [
-                { label: 'Registered Claims (Baseline)', data: registered, backgroundColor: 'rgba(120, 120, 120, 0.6)' },
-                { label: 'Projected Claims (Telematics)', data: projected, backgroundColor: 'rgba(226, 185, 59, 0.9)' }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { labels: { color: '#fff' } },
-                datalabels: { display: false }
+        riskChart = new Chart(document.getElementById('riskChart'), {
+            type: 'bar',
+            data: {
+                labels: regions,
+                datasets: [
+                    { label: 'Registered Claims (Baseline)', data: registered, backgroundColor: 'rgba(120, 120, 120, 0.6)' },
+                    { label: 'Projected Claims (Telematics)', data: projected, backgroundColor: 'rgba(226, 185, 59, 0.9)' }
+                ]
             },
-            scales: {
-                y: { grid: { color: '#333' }, ticks: { color: '#aaa' } },
-                x: { grid: { display: false }, ticks: { color: '#aaa' } }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#fff' } },
+                    datalabels: false // <-- Add this line
+                },
+                scales: {
+                    y: { grid: { color: '#333' }, ticks: { color: '#aaa' } },
+                    x: { grid: { display: false }, ticks: { color: '#aaa' } }
+                }
             }
-        }
-    });
+        });
+    } else {
+        console.log("♻️ [Actuarial] Updating EXISTING riskChart instance.");
+        riskChart.update('none');
+    }
 }
 
+// ---------------------------------------------------------
+// DEMOGRAPHICS LOGIC
+// ---------------------------------------------------------
 async function loadDemographics() {
+    console.log("📡 [Actuarial] loadDemographics requested...");
     try {
         if (cachedDemographicsData) {
+            console.log("⚡ [Actuarial] Serving Demographics data from JS cache.");
             renderDemographics(cachedDemographicsData);
             return;
         }
 
+        console.log("🌐 [Actuarial] Fetching Demographics data from API...");
         const res = await fetch('/api/actuarial/deep-dive');
+        if (!res.ok) throw new Error("HTTP error " + res.status);
         const d = await res.json();
 
+        console.log("📦 [Actuarial] API Demographics Data received:", d);
         cachedDemographicsData = d;
         renderDemographics(d);
     } catch (error) {
-        console.error("Failed to load demographics:", error);
+        console.error("❌ [Actuarial] Error loading demographics:", error);
     }
 }
 
 function renderDemographics(d) {
+    console.log("🎨 [Actuarial] Rendering Demographics Charts...");
     Chart.defaults.color = '#aaa';
     Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
 
-    if (ageChart) ageChart.destroy();
-    ageChart = new Chart(document.getElementById('ageChart'), {
-        type: 'bar',
-        data: { labels: Object.keys(d.age_groups), datasets: [{ label: 'Projected Claims', data: Object.values(d.age_groups), backgroundColor: '#4CAF50' }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-    });
+    // 1. Add it to commonOptions
+    const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+            datalabels: false // <-- Add this here
+        }
+    };
 
-    if (genderChart) genderChart.destroy();
-    genderChart = new Chart(document.getElementById('genderChart'), {
-        type: 'doughnut',
-        data: { labels: Object.keys(d.genders), datasets: [{ data: Object.values(d.genders), backgroundColor: ['#2196F3', '#E91E63'], borderWidth: 0 }] },
-        options: { responsive: true, maintainAspectRatio: false, cutout: '70%' }
-    });
+    setTimeout(() => {
+        if (!ageChart) {
+            console.log("🏗️ [Actuarial] Creating NEW ageChart instance.");
+            ageChart = new Chart(document.getElementById('ageChart'), {
+                type: 'bar',
+                data: { labels: Object.keys(d.age_groups), datasets: [{ label: 'Projected Claims', data: Object.values(d.age_groups), backgroundColor: '#4CAF50' }] },
+                options: commonOptions
+            });
+        } else {
+            console.log("♻️ [Actuarial] Updating EXISTING ageChart instance.");
+            ageChart.update('none');
+        }
 
-    if (vehicleChart) vehicleChart.destroy();
-    vehicleChart = new Chart(document.getElementById('vehicleChart'), {
-        type: 'bar',
-        data: { labels: Object.keys(d.vehicle_types), datasets: [{ label: 'Projected Claims', data: Object.values(d.vehicle_types), backgroundColor: '#FF9800' }] },
-        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-    });
+        if (!genderChart) {
+            console.log("🏗️ [Actuarial] Creating NEW genderChart instance.");
+            genderChart = new Chart(document.getElementById('genderChart'), {
+                type: 'doughnut',
+                data: { labels: Object.keys(d.genders), datasets: [{ data: Object.values(d.genders), backgroundColor: ['#2196F3', '#E91E63'], borderWidth: 0 }] },
+                // 2. Add it to genderChart options
+                options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { datalabels: false } }
+            });
+        } else {
+            genderChart.update('none');
+        }
 
-    if (behaviorChart) behaviorChart.destroy();
-    behaviorChart = new Chart(document.getElementById('behaviorChart'), {
-        type: 'bar',
-        data: { labels: Object.keys(d.behaviors), datasets: [{ label: 'Projected Claims', data: Object.values(d.behaviors), backgroundColor: ['#00A67E', '#E2B93B', '#FF5A5A'] }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-    });
+        if (!vehicleChart) {
+            console.log("🏗️ [Actuarial] Creating NEW vehicleChart instance.");
+            vehicleChart = new Chart(document.getElementById('vehicleChart'), {
+                type: 'bar',
+                data: { labels: Object.keys(d.vehicle_types), datasets: [{ label: 'Projected Claims', data: Object.values(d.vehicle_types), backgroundColor: '#FF9800' }] },
+                // 3. Add it to vehicleChart options
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: false } }
+            });
+        } else {
+            vehicleChart.update('none');
+        }
 
-    if (vehicleAgeChart) vehicleAgeChart.destroy();
-    vehicleAgeChart = new Chart(document.getElementById('vehicleAgeChart'), {
-        type: 'bar',
-        data: { labels: Object.keys(d.vehicle_ages), datasets: [{ label: 'Projected Claims', data: Object.values(d.vehicle_ages), backgroundColor: '#9C27B0' }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-    });
+        if (!behaviorChart) {
+            console.log("🏗️ [Actuarial] Creating NEW behaviorChart instance.");
+            behaviorChart = new Chart(document.getElementById('behaviorChart'), {
+                type: 'bar',
+                data: { labels: Object.keys(d.behaviors), datasets: [{ label: 'Projected Claims', data: Object.values(d.behaviors), backgroundColor: ['#00A67E', '#E2B93B', '#FF5A5A'] }] },
+                options: commonOptions
+            });
+        } else {
+            behaviorChart.update('none');
+        }
+
+        if (!vehicleAgeChart) {
+            console.log("🏗️ [Actuarial] Creating NEW vehicleAgeChart instance.");
+            vehicleAgeChart = new Chart(document.getElementById('vehicleAgeChart'), {
+                type: 'bar',
+                data: { labels: Object.keys(d.vehicle_ages), datasets: [{ label: 'Projected Claims', data: Object.values(d.vehicle_ages), backgroundColor: '#9C27B0' }] },
+                options: commonOptions
+            });
+        } else {
+            vehicleAgeChart.update('none');
+        }
+        console.log("✅ [Actuarial] All demographics charts rendered/updated.");
+    }, 50); // 50ms delay
 }
