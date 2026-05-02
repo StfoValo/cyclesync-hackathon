@@ -47,8 +47,13 @@ def get_asset_risk_portfolio():
 def get_fleet_map(view: str = 'fleet'):
     regional_kpis = fleet_model.get_regional_kpis(0)
     
-    fleet_map = folium.Map(tiles='CartoDB dark_matter', zoom_control=False)
-    fleet_map.fit_bounds([[36.0, 6.5], [47.1, 18.5]]) 
+    # FIX 1: Lock the map perfectly onto the center of Italy
+    fleet_map = folium.Map(
+        location=[41.8719, 12.5674], 
+        zoom_start=6, 
+        tiles='CartoDB dark_matter', 
+        zoom_control=False
+    )
     
     css = "<style>.leaflet-tile-pane { filter: brightness(1.2) contrast(0.9); }</style>"
     fleet_map.get_root().header.add_child(folium.Element(css))
@@ -80,19 +85,17 @@ def get_fleet_map(view: str = 'fleet'):
             </div>
             """
             
-            radius_size = max(8, min(45, r['total_cars'] / 35000))
-            
-            bubble_color = "#00A67E" 
+            # FIX 2: Use sharp, intuitive map pointers instead of overlapping bubbles
+            marker_color = "green" 
             if r['risk_high'] > r['risk_safe']:
-                bubble_color = "#FF5A5A" 
+                marker_color = "red" 
             elif r['risk_moderate'] > r['risk_safe']:
-                bubble_color = "#E2B93B" 
+                marker_color = "orange" 
             
-            folium.CircleMarker(
+            folium.Marker(
                 location=[r['center_lat'], r['center_lon']],
-                radius=radius_size,
                 popup=folium.Popup(html_popup, max_width=320),
-                color=bubble_color, fill=True, fill_color=bubble_color, fill_opacity=0.6, weight=2
+                icon=folium.Icon(color=marker_color, icon='car', prefix='fa')
             ).add_to(fleet_map)
             
     elif view == 'suppliers':
