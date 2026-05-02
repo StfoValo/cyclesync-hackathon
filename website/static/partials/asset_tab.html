@@ -1,50 +1,78 @@
-                <header class="mb-8">
-                    <h2 class="text-3xl font-bold text-white tracking-tight mb-2">Predictive Asset Risk</h2>
-                    <p class="text-slate-400">Vehicle State Index (VSI) and component degradation analytics.</p>
-                </header>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="glass-panel rounded-xl p-6 border border-white/5 shadow-lg">
-                        <p class="text-sm text-slate-400 mb-1">Fleet Average VSI Score</p>
-                        <p class="text-3xl font-bold text-white" id="kpi-vsi">0.0/100</p>
-                    </div>
-                    <div class="glass-panel rounded-xl p-6 border border-white/5 shadow-lg">
-                        <p class="text-sm text-slate-400 mb-1">Vehicles in Critical State</p>
-                        <p class="text-3xl font-bold text-white" id="kpi-critical">0</p>
-                    </div>
-                    <div class="glass-panel rounded-xl p-6 border border-white/5 shadow-lg">
-                        <p class="text-sm text-slate-400 mb-1">Projected Hardware Claims</p>
-                        <p class="text-3xl font-bold text-white" id="kpi-hardware-cost">€0.00</p>
-                    </div>
-                </div>
-                
-                <div class="flex flex-col gap-6">
-                    <div class="glass-panel rounded-2xl p-6 h-[500px] flex flex-col border border-white/5">
-                        <h3 class="text-slate-400 text-center font-semibold mb-4 border-b border-white/10 pb-2">Regional Fleet Safety Index (VSI) Breakdown</h3>
-                        <div class="relative flex-1 w-full h-0"><canvas id="vsiRegionChart"></canvas></div>
-                    </div>
-                    
-                    <div class="glass-panel rounded-2xl p-6 h-[500px] flex flex-col border border-white/5">
-                        <h3 class="text-slate-400 text-center font-semibold mb-4 border-b border-white/10 pb-2">Regional Brake Pad Degradation Matrix</h3>
-                        <div class="relative flex-1 w-full h-0"><canvas id="brakeRegionChart"></canvas></div>
-                    </div>
+<header class="mb-6 md:mb-8">
+    <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight mb-1 md:mb-2">Predictive Asset Risk</h2>
+    <p class="text-sm md:text-base text-slate-400">Vehicle State Index (VSI) and component degradation analytics.</p>
+</header>
 
-                    <div class="glass-panel rounded-2xl p-6 h-[500px] flex flex-col border border-white/5">
-                        <h3 class="text-slate-400 text-center font-semibold mb-4 border-b border-white/10 pb-2">Regional Tire Tread Wear Analytics</h3>
-                        <div class="relative flex-1 w-full h-0"><canvas id="tireRegionChart"></canvas></div>
-                    </div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6 mb-6 md:mb-8">
+    <div class="glass-panel rounded-xl p-4 md:p-6 border border-white/5 shadow-lg relative overflow-hidden group">
+        <div
+            class="absolute inset-0 bg-gradient-to-br from-brand-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+        </div>
+        <p class="text-xs md:text-sm text-slate-400 mb-1">Fleet Average VSI Score</p>
+        <p class="text-xl md:text-3xl font-bold text-white" id="kpi-vsi">0.0/100</p>
+    </div>
+    <div class="glass-panel rounded-xl p-4 md:p-6 border border-white/5 shadow-lg relative overflow-hidden group">
+        <div
+            class="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+        </div>
+        <p class="text-xs md:text-sm text-slate-400 mb-1">Vehicles in Critical State</p>
+        <p class="text-xl md:text-3xl font-bold text-white" id="kpi-critical">0</p>
+    </div>
+    <div class="glass-panel rounded-xl p-4 md:p-6 border border-white/5 shadow-lg relative overflow-hidden group">
+        <div
+            class="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+        </div>
+        <p class="text-xs md:text-sm text-slate-400 mb-1">Projected Hardware Claims</p>
+        <p class="text-xl md:text-3xl font-bold text-white" id="kpi-hardware-cost">€0.00</p>
+    </div>
+</div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-[300px] mb-8">
-                        <div class="glass-panel rounded-2xl p-6 flex flex-col border border-white/5">
-                            <h3 class="text-slate-400 text-center font-semibold mb-4 border-b border-white/10 pb-2">Global VSI</h3>
-                            <div class="relative flex-1 w-full h-0"><canvas id="vsiGlobalChart"></canvas></div>
-                        </div>
-                        <div class="glass-panel rounded-2xl p-6 flex flex-col border border-white/5">
-                            <h3 class="text-slate-400 text-center font-semibold mb-4 border-b border-white/10 pb-2">Global Brakes</h3>
-                            <div class="relative flex-1 w-full h-0"><canvas id="brakeGlobalChart"></canvas></div>
-                        </div>
-                        <div class="glass-panel rounded-2xl p-6 flex flex-col border border-white/5">
-                            <h3 class="text-slate-400 text-center font-semibold mb-4 border-b border-white/10 pb-2">Global Tires</h3>
-                            <div class="relative flex-1 w-full h-0"><canvas id="tireGlobalChart"></canvas></div>
-                        </div>
-                    </div>
-                </div>
+<div class="flex flex-col gap-4 md:gap-6">
+    <div
+        class="glass-panel rounded-xl md:rounded-2xl p-4 md:p-6 h-[350px] md:h-[450px] lg:h-[500px] flex flex-col border border-white/5">
+        <h3
+            class="text-slate-400 text-xs md:text-sm text-center font-semibold mb-2 md:mb-4 border-b border-white/10 pb-2 uppercase tracking-wider">
+            Regional Fleet Safety Index (VSI) Breakdown</h3>
+        <div class="relative flex-1 w-full h-0"><canvas id="vsiRegionChart"></canvas></div>
+    </div>
+
+    <div
+        class="glass-panel rounded-xl md:rounded-2xl p-4 md:p-6 h-[350px] md:h-[450px] lg:h-[500px] flex flex-col border border-white/5">
+        <h3
+            class="text-slate-400 text-xs md:text-sm text-center font-semibold mb-2 md:mb-4 border-b border-white/10 pb-2 uppercase tracking-wider">
+            Regional Brake Pad Degradation Matrix</h3>
+        <div class="relative flex-1 w-full h-0"><canvas id="brakeRegionChart"></canvas></div>
+    </div>
+
+    <div
+        class="glass-panel rounded-xl md:rounded-2xl p-4 md:p-6 h-[350px] md:h-[450px] lg:h-[500px] flex flex-col border border-white/5">
+        <h3
+            class="text-slate-400 text-xs md:text-sm text-center font-semibold mb-2 md:mb-4 border-b border-white/10 pb-2 uppercase tracking-wider">
+            Regional Tire Tread Wear Analytics</h3>
+        <div class="relative flex-1 w-full h-0"><canvas id="tireRegionChart"></canvas></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+        <div
+            class="glass-panel rounded-xl md:rounded-2xl p-4 md:p-6 h-[280px] md:h-[300px] flex flex-col border border-white/5">
+            <h3
+                class="text-slate-400 text-xs md:text-sm text-center font-semibold mb-2 md:mb-4 border-b border-white/10 pb-2 uppercase tracking-wider">
+                Global VSI</h3>
+            <div class="relative flex-1 w-full h-0"><canvas id="vsiGlobalChart"></canvas></div>
+        </div>
+        <div
+            class="glass-panel rounded-xl md:rounded-2xl p-4 md:p-6 h-[280px] md:h-[300px] flex flex-col border border-white/5">
+            <h3
+                class="text-slate-400 text-xs md:text-sm text-center font-semibold mb-2 md:mb-4 border-b border-white/10 pb-2 uppercase tracking-wider">
+                Global Brakes</h3>
+            <div class="relative flex-1 w-full h-0"><canvas id="brakeGlobalChart"></canvas></div>
+        </div>
+        <div
+            class="glass-panel rounded-xl md:rounded-2xl p-4 md:p-6 h-[280px] md:h-[300px] flex flex-col border border-white/5">
+            <h3
+                class="text-slate-400 text-xs md:text-sm text-center font-semibold mb-2 md:mb-4 border-b border-white/10 pb-2 uppercase tracking-wider">
+                Global Tires</h3>
+            <div class="relative flex-1 w-full h-0"><canvas id="tireGlobalChart"></canvas></div>
+        </div>
+    </div>
+</div>
