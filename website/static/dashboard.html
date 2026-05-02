@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insurer Dashboard</title>
+    <title>CycleSync Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -13,15 +13,8 @@
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                        }
-                    }
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { brand: { 400: '#5cffff', 500: '#00E5FF', 600: '#00b8cc' } }
                 }
             }
         }
@@ -43,10 +36,18 @@
             transition: all 0.3s ease;
         }
 
+        /* Mobile styling adjustment for active state */
         .nav-item.active {
-            background: rgba(59, 130, 246, 0.15);
-            border-left: 4px solid #3b82f6;
-            color: #60a5fa;
+            background: rgba(0, 229, 255, 0.15);
+            border-bottom: 3px solid #00E5FF;
+            color: #5cffff;
+        }
+
+        @media (min-width: 768px) {
+            .nav-item.active {
+                border-bottom: none;
+                border-left: 4px solid #00E5FF;
+            }
         }
 
         .nav-item:hover:not(.active) {
@@ -73,70 +74,81 @@
                 transform: translateY(0);
             }
         }
+
+        /* Hide scrollbar for mobile horizontal nav */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
 
-<body class="h-screen w-screen overflow-hidden flex bg-slate-900 text-slate-100">
+<body class="h-screen w-screen overflow-hidden flex flex-col md:flex-row bg-slate-900 text-slate-100">
 
-    <!-- Sidebar -->
-    <aside class="w-72 glass-panel h-full flex flex-col z-20 shadow-2xl relative">
-        <div class="p-6 flex items-center gap-3 border-b border-white/5">
-            <div
-                class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-indigo-600 flex items-center justify-center font-bold text-white shadow-lg shadow-brand-500/30">
-                C</div>
-            <h1
-                class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
-                CycleSync</h1>
+    <aside class="w-full md:w-72 glass-panel flex flex-col z-20 shadow-2xl relative shrink-0">
+
+        <div
+            class="p-4 md:p-6 flex items-center justify-between md:justify-start gap-3 border-b border-white/5 shrink-0">
+            <img src="/static/cyclesync_logo.png" alt="CycleSync Logo" class="h-8 md:h-10 w-auto">
+
+            <div class="md:hidden w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center">
+                <span class="text-xs font-bold text-white">OA</span>
+            </div>
         </div>
 
-        <nav class="flex-1 py-6 flex flex-col gap-2">
+        <nav
+            class="flex-1 py-2 md:py-6 flex flex-row md:flex-col gap-1 overflow-x-auto overflow-y-hidden md:overflow-visible no-scrollbar px-2 md:px-0">
             <button data-target="telemetry-view"
-                class="nav-item active w-full text-left px-6 py-3 font-medium text-slate-300 flex items-center gap-3">
+                class="nav-item active flex-shrink-0 whitespace-nowrap text-sm md:text-base w-auto md:w-full text-left px-4 py-3 md:px-6 md:py-3 font-medium text-slate-300 flex items-center gap-2 md:gap-3 rounded-lg md:rounded-none">
                 <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7">
                     </path>
                 </svg>
-                Live Fleet Telemetry
+                Fleet Telemetry
             </button>
             <button data-target="executive-view"
-                class="nav-item w-full text-left px-6 py-3 font-medium text-slate-300 flex items-center gap-3">
+                class="nav-item flex-shrink-0 whitespace-nowrap text-sm md:text-base w-auto md:w-full text-left px-4 py-3 md:px-6 md:py-3 font-medium text-slate-300 flex items-center gap-2 md:gap-3 rounded-lg md:rounded-none">
                 <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
                     </path>
                 </svg>
-                Executive Risk Summary
+                Risk Summary
             </button>
             <button data-target="asset-view"
-                class="nav-item w-full text-left px-6 py-3 font-medium text-slate-300 flex items-center gap-3">
+                class="nav-item flex-shrink-0 whitespace-nowrap text-sm md:text-base w-auto md:w-full text-left px-4 py-3 md:px-6 md:py-3 font-medium text-slate-300 flex items-center gap-2 md:gap-3 rounded-lg md:rounded-none">
                 <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
                     </path>
                 </svg>
-                Predictive Asset Risk
+                Asset Risk
             </button>
             <button data-target="ai-view"
-                class="nav-item w-full text-left px-6 py-3 font-medium text-slate-300 flex items-center gap-3">
+                class="nav-item flex-shrink-0 whitespace-nowrap text-sm md:text-base w-auto md:w-full text-left px-4 py-3 md:px-6 md:py-3 font-medium text-slate-300 flex items-center gap-2 md:gap-3 rounded-lg md:rounded-none">
                 <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                 </svg>
-                AI Routing Directive
+                AI Routing
             </button>
             <button data-target="esg-view"
-                class="nav-item w-full text-left px-6 py-3 font-medium text-slate-300 flex items-center gap-3">
+                class="nav-item flex-shrink-0 whitespace-nowrap text-sm md:text-base w-auto md:w-full text-left px-4 py-3 md:px-6 md:py-3 font-medium text-slate-300 flex items-center gap-2 md:gap-3 rounded-lg md:rounded-none">
                 <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
                     </path>
                 </svg>
-                ESG & Circular Economy
+                ESG & Circular
             </button>
         </nav>
 
-        <div class="p-6 border-t border-white/5">
+        <div class="hidden md:block p-6 border-t border-white/5 mt-auto">
             <div class="flex items-center gap-3">
                 <div
                     class="w-10 h-10 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center">
@@ -153,28 +165,17 @@
         </div>
     </aside>
 
-    <!-- Main Content -->
     <main class="flex-1 h-full overflow-y-auto bg-slate-900 relative">
-        <!-- Subtle background glow -->
         <div
             class="absolute top-0 left-0 w-full h-96 bg-brand-600/10 blur-3xl -z-10 rounded-b-[100px] pointer-events-none">
         </div>
 
-        <div class="p-8 max-w-7xl mx-auto h-full">
+        <div class="p-4 md:p-8 max-w-7xl mx-auto h-full">
 
-            <!-- Live Fleet Telemetry View -->
             <div id="telemetry-view" class="view-section active"></div>
-
-            <!-- Executive Risk Summary View -->
             <div id="executive-view" class="view-section"></div>
-
-            <!-- Predictive Asset Risk View -->
             <div id="asset-view" class="view-section"></div>
-
-            <!-- AI Routing Directive View -->
             <div id="ai-view" class="view-section"></div>
-
-            <!-- ESG & Circular Economy View -->
             <div id="esg-view" class="view-section"></div>
 
         </div>
