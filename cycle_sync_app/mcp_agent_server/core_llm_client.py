@@ -22,18 +22,20 @@ class CoreLLMClient:
         # Path to our Shadow Cache file
         self.cache_file_path = os.path.join(os.path.dirname(__file__), "fallback_responses.json")
 
-    def stream_inference(self, system_instruction: str, user_prompt: str, region: str = "default"):
+    def stream_inference(self, system_instruction: str, user_prompt: str, region: str = "default", lang: str = "en"):
+        # --- FIX 1: Enforce the language instruction directly on the LLM System Prompt ---
+        language_command = "Italian" if lang == "it" else "English"
+        system_instruction += f"\n\nCRITICAL INSTRUCTION: You MUST generate your entire response in {language_command}."
+        
+        # --- FIX 2: Make the Cache key language-aware (e.g., Abruzzo_it) ---
+        cache_key = f"{region}_{lang}"
+        
         full_prompt = f"SYSTEM INSTRUCTION:\n{system_instruction}\n\nUSER PAYLOAD:\n{user_prompt}"
         prompt_type = "logistics" if "Reverse Logistics" in system_instruction else "campaign"
 
-        # ==========================================
-        # TIER 1: GROQ (LLAMA 3.1)
-        # ==========================================
         if self.groq_client:
             try:
-                print(f"[LLM Router] Attempting Tier 1: Groq Fallback for {region} (8.0s timeout)...")
-                
-                # --- FIX: Updated to the new supported Llama 3.1 model and enforced 8.0s timeout ---
+                print(f"[LLM Router] Attempting Tier 1: Groq Fallback for {region} ({lang}) (8.0s timeout)...")
                 completion = self.groq_client.chat.completions.create(
                     model="llama-3.1-8b-instant",
                     messages=[
@@ -51,23 +53,17 @@ class CoreLLMClient:
                         full_text_accumulator += content
                         yield content
                 
-                self._save_regional_fallback(prompt_type, region, full_text_accumulator)
+                # Save using the language-aware cache key
+                self._save_regional_fallback(prompt_type, cache_key, full_text_accumulator)
                 return 
                 
             except Exception as e:
-                print(f"[LLM Router] ⚠️ Groq failed or timed out: {str(e)}")
+                print(f"[LLM Router] ⚠️ Groq failed: {str(e)}")
         
-        # ==========================================
-        # TIER 2: GOOGLE GEMINI
-        # ==========================================
         try:
-            print(f"[LLM Router] Attempting Tier 2: Gemini for {region} (3.0s timeout)...")
-            
-            # --- FIX: Enforcing the 8.0s timeout ---
+            print(f"[LLM Router] Attempting Tier 2: Gemini for {region} ({lang}) (10.0s timeout)...")
             response = self.gemini_model.generate_content(
-                full_prompt, 
-                stream=True,
-                request_options={"timeout": 3.0} 
+                full_prompt, stream=True, request_options={"timeout": 10.0} 
             )
             
             full_text_accumulator = ""
@@ -76,22 +72,18 @@ class CoreLLMClient:
                     full_text_accumulator += chunk.text
                     yield chunk.text
             
-            self._save_regional_fallback(prompt_type, region, full_text_accumulator)
+            # Save using the language-aware cache key
+            self._save_regional_fallback(prompt_type, cache_key, full_text_accumulator)
             return 
             
         except Exception as e:
-            print(f"[LLM Router] ⚠️ Gemini failed or timed out: {str(e)}")
+            print(f"[LLM Router] ⚠️ Gemini failed: {str(e)}")
 
-        
-
-        # ==========================================
-        # TIER 3: REGION-AWARE LOCAL CACHE
-        # ==========================================
-        print(f"[LLM Router] 🛑 All APIs failed. Engaging Tier 3 Local Cache for {region}...")
-        
+        print(f"[LLM Router] 🛑 Engaging Tier 3 Local Cache for {cache_key}...")
         time.sleep(0.8) 
         
-        cached_response = self._get_regional_fallback(prompt_type, region)
+        # Retrieve using the language-aware cache key
+        cached_response = self._get_regional_fallback(prompt_type, cache_key)
             
         words = cached_response.split(" ")
         for word in words:

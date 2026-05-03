@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadView(targetId) {
         const section = document.getElementById(targetId);
         if (!section) return;
-        
+
         // Hide all
         viewSections.forEach(sec => sec.classList.remove('active'));
         // Show target
@@ -32,23 +32,28 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const config = viewModules[targetId];
                 if (!config) return;
-                
+
                 const response = await fetch(config.path);
                 if (!response.ok) throw new Error("Failed to load partial");
                 const html = await response.text();
                 section.innerHTML = html;
-                
+
+                // THE FIX: Instantly translate the newly injected HTML!
+                if (window.setLanguage) {
+                    window.setLanguage(localStorage.getItem('cyclesync_lang') || 'en');
+                }
+
                 if (config.init) {
                     config.init();
                 }
-                
-                
+
+
             } catch (err) {
                 loadedViews.delete(targetId); // Revert if failed
                 console.error(`Error loading view ${targetId}:`, err);
             }
         }
-        
+
         // Force resize explicitly to prevent window event overload
         setTimeout(() => {
             if (typeof window.Chart !== 'undefined') {
@@ -63,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         item.addEventListener('click', (e) => {
             navItems.forEach(nav => nav.classList.remove('active'));
             e.currentTarget.classList.add('active');
-            
+
             const targetId = e.currentTarget.getAttribute('data-target');
             loadView(targetId);
         });
@@ -74,6 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (activeItem) {
         loadView(activeItem.getAttribute('data-target'));
     }
-    
+
     console.log("CycleSync Frontend Shell Initialized.");
 });

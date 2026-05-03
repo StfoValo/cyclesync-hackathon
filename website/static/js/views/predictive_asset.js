@@ -21,6 +21,18 @@ export function initPredictiveAsset() {
     loadVSIDashboard();
 }
 
+const getT = (key) => window.translations[localStorage.getItem('cyclesync_lang') || 'en'][key] || key;
+
+window.addEventListener('languageChanged', () => {
+    if (vsiRegChart) { vsiRegChart.destroy(); vsiRegChart = null; }
+    if (brkRegChart) { brkRegChart.destroy(); brkRegChart = null; }
+    if (tirRegChart) { tirRegChart.destroy(); tirRegChart = null; }
+    if (vsiGlbChart) { vsiGlbChart.destroy(); vsiGlbChart = null; }
+    if (brkGlbChart) { brkGlbChart.destroy(); brkGlbChart = null; }
+    if (tirGlbChart) { tirGlbChart.destroy(); tirGlbChart = null; }
+    if (isVsiInitialized) loadVSIDashboard();
+});
+
 async function loadVSIDashboard() {
     console.log("📡 [Predictive Asset] loadVSIDashboard requested...");
     try {
@@ -90,9 +102,9 @@ async function loadVSIDashboard() {
             vsiRegChart = new Chart(document.getElementById('vsiRegionChart'), {
                 type: 'bar', data: {
                     labels: regions, datasets: [
-                        { label: 'Safe', data: vsiS, backgroundColor: '#00A67E' },
-                        { label: 'Warning', data: vsiW, backgroundColor: '#E2B93B' },
-                        { label: 'Critical', data: vsiC, backgroundColor: '#FF5A5A' }]
+                        { label: getT('chart-safe'), data: vsiS, backgroundColor: '#00A67E' },
+                        { label: getT('chart-warn'), data: vsiW, backgroundColor: '#E2B93B' },
+                        { label: getT('chart-crit'), data: vsiC, backgroundColor: '#FF5A5A' }]
                 }, options: commonStackOptions
             });
         }
@@ -101,9 +113,9 @@ async function loadVSIDashboard() {
             brkRegChart = new Chart(document.getElementById('brakeRegionChart'), {
                 type: 'bar', data: {
                     labels: regions, datasets: [
-                        { label: 'Safe (>6mm)', data: brkS, backgroundColor: '#00A67E' },
-                        { label: 'Warning (3-6mm)', data: brkW, backgroundColor: '#E2B93B' },
-                        { label: 'Critical (<3mm)', data: brkC, backgroundColor: '#FF5A5A' }]
+                        { label: getT('chart-safe-b'), data: brkS, backgroundColor: '#00A67E' },
+                        { label: getT('chart-warn-b'), data: brkW, backgroundColor: '#E2B93B' },
+                        { label: getT('chart-crit-b'), data: brkC, backgroundColor: '#FF5A5A' }]
                 }, options: commonStackOptions
             });
         }
@@ -112,9 +124,9 @@ async function loadVSIDashboard() {
             tirRegChart = new Chart(document.getElementById('tireRegionChart'), {
                 type: 'bar', data: {
                     labels: regions, datasets: [
-                        { label: 'Safe (>4mm)', data: tirS, backgroundColor: '#00A67E' },
-                        { label: 'Warning (2-4mm)', data: tirW, backgroundColor: '#E2B93B' },
-                        { label: 'Critical (<2mm)', data: tirC, backgroundColor: '#FF5A5A' }]
+                        { label: getT('chart-safe-t'), data: tirS, backgroundColor: '#00A67E' },
+                        { label: getT('chart-warn-t'), data: tirW, backgroundColor: '#E2B93B' },
+                        { label: getT('chart-crit-t'), data: tirC, backgroundColor: '#FF5A5A' }]
                 }, options: commonStackOptions
             });
         }
@@ -132,15 +144,15 @@ async function loadVSIDashboard() {
         };
 
         if (!vsiGlbChart) {
-            vsiGlbChart = new Chart(document.getElementById('vsiGlobalChart'), { type: 'doughnut', data: { labels: ['Safe', 'Warning', 'Critical'], datasets: [{ data: gVsi, backgroundColor: ['#00A67E', '#E2B93B', '#FF5A5A'], borderWidth: 0 }] }, options: dOptions });
+            vsiGlbChart = new Chart(document.getElementById('vsiGlobalChart'), { type: 'doughnut', data: { labels: [getT('chart-safe'), getT('chart-warn'), getT('chart-crit')], datasets: [{ data: gVsi, backgroundColor: ['#00A67E', '#E2B93B', '#FF5A5A'], borderWidth: 0 }] }, options: dOptions });
         }
 
         if (!brkGlbChart) {
-            brkGlbChart = new Chart(document.getElementById('brakeGlobalChart'), { type: 'doughnut', data: { labels: ['Safe', 'Warning', 'Critical'], datasets: [{ data: gBrk, backgroundColor: ['#00A67E', '#E2B93B', '#FF5A5A'], borderWidth: 0 }] }, options: dOptions });
+            brkGlbChart = new Chart(document.getElementById('brakeGlobalChart'), { type: 'doughnut', data: { labels: [getT('chart-safe'), getT('chart-warn'), getT('chart-crit')], datasets: [{ data: gBrk, backgroundColor: ['#00A67E', '#E2B93B', '#FF5A5A'], borderWidth: 0 }] }, options: dOptions });
         }
 
         if (!tirGlbChart) {
-            tirGlbChart = new Chart(document.getElementById('tireGlobalChart'), { type: 'doughnut', data: { labels: ['Safe', 'Warning', 'Critical'], datasets: [{ data: gTir, backgroundColor: ['#00A67E', '#E2B93B', '#FF5A5A'], borderWidth: 0 }] }, options: dOptions });
+            tirGlbChart = new Chart(document.getElementById('tireGlobalChart'), { type: 'doughnut', data: { labels: [getT('chart-safe'), getT('chart-warn'), getT('chart-crit')], datasets: [{ data: gTir, backgroundColor: ['#00A67E', '#E2B93B', '#FF5A5A'], borderWidth: 0 }] }, options: dOptions });
         }
 
         console.log("✅ [Predictive Asset] All charts successfully rendered.");

@@ -1,14 +1,14 @@
 <header class="mb-6 md:mb-8">
-    <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight mb-1 md:mb-2">AI Routing Directive</h2>
-    <p class="text-sm md:text-base text-slate-400">LLM-powered strategic intelligence and policy recommendations.</p>
+    <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight mb-1 md:mb-2"><span data-i18n="ai-title"><span data-i18n="ai-title">AI Routing Directive</span></span></h2>
+    <p class="text-sm md:text-base text-slate-400"><span data-i18n="ai-subtitle"><span data-i18n="ai-subtitle">LLM-powered strategic intelligence and policy recommendations.</span></span></p>
 </header>
 
 <div class="glass-panel rounded-xl md:rounded-2xl p-4 md:p-6 min-h-[500px] flex flex-col border border-white/5">
 
     <div
         class="mb-6 flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-4 bg-slate-800/50 p-3 md:p-4 rounded-xl border border-white/5">
-        <label class="text-slate-300 font-medium whitespace-nowrap text-sm md:text-base">📍 Select Target
-            Region:</label>
+        <label class="text-slate-300 font-medium whitespace-nowrap text-sm md:text-base"><span data-i18n="ai-sel-region"><span data-i18n="ai-sel-region">📍 Select Target
+            Region:</span></span></label>
 
         <select id="region-selector"
             class="w-full md:w-auto flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 md:px-4 py-2 md:py-2.5 text-sm md:text-base text-white focus:outline-none focus:border-brand-500 transition-colors">
@@ -40,7 +40,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z">
                 </path>
             </svg>
-            Generate Strategy
+            <span data-i18n="ai-btn-gen"><span data-i18n="ai-btn-gen">Generate Strategy</span></span>
         </button>
     </div>
 
@@ -80,42 +80,42 @@
                                         d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                                 </svg>
                             </div>
-                            <span class="text-white text-sm font-semibold tracking-wide">Telematics AI</span>
+                            <span class="text-white text-sm font-semibold tracking-wide"><span data-i18n="ai-term-title"><span data-i18n="ai-term-title">Telematics AI</span></span></span>
                         </div>
-                        <span class="text-slate-300 text-xs">Now</span>
+                        <span class="text-slate-300 text-xs"><span data-i18n="ai-term-now"><span data-i18n="ai-term-now">Now</span></span></span>
                     </div>
                     <div class="p-4 flex-1 overflow-hidden flex flex-col">
                         <div id="ai-terminal"
                             class="text-white text-xs md:text-sm leading-relaxed overflow-y-auto flex-1 whitespace-pre-wrap pr-1">
-                            Awaiting actuarial input...</div>
+                            <span data-i18n="ai-term-wait"><span data-i18n="ai-term-wait">Awaiting actuarial input...</span></span></div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="w-full lg:flex-[1.2] flex flex-col justify-center gap-4 md:gap-6 mt-6 lg:mt-0">
-            <h3 class="text-lg md:text-xl font-bold text-white mb-2 text-center lg:text-left">📈 Post-Dispatch
-                Conversion Funnel</h3>
+            <h3 class="text-lg md:text-xl font-bold text-white mb-2 text-center lg:text-left"><span data-i18n="ai-funnel-title"><span data-i18n="ai-funnel-title">📈 Post-Dispatch
+                Conversion Funnel</span></span></h3>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                 <div
                     class="glass-panel rounded-xl p-4 md:p-6 border border-white/5 shadow-lg flex flex-col gap-1 md:gap-2">
-                    <p class="text-slate-300 font-medium text-xs md:text-sm">Total Devices Targeted</p>
+                    <p class="text-slate-300 font-medium text-xs md:text-sm"><span data-i18n="ai-kpi-target"><span data-i18n="ai-kpi-target">Total Devices Targeted</span></span></p>
                     <p class="text-2xl md:text-3xl font-bold text-[#00A67E]" id="ai-kpi-targeted">---</p>
                 </div>
                 <div
                     class="glass-panel rounded-xl p-4 md:p-6 border border-white/5 shadow-lg flex flex-col gap-1 md:gap-2">
-                    <p class="text-slate-300 font-medium text-xs md:text-sm">Notification Open Rate</p>
+                    <p class="text-slate-300 font-medium text-xs md:text-sm"><span data-i18n="ai-kpi-open"><span data-i18n="ai-kpi-open">Notification Open Rate</span></span></p>
                     <p class="text-2xl md:text-3xl font-bold text-[#00A67E]" id="ai-kpi-opened">---</p>
                 </div>
                 <div
                     class="glass-panel rounded-xl p-4 md:p-6 border border-white/5 shadow-lg flex flex-col gap-1 md:gap-2">
-                    <p class="text-slate-300 font-medium text-xs md:text-sm">Repairs Booked (Network)</p>
+                    <p class="text-slate-300 font-medium text-xs md:text-sm"><span data-i18n="ai-kpi-booked"><span data-i18n="ai-kpi-booked">Repairs Booked (Network)</span></span></p>
                     <p class="text-2xl md:text-3xl font-bold text-[#00A67E]" id="ai-kpi-booked">---</p>
                 </div>
                 <div
                     class="glass-panel rounded-xl p-4 md:p-6 border border-white/5 shadow-lg flex flex-col gap-1 md:gap-2">
-                    <p class="text-slate-300 font-medium text-xs md:text-sm">Est. Claims Prevented (ROI)</p>
+                    <p class="text-slate-300 font-medium text-xs md:text-sm"><span data-i18n="ai-kpi-roi"><span data-i18n="ai-kpi-roi">Est. Claims Prevented (ROI)</span></span></p>
                     <p class="text-2xl md:text-3xl font-bold text-[#00A67E]" id="ai-kpi-roi">---</p>
                 </div>
             </div>

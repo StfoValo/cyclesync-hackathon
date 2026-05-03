@@ -1,14 +1,14 @@
 <header class="mb-6 md:mb-8 flex flex-col md:flex-row md:justify-between md:items-end gap-4">
     <div>
-        <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight mb-1 md:mb-2">Executive Risk Summary</h2>
-        <p class="text-sm md:text-base text-slate-400">Actuarial financial projections and demographic deep dives.</p>
+        <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight mb-1 md:mb-2"><span data-i18n="exec-title"><span data-i18n="exec-title">Executive Risk Summary</span></span></h2>
+        <p class="text-sm md:text-base text-slate-400"><span data-i18n="exec-subtitle"><span data-i18n="exec-subtitle">Actuarial financial projections and demographic deep dives.</span></span></p>
     </div>
     <div class="flex bg-slate-800/80 backdrop-blur-sm rounded-lg p-1 border border-white/10 w-full md:w-auto">
         <button id="btn-view-regional"
-            class="flex-1 md:flex-none px-3 md:px-5 py-2 md:py-2.5 rounded-md text-xs md:text-sm font-medium bg-brand-600 text-white shadow-lg transition-all whitespace-nowrap">Regional
-            Overview</button>
+            class="flex-1 md:flex-none px-3 md:px-5 py-2 md:py-2.5 rounded-md text-xs md:text-sm font-medium bg-brand-600 text-white shadow-lg transition-all whitespace-nowrap"><span data-i18n="exec-btn-regional"><span data-i18n="exec-btn-regional">Regional
+            Overview</span></span></button>
         <button id="btn-view-demographic"
-            class="flex-1 md:flex-none px-3 md:px-5 py-2 md:py-2.5 rounded-md text-xs md:text-sm font-medium text-slate-400 hover:text-white transition-all whitespace-nowrap">Demographics</button>
+            class="flex-1 md:flex-none px-3 md:px-5 py-2 md:py-2.5 rounded-md text-xs md:text-sm font-medium text-slate-400 hover:text-white transition-all whitespace-nowrap"><span data-i18n="exec-btn-demo"><span data-i18n="exec-btn-demo">Demographics</span></span></button>
     </div>
 </header>
 
@@ -17,28 +17,28 @@
         <div
             class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
         </div>
-        <p class="text-xs md:text-sm text-slate-400 mb-1">Total Monitored Fleet</p>
+        <p class="text-xs md:text-sm text-slate-400 mb-1"><span data-i18n="exec-kpi-total"><span data-i18n="exec-kpi-total">Total Monitored Fleet</span></span></p>
         <p class="text-xl md:text-3xl font-bold text-white" id="kpi-total-fleet">--</p>
     </div>
     <div class="glass-panel rounded-xl p-4 md:p-6 border border-white/5 shadow-lg relative overflow-hidden group">
         <div
             class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
         </div>
-        <p class="text-xs md:text-sm text-slate-400 mb-1">Avg Premium (EUR)</p>
+        <p class="text-xs md:text-sm text-slate-400 mb-1"><span data-i18n="exec-kpi-avg"><span data-i18n="exec-kpi-avg">Avg Premium (EUR)</span></span></p>
         <p class="text-xl md:text-3xl font-bold text-white" id="kpi-avg-premium">--</p>
     </div>
     <div class="glass-panel rounded-xl p-4 md:p-6 border border-white/5 shadow-lg relative overflow-hidden group">
         <div
             class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
         </div>
-        <p class="text-xs md:text-sm text-slate-400 mb-1">Telematics Discount</p>
+        <p class="text-xs md:text-sm text-slate-400 mb-1"><span data-i18n="exec-kpi-disc"><span data-i18n="exec-kpi-disc">Telematics Discount</span></span></p>
         <p class="text-xl md:text-3xl font-bold text-emerald-400" id="kpi-discount">--</p>
     </div>
     <div class="glass-panel rounded-xl p-4 md:p-6 border border-white/5 shadow-lg relative overflow-hidden group">
         <div
             class="absolute inset-0 bg-gradient-to-br from-brand-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
         </div>
-        <p class="text-xs md:text-sm text-slate-400 mb-1">Claims Reduction</p>
+        <p class="text-xs md:text-sm text-slate-400 mb-1"><span data-i18n="exec-kpi-claims"><span data-i18n="exec-kpi-claims">Claims Reduction</span></span></p>
         <p class="text-xl md:text-3xl font-bold text-brand-400" id="kpi-claims-reduction">--</p>
     </div>
 </div>
@@ -56,7 +56,7 @@
                 class="glass-panel rounded-xl p-4 md:p-5 flex flex-col h-[280px] md:h-[320px] bg-slate-800/40 border border-white/5">
                 <h3
                     class="text-slate-400 text-xs md:text-sm text-center mb-2 md:mb-4 font-semibold uppercase tracking-wider">
-                    Claims by Driver Age Group</h3>
+                    <span data-i18n="exec-chart-age"><span data-i18n="exec-chart-age">Claims by Driver Age Group</span></span></h3>
                 <div class="relative flex-1 w-full min-h-[200px]">
                     <canvas id="ageChart"></canvas>
                 </div>
@@ -66,7 +66,7 @@
                 class="glass-panel rounded-xl p-4 md:p-5 flex flex-col h-[280px] md:h-[320px] bg-slate-800/40 border border-white/5">
                 <h3
                     class="text-slate-400 text-xs md:text-sm text-center mb-2 md:mb-4 font-semibold uppercase tracking-wider">
-                    Claims by Gender</h3>
+                    <span data-i18n="exec-chart-gender"><span data-i18n="exec-chart-gender">Claims by Gender</span></span></h3>
                 <div class="relative flex-1 w-full min-h-[200px]">
                     <canvas id="genderChart"></canvas>
                 </div>
@@ -76,7 +76,7 @@
                 class="glass-panel rounded-xl p-4 md:p-5 flex flex-col h-[280px] md:h-[320px] bg-slate-800/40 border border-white/5">
                 <h3
                     class="text-slate-400 text-xs md:text-sm text-center mb-2 md:mb-4 font-semibold uppercase tracking-wider">
-                    Claims by Vehicle Category</h3>
+                    <span data-i18n="exec-chart-vehicle"><span data-i18n="exec-chart-vehicle">Claims by Vehicle Category</span></span></h3>
                 <div class="relative flex-1 w-full min-h-[200px]">
                     <canvas id="vehicleChart"></canvas>
                 </div>
@@ -86,7 +86,7 @@
                 class="glass-panel rounded-xl p-4 md:p-5 flex flex-col h-[280px] md:h-[320px] bg-slate-800/40 border border-white/5">
                 <h3
                     class="text-slate-400 text-xs md:text-sm text-center mb-2 md:mb-4 font-semibold uppercase tracking-wider">
-                    Claims by Behavioral Risk</h3>
+                    <span data-i18n="exec-chart-behavior"><span data-i18n="exec-chart-behavior">Claims by Behavioral Risk</span></span></h3>
                 <div class="relative flex-1 w-full min-h-[200px]">
                     <canvas id="behaviorChart"></canvas>
                 </div>
@@ -96,7 +96,7 @@
                 class="glass-panel rounded-xl p-4 md:p-5 flex flex-col h-[300px] md:h-[350px] bg-slate-800/40 border border-white/5 lg:col-span-2">
                 <h3
                     class="text-slate-400 text-xs md:text-sm text-center mb-2 md:mb-4 font-semibold uppercase tracking-wider">
-                    Claims by Vehicle Age (Italian RCA)</h3>
+                    <span data-i18n="exec-chart-vehage"><span data-i18n="exec-chart-vehage">Claims by Vehicle Age (Italian RCA)</span></span></h3>
                 <div class="relative flex-1 w-full min-h-[200px]">
                     <canvas id="vehicleAgeChart"></canvas>
                 </div>

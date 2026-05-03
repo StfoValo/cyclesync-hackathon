@@ -88,6 +88,21 @@
 </head>
 
 <body class="h-screen w-screen overflow-hidden flex flex-col md:flex-row bg-slate-900 text-slate-100">
+    <script src="/static/js/i18n.js"></script>
+
+    <!-- Language Toggle -->
+    <div class="fixed bottom-6 right-6 md:top-6 md:bottom-auto z-50">
+        <div class="flex bg-slate-800/80 backdrop-blur-md rounded-full p-1 border border-white/10 shadow-lg">
+            <button onclick="window.setLanguage('en')" id="lang-en"
+                class="px-3 py-1.5 rounded-full text-xs font-bold transition-all bg-brand-500 text-slate-900 shadow-[0_0_10px_rgba(0,229,255,0.4)]">
+                🇬🇧 EN
+            </button>
+            <button onclick="window.setLanguage('it')" id="lang-it"
+                class="px-3 py-1.5 rounded-full text-xs font-bold transition-all text-slate-400 hover:text-white">
+                🇮🇹 IT
+            </button>
+        </div>
+    </div>
 
     <aside class="w-full md:w-72 glass-panel flex flex-col z-20 shadow-2xl relative shrink-0">
 
@@ -104,7 +119,7 @@
 
             <a href="/driver"
                 class="md:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/40 text-brand-400 hover:bg-brand-500 hover:text-slate-900 transition-colors shadow-[0_0_10px_rgba(0,229,255,0.2)]">
-                <span class="text-xs font-bold whitespace-nowrap tracking-wide">🚗 Driver App</span>
+                <span data-i18n="nav-driver-app" class="text-xs font-bold whitespace-nowrap tracking-wide">🚗 Driver App</span>
             </a>
 
         </div>
@@ -118,7 +133,7 @@
                         d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7">
                     </path>
                 </svg>
-                Fleet Telemetry
+                <span data-i18n="nav-fleet">Fleet Telemetry</span>
             </button>
             <button data-target="executive-view"
                 class="nav-item flex-shrink-0 whitespace-nowrap text-sm md:text-base w-auto md:w-full text-left px-4 py-3 md:px-6 md:py-3 font-medium text-slate-300 flex items-center gap-2 md:gap-3 rounded-lg md:rounded-none">
@@ -127,7 +142,7 @@
                         d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
                     </path>
                 </svg>
-                Risk Summary
+                <span data-i18n="nav-risk">Risk Summary</span>
             </button>
             <button data-target="asset-view"
                 class="nav-item flex-shrink-0 whitespace-nowrap text-sm md:text-base w-auto md:w-full text-left px-4 py-3 md:px-6 md:py-3 font-medium text-slate-300 flex items-center gap-2 md:gap-3 rounded-lg md:rounded-none">
@@ -136,7 +151,7 @@
                         d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
                     </path>
                 </svg>
-                Asset Risk
+                <span data-i18n="nav-asset">Asset Risk</span>
             </button>
             <button data-target="ai-view"
                 class="nav-item flex-shrink-0 whitespace-nowrap text-sm md:text-base w-auto md:w-full text-left px-4 py-3 md:px-6 md:py-3 font-medium text-slate-300 flex items-center gap-2 md:gap-3 rounded-lg md:rounded-none">
@@ -144,7 +159,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                 </svg>
-                AI Routing
+                <span data-i18n="nav-ai">AI Routing</span>
             </button>
             <button data-target="esg-view"
                 class="nav-item flex-shrink-0 whitespace-nowrap text-sm md:text-base w-auto md:w-full text-left px-4 py-3 md:px-6 md:py-3 font-medium text-slate-300 flex items-center gap-2 md:gap-3 rounded-lg md:rounded-none">
@@ -153,7 +168,7 @@
                         d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
                     </path>
                 </svg>
-                ESG & Circular
+                <span data-i18n="nav-esg">ESG & Circular</span>
             </button>
         </nav>
 
@@ -167,15 +182,15 @@
                     </svg>
                 </div>
                 <div>
-                    <p class="text-sm font-medium text-white">Admin</p>
-                    <p class="text-xs text-brand-400">System Access</p>
+                    <p data-i18n="nav-admin" class="text-sm font-medium text-white">Admin</p>
+                    <p data-i18n="nav-sys-access" class="text-xs text-brand-400">System Access</p>
                 </div>
             </div>
 
             <a href="/driver"
                 class="mt-2 flex items-center justify-center gap-2 w-full py-3 px-4 bg-gradient-to-r from-brand-600 to-blue-600 hover:from-brand-500 hover:to-blue-500 text-white rounded-xl shadow-[0_0_15px_rgba(0,229,255,0.3)] transition-all font-semibold text-sm group cursor-pointer border border-brand-400/50">
                 <span>📱</span>
-                Launch Driver App
+                <span data-i18n="nav-launch">Launch Driver App</span>
                 <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>

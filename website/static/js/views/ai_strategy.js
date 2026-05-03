@@ -1,3 +1,5 @@
+const getT = (key) => window.translations[localStorage.getItem('cyclesync_lang') || 'en'][key] || key;
+
 export function initAIStrategy() {
     const btnAnalyze = document.getElementById('btn-analyze');
     const regionSelector = document.getElementById('region-selector');
@@ -7,9 +9,9 @@ export function initAIStrategy() {
         btnAnalyze.addEventListener('click', async () => {
             const region = regionSelector.value;
             btnAnalyze.disabled = true;
-            btnAnalyze.innerHTML = "Orchestrating Network...";
+            btnAnalyze.innerHTML = getT('term-orchestrating');
 
-            aiTerminal.innerHTML = `⚠️ Fetching live telemetry for <b>${region}</b>...\n\n`;
+            aiTerminal.innerHTML = getT('term-fetching').replace('{}', region);
 
             // Reset KPIs
             document.getElementById('ai-kpi-targeted').innerText = "---";
@@ -18,7 +20,8 @@ export function initAIStrategy() {
             document.getElementById('ai-kpi-roi').innerText = "---";
 
             try {
-                const response = await fetch(`/api/ai/orchestrate/${encodeURIComponent(region)}`);
+                const lang = localStorage.getItem('cyclesync_lang') || 'en';
+                const response = await fetch(`/api/ai/orchestrate/${encodeURIComponent(region)}?lang=${lang}`);
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder("utf-8");
 
@@ -53,7 +56,7 @@ export function initAIStrategy() {
                 aiTerminal.innerHTML += `\n\n<b style='color: #FF5A5A;'>[ERROR]</b> ${error.message}`;
             } finally {
                 btnAnalyze.disabled = false;
-                btnAnalyze.innerHTML = `<svg class="w-5 h-5 inline-block mr-2 -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>Generate Intervention Strategy`;
+                btnAnalyze.innerHTML = `<svg class="w-5 h-5 inline-block mr-2 -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>${getT('ai-btn-gen')}`;
             }
         });
     }

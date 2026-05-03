@@ -59,6 +59,24 @@ export function initActuarial() {
     }
 }
 
+const getT = (key) => window.translations[localStorage.getItem('cyclesync_lang') || 'en'][key] || key;
+
+window.addEventListener('languageChanged', () => {
+    if (riskChart) { riskChart.destroy(); riskChart = null; }
+    if (ageChart) { ageChart.destroy(); ageChart = null; }
+    if (genderChart) { genderChart.destroy(); genderChart = null; }
+    if (vehicleChart) { vehicleChart.destroy(); vehicleChart = null; }
+    if (behaviorChart) { behaviorChart.destroy(); behaviorChart = null; }
+    if (vehicleAgeChart) { vehicleAgeChart.destroy(); vehicleAgeChart = null; }
+
+    const regionalCharts = document.getElementById('regional-charts');
+    if (regionalCharts && !regionalCharts.classList.contains('hidden')) {
+        if (cachedSummaryData) renderRegionalCharts(cachedSummaryData);
+    } else {
+        if (cachedDemographicsData) renderDemographics(cachedDemographicsData);
+    }
+});
+
 // ---------------------------------------------------------
 // REGIONAL CHARTS LOGIC
 // ---------------------------------------------------------
@@ -106,8 +124,8 @@ function renderRegionalCharts(data) {
             data: {
                 labels: regions,
                 datasets: [
-                    { label: 'Registered Claims (Baseline)', data: registered, backgroundColor: 'rgba(120, 120, 120, 0.6)' },
-                    { label: 'Projected Claims (Telematics)', data: projected, backgroundColor: 'rgba(226, 185, 59, 0.9)' }
+                    { label: getT('chart-reg-claims'), data: registered, backgroundColor: 'rgba(120, 120, 120, 0.6)' },
+                    { label: getT('chart-proj-claims'), data: projected, backgroundColor: 'rgba(226, 185, 59, 0.9)' }
                 ]
             },
             options: {
@@ -174,7 +192,7 @@ function renderDemographics(d) {
             console.log("🏗️ [Actuarial] Creating NEW ageChart instance.");
             ageChart = new Chart(document.getElementById('ageChart'), {
                 type: 'bar',
-                data: { labels: Object.keys(d.age_groups), datasets: [{ label: 'Projected Claims', data: Object.values(d.age_groups), backgroundColor: '#4CAF50' }] },
+                data: { labels: Object.keys(d.age_groups).map(k => getT('chart-age-' + ['<25', '25-35', '36-50', '51-65', '>65'].indexOf(k))), datasets: [{ label: getT('chart-proj-claims-short'), data: Object.values(d.age_groups), backgroundColor: '#4CAF50' }] },
                 options: commonOptions
             });
         } else {
@@ -186,7 +204,7 @@ function renderDemographics(d) {
             console.log("🏗️ [Actuarial] Creating NEW genderChart instance.");
             genderChart = new Chart(document.getElementById('genderChart'), {
                 type: 'doughnut',
-                data: { labels: Object.keys(d.genders), datasets: [{ data: Object.values(d.genders), backgroundColor: ['#2196F3', '#E91E63'], borderWidth: 0 }] },
+                data: { labels: Object.keys(d.genders).map(k => getT('chart-gender-' + (['Male', 'Female', 'Corporate/Other'].indexOf(k)+1))), datasets: [{ data: Object.values(d.genders), backgroundColor: ['#2196F3', '#E91E63'], borderWidth: 0 }] },
                 // 2. Add it to genderChart options
                 options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { datalabels: false } }
             });
@@ -198,7 +216,7 @@ function renderDemographics(d) {
             console.log("🏗️ [Actuarial] Creating NEW vehicleChart instance.");
             vehicleChart = new Chart(document.getElementById('vehicleChart'), {
                 type: 'bar',
-                data: { labels: Object.keys(d.vehicle_types), datasets: [{ label: 'Projected Claims', data: Object.values(d.vehicle_types), backgroundColor: '#FF9800' }] },
+                data: { labels: Object.keys(d.vehicle_types).map(k => getT('chart-veh-' + (['Sedan', 'SUV', 'Compact', 'Sports', 'Van'].indexOf(k)+1))), datasets: [{ label: getT('chart-proj-claims-short'), data: Object.values(d.vehicle_types), backgroundColor: '#FF9800' }] },
                 // 3. Add it to vehicleChart options
                 options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: false } }
             });
@@ -210,7 +228,7 @@ function renderDemographics(d) {
             console.log("🏗️ [Actuarial] Creating NEW behaviorChart instance.");
             behaviorChart = new Chart(document.getElementById('behaviorChart'), {
                 type: 'bar',
-                data: { labels: Object.keys(d.behaviors), datasets: [{ label: 'Projected Claims', data: Object.values(d.behaviors), backgroundColor: ['#00A67E', '#E2B93B', '#FF5A5A'] }] },
+                data: { labels: Object.keys(d.behaviors).map(k => getT('chart-beh-' + (['Aggressive', 'Moderate', 'Safe', 'Telematics-Optimized'].indexOf(k)+1))), datasets: [{ label: getT('chart-proj-claims-short'), data: Object.values(d.behaviors), backgroundColor: ['#00A67E', '#E2B93B', '#FF5A5A'] }] },
                 options: commonOptions
             });
         } else {
@@ -221,7 +239,7 @@ function renderDemographics(d) {
             console.log("🏗️ [Actuarial] Creating NEW vehicleAgeChart instance.");
             vehicleAgeChart = new Chart(document.getElementById('vehicleAgeChart'), {
                 type: 'bar',
-                data: { labels: Object.keys(d.vehicle_ages), datasets: [{ label: 'Projected Claims', data: Object.values(d.vehicle_ages), backgroundColor: '#9C27B0' }] },
+                data: { labels: Object.keys(d.vehicle_ages).map(k => getT('chart-vehage-' + (['0-3 Years', '4-7 Years', '8-12 Years', '>12 Years'].indexOf(k)+1))), datasets: [{ label: getT('chart-proj-claims-short'), data: Object.values(d.vehicle_ages), backgroundColor: '#9C27B0' }] },
                 options: commonOptions
             });
         } else {

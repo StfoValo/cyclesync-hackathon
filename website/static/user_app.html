@@ -74,19 +74,34 @@
 </head>
 
 <body class="h-[100dvh] w-screen flex flex-col overflow-hidden relative pb-[80px]">
+    <script src="/static/js/i18n.js"></script>
+
+
 
     <div id="view-home" class="app-view active flex-col h-full overflow-y-auto hide-scrollbar px-5 pt-6 pb-6">
 
         <header class="flex items-center justify-between mb-8">
             <div>
                 <p class="text-slate-400 text-sm font-medium mb-1">CycleSync Home</p>
-                <h1 class="text-2xl font-bold tracking-tight">Ciao, Andrea</h1>
+                <h1 data-i18n="driver-hello" class="text-2xl font-bold tracking-tight">Ciao, Andrea</h1>
             </div>
-            <a href="/dashboard"
-                class="w-12 h-12 rounded-full bg-slate-800 border-2 border-brand-500/30 overflow-hidden shadow-[0_0_15px_rgba(0,229,255,0.2)]">
-                <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Andrea&backgroundColor=0f1725" alt="Avatar"
-                    class="w-full h-full object-cover">
-            </a>
+            <div class="flex items-center gap-2">
+                <div class="flex bg-slate-800/80 backdrop-blur-md rounded-full p-0.5 border border-white/10 shadow-lg">
+                    <button onclick="window.setLanguage('en')" id="lang-en"
+                        class="px-2.5 py-1 rounded-full text-[10px] font-bold transition-all bg-brand-500 text-slate-900 shadow-[0_0_10px_rgba(0,229,255,0.4)]">
+                        EN
+                    </button>
+                    <button onclick="window.setLanguage('it')" id="lang-it"
+                        class="px-2.5 py-1 rounded-full text-[10px] font-bold transition-all text-slate-400 hover:text-white">
+                        IT
+                    </button>
+                </div>
+                <a href="/dashboard"
+                    class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-800 border-2 border-brand-500/30 overflow-hidden shadow-[0_0_15px_rgba(0,229,255,0.2)]">
+                    <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Andrea&backgroundColor=0f1725" alt="Avatar"
+                        class="w-full h-full object-cover">
+                </a>
+            </div>
         </header>
 
         <div class="flex gap-3 overflow-x-auto hide-scrollbar mb-8 -mx-5 px-5">
@@ -96,13 +111,13 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                 </svg>
-                Soccorso Rapido
+                <span data-i18n="driver-sos">Soccorso Rapido</span>
             </button>
-            <button
+            <button data-i18n="driver-parking"
                 class="bg-slate-800 border border-white/10 text-white font-medium px-5 py-2.5 rounded-full whitespace-nowrap shrink-0">
                 Parcheggi
             </button>
-            <button
+            <button data-i18n="driver-charging"
                 class="bg-slate-800 border border-white/10 text-white font-medium px-5 py-2.5 rounded-full whitespace-nowrap shrink-0">
                 Ricarica EV
             </button>
@@ -122,12 +137,12 @@
                         class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-500"></span>
                 </span>
-                <span class="text-xs font-bold text-brand-400 uppercase tracking-wider">Azione Richiesta</span>
+                <span data-i18n="driver-action-req" class="text-xs font-bold text-brand-400 uppercase tracking-wider">Azione Richiesta</span>
             </div>
-            <h3 class="text-lg font-bold text-white mb-1">Manutenzione Consigliata</h3>
-            <p class="text-sm text-slate-400 mb-4 max-w-[80%]">Rilevata usura anomala freni. Intervieni per mantenere lo
+            <h3 data-i18n="driver-maint-rec" class="text-lg font-bold text-white mb-1">Manutenzione Consigliata</h3>
+            <p data-i18n="driver-maint-desc" class="text-sm text-slate-400 mb-4 max-w-[80%]">Rilevata usura anomala freni. Intervieni per mantenere lo
                 sconto telematica.</p>
-            <span class="inline-flex items-center text-sm font-semibold text-white bg-white/10 px-3 py-1.5 rounded-lg">
+            <span data-i18n="driver-view-details" class="inline-flex items-center text-sm font-semibold text-white bg-white/10 px-3 py-1.5 rounded-lg">
                 Vedi dettagli &rarr;
             </span>
         </div>
@@ -135,22 +150,22 @@
         <div class="grid grid-cols-2 gap-4 mb-6">
             <div class="glass-card p-4 flex flex-col justify-between aspect-square">
                 <div>
-                    <p class="text-xs text-slate-400 mb-1">Veicolo Attivo</p>
-                    <h4 class="font-bold text-base leading-tight">Il tuo SUV</h4>
+                    <p data-i18n="driver-active-veh" class="text-xs text-slate-400 mb-1">Veicolo Attivo</p>
+                    <h4 data-i18n="driver-your-suv" class="font-bold text-base leading-tight">Il tuo SUV</h4>
                 </div>
                 <div>
                     <div class="flex items-end gap-1 mb-1">
                         <span class="text-2xl font-black text-emerald-400">92</span>
                         <span class="text-xs text-slate-500 pb-1">/100</span>
                     </div>
-                    <p class="text-[10px] font-bold text-emerald-500 uppercase tracking-wide">VSI Score: Ottimo</p>
+                    <p data-i18n="driver-vsi-score" class="text-[10px] font-bold text-emerald-500 uppercase tracking-wide">VSI Score: Ottimo</p>
                 </div>
             </div>
 
             <div class="glass-card p-4 flex flex-col justify-between aspect-square">
                 <div>
-                    <p class="text-xs text-slate-400 mb-1">Sconto Polizza</p>
-                    <h4 class="font-bold text-base leading-tight">Telematica</h4>
+                    <p data-i18n="driver-policy-disc" class="text-xs text-slate-400 mb-1">Sconto Polizza</p>
+                    <h4 data-i18n="driver-telematics" class="font-bold text-base leading-tight">Telematica</h4>
                 </div>
                 <div>
                     <div class="flex items-center gap-1 mb-1">
@@ -179,7 +194,7 @@
                         d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
             </button>
-            <h1 class="text-[15px] font-semibold tracking-wide text-slate-200">Dettagli Avviso</h1>
+            <h1 data-i18n="driver-alert-details" class="text-[15px] font-semibold tracking-wide text-slate-200">Dettagli Avviso</h1>
             <div class="w-6"></div>
         </header>
 
@@ -197,8 +212,8 @@
         </div>
 
         <div class="text-center mb-8">
-            <h2 class="text-2xl font-bold mb-3 tracking-tight">Manutenzione consigliata</h2>
-            <p class="text-slate-400 text-[15px] leading-relaxed px-2">Abbiamo rilevato un'usura anomala delle pastiglie
+            <h2 data-i18n="driver-maint-rec" class="text-2xl font-bold mb-3 tracking-tight">Manutenzione consigliata</h2>
+            <p data-i18n="driver-alert-desc" class="text-slate-400 text-[15px] leading-relaxed px-2">Abbiamo rilevato un'usura anomala delle pastiglie
                 dei freni. Intervieni per guidare in sicurezza e ottenere un vantaggio sulla tua polizza.</p>
         </div>
 
@@ -211,8 +226,8 @@
                         </path>
                     </svg></div>
                 <div>
-                    <h4 class="font-semibold text-[15px] mb-0.5 text-white">Sconto polizza attivabile</h4>
-                    <p class="text-sm text-slate-400">Dopo l'intervento riceverai <span
+                    <h4 data-i18n="driver-discount-active" class="font-semibold text-[15px] mb-0.5 text-white">Sconto polizza attivabile</h4>
+                    <p class="text-sm text-slate-400"><span data-i18n="driver-discount-after">Dopo l'intervento riceverai</span> <span
                             class="text-brand-400 font-semibold">-2.7%</span></p>
                 </div>
             </div>
@@ -224,9 +239,9 @@
                         </path>
                     </svg></div>
                 <div>
-                    <h4 class="font-semibold text-[15px] mb-0.5 text-white">Riduzione rischio sinistri</h4>
-                    <p class="text-sm text-slate-400">Fino a <span class="text-brand-400 font-semibold">-30.8%</span>
-                        intervenendo ora</p>
+                    <h4 data-i18n="driver-risk-red" class="font-semibold text-[15px] mb-0.5 text-white">Riduzione rischio sinistri</h4>
+                    <p class="text-sm text-slate-400"><span data-i18n="driver-up-to">Fino a</span> <span class="text-brand-400 font-semibold">-30.8%</span>
+                        <span data-i18n="driver-act-now">intervenendo ora</span></p>
                 </div>
             </div>
         </div>
@@ -234,12 +249,12 @@
         <div class="flex flex-col gap-3 mt-auto">
             <button onclick="switchView('view-map')"
                 class="w-full bg-brand-500 hover:bg-brand-400 text-black font-semibold py-3.5 rounded-xl flex justify-center items-center gap-2 transition-colors">
-                Trova officina convenzionata
+                <span data-i18n="driver-find-shop">Trova officina convenzionata</span>
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
             </button>
-            <button onclick="switchView('view-home')"
+            <button onclick="switchView('view-home')" data-i18n="driver-ignore"
                 class="w-full bg-transparent border border-white/20 text-slate-300 font-semibold py-3.5 rounded-xl hover:bg-white/5 transition-colors">
                 Ignora per ora
             </button>
@@ -249,7 +264,7 @@
 
     <div id="view-map" class="app-view flex-col h-full bg-slate-900">
         <header class="flex items-center justify-between px-4 py-4 shrink-0 bg-darkbg z-10 border-b border-white/5">
-            <h1 class="text-[17px] font-semibold tracking-wide text-white">Rete Convenzionata</h1>
+            <h1 data-i18n="driver-network" class="text-[17px] font-semibold tracking-wide text-white">Rete Convenzionata</h1>
             <svg class="w-5 h-5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z">
@@ -272,7 +287,7 @@
             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
             </svg>
-            <span class="text-[10px] font-medium">Home</span>
+            <span data-i18n="driver-nav-home" class="text-[10px] font-medium">Home</span>
         </button>
 
         <button onclick="switchView('view-map')" id="nav-map"
@@ -282,7 +297,7 @@
                     d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7">
                 </path>
             </svg>
-            <span class="text-[10px] font-medium">Network</span>
+            <span data-i18n="driver-nav-network" class="text-[10px] font-medium">Network</span>
         </button>
 
         <button onclick="switchView('view-alert')" id="nav-alert"
@@ -293,7 +308,7 @@
                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
                 </path>
             </svg>
-            <span class="text-[10px] font-medium">Avvisi</span>
+            <span data-i18n="driver-nav-alerts" class="text-[10px] font-medium">Avvisi</span>
         </button>
 
         <button
@@ -302,7 +317,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
             </svg>
-            <span class="text-[10px] font-medium">Profilo</span>
+            <span data-i18n="driver-nav-profile" class="text-[10px] font-medium">Profilo</span>
         </button>
     </nav>
 

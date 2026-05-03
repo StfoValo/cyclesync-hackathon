@@ -26,9 +26,9 @@ def get_cache(key: str):
         return {}
         
 @router.get("/api/ai/orchestrate/{region}")
-async def orchestrate_ai(request: Request, region: str): 
+async def orchestrate_ai(request: Request, region: str, lang: str = "en"): 
     client_ip = request.client.host
-    print(f"🧠 USER {client_ip} triggered AI Strategy for region: {region}")
+    print(f"🧠 USER {client_ip} triggered AI Strategy for region: {region} (Lang: {lang})")
     
     portfolio = get_cache('asset_risk_portfolio')
     region_data = next((r for r in portfolio.get("regional", []) if r["region"] == region), None)
@@ -36,21 +36,19 @@ async def orchestrate_ai(request: Request, region: str):
     payload = json.dumps(region_data) if region_data else f'{{"region": "{region}", "status": "no data"}}'
     
     def generate():
-        for chunk in orchestrator.run_actuarial_strategy_analysis(payload, region):
+        for chunk in orchestrator.run_actuarial_strategy_analysis(payload, region, lang):
             yield chunk
 
     return StreamingResponse(generate(), media_type="text/event-stream")
 
 
 @router.get("/api/ai/circular-logistics/{region}")
-async def orchestrate_circular_logistics(region: str):
-    
+async def orchestrate_circular_logistics(region: str, lang: str = 'en'):
     payload = build_reverse_logistics_payload(region)
-    
     def generate():
-        for chunk in orchestrator.run_circular_logistics_analysis(payload, region):
+        # Pass lang into the orchestrator
+        for chunk in orchestrator.run_circular_logistics_analysis(payload, region, lang):
             yield chunk
-
     return StreamingResponse(generate(), media_type="text/event-stream")
 
 

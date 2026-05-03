@@ -10,6 +10,15 @@ export function initESG() {
     }
 }
 
+const getT = (key) => window.translations[localStorage.getItem('cyclesync_lang') || 'en'][key] || key;
+
+window.addEventListener('languageChanged', () => {
+    if (tiresChart) { tiresChart.destroy(); tiresChart = null; }
+    if (brakesChart) { brakesChart.destroy(); brakesChart = null; }
+    if (batteriesChart) { batteriesChart.destroy(); batteriesChart = null; }
+    if (cachedEsgData) renderESG(cachedEsgData);
+});
+
 function setupReverseLogistics() {
     const btn = document.getElementById('btn-generate-manifest');
     const terminal = document.getElementById('logistics-terminal');
@@ -22,7 +31,7 @@ function setupReverseLogistics() {
 
         btn.disabled = true;
         const originalText = btn.innerHTML;
-        btn.innerHTML = 'Scanning Fleet Telemetry...';
+        btn.innerHTML = getT('term-run') + '...';
 
         terminal.innerHTML = '';
 
@@ -42,7 +51,9 @@ function setupReverseLogistics() {
 
         setTimeout(async () => {
             try {
-                const response = await fetch(`/api/ai/circular-logistics/${encodeURIComponent(region)}`);
+                // THE FIX: Grab the language and attach it to the API URL
+                const currentLang = localStorage.getItem('cyclesync_lang') || 'en';
+                const response = await fetch(`/api/ai/circular-logistics/${encodeURIComponent(region)}?lang=${currentLang}`);
                 if (!response.ok) throw new Error("HTTP error " + response.status);
 
                 const reader = response.body.getReader();
@@ -154,7 +165,7 @@ function renderESG(data) {
     if (tiresChart) tiresChart.destroy();
     tiresChart = new window.Chart(document.getElementById('esgTiresChart'), {
         type: 'doughnut',
-        data: { labels: Object.keys(tiresData).map(k => k.replace(/_/g, ' ')), datasets: [{ data: Object.values(tiresData), backgroundColor: ecoColors1, borderWidth: 0 }] },
+        data: { labels: Object.keys(tiresData).map(k => getT('chart-' + k.split('_')[0])), datasets: [{ data: Object.values(tiresData), backgroundColor: ecoColors1, borderWidth: 0 }] },
         options: chartOptions
     });
 
@@ -163,7 +174,7 @@ function renderESG(data) {
     if (brakesChart) brakesChart.destroy();
     brakesChart = new window.Chart(document.getElementById('esgBrakesChart'), {
         type: 'doughnut',
-        data: { labels: Object.keys(brakesData).map(k => k.replace(/_/g, ' ')), datasets: [{ data: Object.values(brakesData), backgroundColor: ecoColors2, borderWidth: 0 }] },
+        data: { labels: Object.keys(brakesData).map(k => getT('chart-' + k.split('_')[0])), datasets: [{ data: Object.values(brakesData), backgroundColor: ecoColors2, borderWidth: 0 }] },
         options: chartOptions
     });
 
@@ -172,7 +183,7 @@ function renderESG(data) {
     if (batteriesChart) batteriesChart.destroy();
     batteriesChart = new window.Chart(document.getElementById('esgBatteriesChart'), {
         type: 'doughnut',
-        data: { labels: Object.keys(batteriesData).map(k => k.replace(/_/g, ' ')), datasets: [{ data: Object.values(batteriesData), backgroundColor: ecoColors3, borderWidth: 0 }] },
+        data: { labels: Object.keys(batteriesData).map(k => getT('chart-' + k.split('_')[0])), datasets: [{ data: Object.values(batteriesData), backgroundColor: ecoColors3, borderWidth: 0 }] },
         options: chartOptions
     });
 }

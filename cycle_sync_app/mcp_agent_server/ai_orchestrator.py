@@ -7,26 +7,46 @@ class AIOrchestrator:
     def __init__(self):
         self.llm_client = CoreLLMClient()
 
-    def run_actuarial_strategy_analysis(self, json_payload: str, region: str): 
-        yield f"### 🔄 Unipol Enterprise AI Initialization\n"
-        yield f"Ingesting regional VSI telemetry, predictive hardware risk, and network capacity...\n\n"
+    def run_actuarial_strategy_analysis(self, json_payload: str, region: str, lang: str = "en"): 
+        if lang == "it":
+            yield f"### 🔄 Inizializzazione AI Enterprise CycleSync\n"
+            yield f"Acquisizione telemetria VSI regionale, rischio hardware predittivo e capacità di rete...\n\n"
+        else:
+            yield f"### 🔄 CycleSync Enterprise AI Initialization\n"
+            yield f"Ingesting regional VSI telemetry, predictive hardware risk, and network capacity...\n\n"
+            
         time.sleep(0.5)
         
         system_instruction = get_actuary_system_prompt()
+        if lang == "it":
+            system_instruction += "\n\nIMPORTANT: You MUST generate your ENTIRE response in fluent Italian."
+            print("SYSTEM INSTRUCTION: ", system_instruction)
+        else:
+            system_instruction += "\n\nIMPORTANT: You MUST generate your ENTIRE response in English."
+            print("SYSTEM INSTRUCTION: ", system_instruction)
+            
         user_prompt = get_actuary_user_prompt(json_payload)
             
-        # FIX: Passing 'region' to the LLM client
-        for chunk in self.llm_client.stream_inference(system_instruction, user_prompt, region):
+        for chunk in self.llm_client.stream_inference(system_instruction, user_prompt, region, lang):
             yield chunk
 
-    def run_circular_logistics_analysis(self, json_payload: str, region: str): 
-        yield f"### 🔄 CycleSync Reverse Logistics Engine\n"
-        yield f"Ingesting End-of-Life (EOL) component volumes and cross-referencing regional recycling hubs...\n\n"
+    def run_circular_logistics_analysis(self, json_payload: str, region: str, lang: str = "en"): 
+        if lang == "it":
+            yield f"### 🔄 Motore Logistica Inversa CycleSync\n"
+            yield f"Acquisizione volumi componenti di fine vita (EOL) e ricerca di hub di riciclaggio regionali...\n\n"
+        else:
+            yield f"### 🔄 CycleSync Reverse Logistics Engine\n"
+            yield f"Ingesting End-of-Life (EOL) component volumes and cross-referencing regional recycling hubs...\n\n"
+            
         time.sleep(0.5)
         
         system_instruction = get_logistics_system_prompt()
+        if lang == "it":
+            system_instruction += "\n\nIMPORTANT: You MUST generate your ENTIRE response in fluent Italian."
+        else:
+            system_instruction += "\n\nIMPORTANT: You MUST generate your ENTIRE response in English."
+            
         user_prompt = get_logistics_user_prompt(json_payload)
         
-        # FIX: Passing 'region' to the LLM client
-        for chunk in self.llm_client.stream_inference(system_instruction, user_prompt, region):
+        for chunk in self.llm_client.stream_inference(system_instruction, user_prompt, region, lang):
             yield chunk
