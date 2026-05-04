@@ -78,28 +78,25 @@
 
 
 
-    <div id="view-home" class="app-view active flex-col h-full overflow-y-auto hide-scrollbar px-5 pt-6 pb-6">
+    <div id="view-home"
+        class="app-view active flex-col h-full overflow-y-auto hide-scrollbar px-5 pt-6 pb-6 mx-auto max-w-lg w-full">
 
         <header class="flex items-center justify-between mb-8">
             <div>
                 <p class="text-slate-400 text-sm font-medium mb-1">CycleSync Home</p>
                 <h1 data-i18n="driver-hello" class="text-2xl font-bold tracking-tight">Ciao, Andrea</h1>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-3">
                 <div class="flex bg-slate-800/80 backdrop-blur-md rounded-full p-0.5 border border-white/10 shadow-lg">
-                    <button onclick="window.setLanguage('en')" id="lang-en"
-                        class="px-2.5 py-1 rounded-full text-[10px] font-bold transition-all bg-brand-500 text-slate-900 shadow-[0_0_10px_rgba(0,229,255,0.4)]">
-                        EN
-                    </button>
-                    <button onclick="window.setLanguage('it')" id="lang-it"
-                        class="px-2.5 py-1 rounded-full text-[10px] font-bold transition-all text-slate-400 hover:text-white">
-                        IT
-                    </button>
+                    <button onclick="window.setLanguage('en')" id="lang-en-app"
+                        class="px-2.5 py-1 rounded-full text-[10px] font-bold transition-all bg-brand-500 text-slate-900 shadow-[0_0_10px_rgba(0,229,255,0.4)]">EN</button>
+                    <button onclick="window.setLanguage('it')" id="lang-it-app"
+                        class="px-2.5 py-1 rounded-full text-[10px] font-bold transition-all text-slate-400 hover:text-white">IT</button>
                 </div>
                 <a href="/dashboard"
                     class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-800 border-2 border-brand-500/30 overflow-hidden shadow-[0_0_15px_rgba(0,229,255,0.2)]">
-                    <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Andrea&backgroundColor=0f1725" alt="Avatar"
-                        class="w-full h-full object-cover">
+                    <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Andrea&backgroundColor=0f1725"
+                        alt="Avatar" class="w-full h-full object-cover">
                 </a>
             </div>
         </header>
@@ -114,13 +111,10 @@
                 <span data-i18n="driver-sos">Soccorso Rapido</span>
             </button>
             <button data-i18n="driver-parking"
-                class="bg-slate-800 border border-white/10 text-white font-medium px-5 py-2.5 rounded-full whitespace-nowrap shrink-0">
-                Parcheggi
-            </button>
+                class="bg-slate-800 border border-white/10 text-white font-medium px-5 py-2.5 rounded-full whitespace-nowrap shrink-0">Parcheggi</button>
             <button data-i18n="driver-charging"
-                class="bg-slate-800 border border-white/10 text-white font-medium px-5 py-2.5 rounded-full whitespace-nowrap shrink-0">
-                Ricarica EV
-            </button>
+                class="bg-slate-800 border border-white/10 text-white font-medium px-5 py-2.5 rounded-full whitespace-nowrap shrink-0">Ricarica
+                EV</button>
         </div>
 
         <div onclick="switchView('view-alert')"
@@ -137,18 +131,20 @@
                         class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-500"></span>
                 </span>
-                <span data-i18n="driver-action-req" class="text-xs font-bold text-brand-400 uppercase tracking-wider">Azione Richiesta</span>
+                <span data-i18n="driver-action-req"
+                    class="text-xs font-bold text-brand-400 uppercase tracking-wider">Azione Richiesta</span>
             </div>
             <h3 data-i18n="driver-maint-rec" class="text-lg font-bold text-white mb-1">Manutenzione Consigliata</h3>
-            <p data-i18n="driver-maint-desc" class="text-sm text-slate-400 mb-4 max-w-[80%]">Rilevata usura anomala freni. Intervieni per mantenere lo
-                sconto telematica.</p>
-            <span data-i18n="driver-view-details" class="inline-flex items-center text-sm font-semibold text-white bg-white/10 px-3 py-1.5 rounded-lg">
-                Vedi dettagli &rarr;
+            <p data-i18n="driver-maint-desc" class="text-sm text-slate-400 mb-4 max-w-[80%]">Rilevata usura anomala
+                freni. Intervieni per mantenere lo sconto telematica.</p>
+            <span
+                class="inline-flex items-center text-sm font-semibold text-white bg-white/10 px-3 py-1.5 rounded-lg group-hover:bg-brand-500 group-hover:text-black transition-colors">
+                <span data-i18n="driver-view-details">Vedi dettagli &rarr;</span>
             </span>
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="glass-card p-4 flex flex-col justify-between aspect-square">
+            <div class="glass-card p-4 flex flex-col justify-between min-h-[120px]">
                 <div>
                     <p data-i18n="driver-active-veh" class="text-xs text-slate-400 mb-1">Veicolo Attivo</p>
                     <h4 data-i18n="driver-your-suv" class="font-bold text-base leading-tight">Il tuo SUV</h4>
@@ -158,11 +154,12 @@
                         <span class="text-2xl font-black text-emerald-400">92</span>
                         <span class="text-xs text-slate-500 pb-1">/100</span>
                     </div>
-                    <p data-i18n="driver-vsi-score" class="text-[10px] font-bold text-emerald-500 uppercase tracking-wide">VSI Score: Ottimo</p>
+                    <p data-i18n="driver-vsi-score"
+                        class="text-[10px] font-bold text-emerald-500 uppercase tracking-wide">VSI Score: Ottimo</p>
                 </div>
             </div>
 
-            <div class="glass-card p-4 flex flex-col justify-between aspect-square">
+            <div class="glass-card p-4 flex flex-col justify-between min-h-[120px]">
                 <div>
                     <p data-i18n="driver-policy-disc" class="text-xs text-slate-400 mb-1">Sconto Polizza</p>
                     <h4 data-i18n="driver-telematics" class="font-bold text-base leading-tight">Telematica</h4>
@@ -182,6 +179,68 @@
                 </div>
             </div>
         </div>
+
+        <div class="mb-6">
+            <h3 data-i18n="driver-health-title"
+                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">Stato Componenti</h3>
+            <div class="glass-card p-4 flex flex-col gap-4">
+
+                <div>
+                    <div class="flex justify-between items-end mb-1">
+                        <span data-i18n="driver-brakes" class="text-sm font-semibold text-white">Pastiglie Freni</span>
+                        <span data-i18n="driver-brakes-warn"
+                            class="text-[10px] font-bold text-brand-400 uppercase">Controllo richiesto</span>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-2">
+                        <div class="bg-brand-400 h-2 rounded-full shadow-[0_0_10px_rgba(0,229,255,0.5)]"
+                            style="width: 25%"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-end mb-1">
+                        <span data-i18n="driver-tires" class="text-sm font-semibold text-white">Pneumatici</span>
+                        <span data-i18n="driver-tires-ok"
+                            class="text-[10px] font-bold text-emerald-500 uppercase">Ottimale</span>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-2">
+                        <div class="bg-emerald-500 h-2 rounded-full" style="width: 82%"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-end mb-1">
+                        <span data-i18n="driver-battery" class="text-sm font-semibold text-white">Stato Batteria
+                            EV</span>
+                        <span data-i18n="driver-battery-ok" class="text-[10px] font-bold text-emerald-500 uppercase">In
+                            salute</span>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-2">
+                        <div class="bg-emerald-500 h-2 rounded-full" style="width: 95%"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <h3 data-i18n="driver-eco-title"
+                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">Impatto Eco</h3>
+            <div class="glass-card p-4 flex justify-around items-center border border-emerald-500/20 bg-emerald-500/5">
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-emerald-400">124</p>
+                    <p data-i18n="driver-co2-saved"
+                        class="text-[10px] text-emerald-500 uppercase font-bold tracking-wide">CO2 Risparmiata (kg)</p>
+                </div>
+                <div class="w-px h-10 bg-white/10"></div>
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-emerald-400">5.2</p>
+                    <p data-i18n="driver-trees" class="text-[10px] text-emerald-500 uppercase font-bold tracking-wide">
+                        Alberi Equivalenti</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 
@@ -194,7 +253,8 @@
                         d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
             </button>
-            <h1 data-i18n="driver-alert-details" class="text-[15px] font-semibold tracking-wide text-slate-200">Dettagli Avviso</h1>
+            <h1 data-i18n="driver-alert-details" class="text-[15px] font-semibold tracking-wide text-slate-200">Dettagli
+                Avviso</h1>
             <div class="w-6"></div>
         </header>
 
@@ -212,8 +272,10 @@
         </div>
 
         <div class="text-center mb-8">
-            <h2 data-i18n="driver-maint-rec" class="text-2xl font-bold mb-3 tracking-tight">Manutenzione consigliata</h2>
-            <p data-i18n="driver-alert-desc" class="text-slate-400 text-[15px] leading-relaxed px-2">Abbiamo rilevato un'usura anomala delle pastiglie
+            <h2 data-i18n="driver-maint-rec" class="text-2xl font-bold mb-3 tracking-tight">Manutenzione consigliata
+            </h2>
+            <p data-i18n="driver-alert-desc" class="text-slate-400 text-[15px] leading-relaxed px-2">Abbiamo rilevato
+                un'usura anomala delle pastiglie
                 dei freni. Intervieni per guidare in sicurezza e ottenere un vantaggio sulla tua polizza.</p>
         </div>
 
@@ -226,9 +288,10 @@
                         </path>
                     </svg></div>
                 <div>
-                    <h4 data-i18n="driver-discount-active" class="font-semibold text-[15px] mb-0.5 text-white">Sconto polizza attivabile</h4>
-                    <p class="text-sm text-slate-400"><span data-i18n="driver-discount-after">Dopo l'intervento riceverai</span> <span
-                            class="text-brand-400 font-semibold">-2.7%</span></p>
+                    <h4 data-i18n="driver-discount-active" class="font-semibold text-[15px] mb-0.5 text-white">Sconto
+                        polizza attivabile</h4>
+                    <p class="text-sm text-slate-400"><span data-i18n="driver-discount-after">Dopo l'intervento
+                            riceverai</span> <span class="text-brand-400 font-semibold">-2.7%</span></p>
                 </div>
             </div>
             <div class="flex items-start gap-4 p-4 border-b border-white/5">
@@ -239,9 +302,12 @@
                         </path>
                     </svg></div>
                 <div>
-                    <h4 data-i18n="driver-risk-red" class="font-semibold text-[15px] mb-0.5 text-white">Riduzione rischio sinistri</h4>
-                    <p class="text-sm text-slate-400"><span data-i18n="driver-up-to">Fino a</span> <span class="text-brand-400 font-semibold">-30.8%</span>
-                        <span data-i18n="driver-act-now">intervenendo ora</span></p>
+                    <h4 data-i18n="driver-risk-red" class="font-semibold text-[15px] mb-0.5 text-white">Riduzione
+                        rischio sinistri</h4>
+                    <p class="text-sm text-slate-400"><span data-i18n="driver-up-to">Fino a</span> <span
+                            class="text-brand-400 font-semibold">-30.8%</span>
+                        <span data-i18n="driver-act-now">intervenendo ora</span>
+                    </p>
                 </div>
             </div>
         </div>
@@ -264,7 +330,8 @@
 
     <div id="view-map" class="app-view flex-col h-full bg-slate-900">
         <header class="flex items-center justify-between px-4 py-4 shrink-0 bg-darkbg z-10 border-b border-white/5">
-            <h1 data-i18n="driver-network" class="text-[17px] font-semibold tracking-wide text-white">Rete Convenzionata</h1>
+            <h1 data-i18n="driver-network" class="text-[17px] font-semibold tracking-wide text-white">Rete Convenzionata
+            </h1>
             <svg class="w-5 h-5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z">
