@@ -9,7 +9,8 @@ const viewModules = {
     'executive-view': { path: '/static/partials/executive_tab.html', init: initActuarial },
     'asset-view': { path: '/static/partials/asset_tab.html', init: initPredictiveAsset },
     'ai-view': { path: '/static/partials/ai_tab.html', init: initAIStrategy },
-    'esg-view': { path: '/static/partials/esg_tab.html', init: initESG }
+    'esg-view': { path: '/static/partials/esg_tab.html', init: initESG },
+    'adjuster-view': { path: '/static/partials/adjuster_tab.html', init: null }
 };
 
 const loadedViews = new Set();

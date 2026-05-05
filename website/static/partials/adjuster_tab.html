@@ -1,0 +1,176 @@
+<header class="mb-6 md:mb-8">
+    <div class="flex items-center gap-3 mb-1 md:mb-2">
+        <svg class="w-8 h-8 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.956 11.956 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+            </path>
+        </svg>
+        <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">
+            <span data-i18n="adj-title">Anti-Fraud Adjuster Portal</span>
+        </h2>
+    </div>
+    <p class="text-sm md:text-base text-slate-400">
+        <span data-i18n="adj-subtitle">Digital Product Passport (DPP) & pre-crash telemetry investigation.</span>
+    </p>
+</header>
+
+<div
+    class="glass-panel rounded-xl p-4 md:p-6 border border-white/5 shadow-lg mb-6 md:mb-8 max-w-3xl mx-auto flex gap-3">
+    <input type="text" value="AB 123 CD" placeholder="Enter License Plate or Claim ID..."
+        class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-rose-500 transition-colors font-mono uppercase tracking-widest text-lg">
+    <button
+        class="bg-rose-600 hover:bg-rose-500 text-white px-6 md:px-8 py-3 rounded-lg font-bold transition-colors shadow-[0_0_15px_rgba(225,29,72,0.4)]">
+        <span data-i18n="adj-search">Search</span>
+    </button>
+</div>
+
+<div id="dpp-results" class="flex flex-col gap-6 fade-in">
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <div class="glass-panel rounded-xl p-6 border border-white/5 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 opacity-10"><span class="text-6xl">🚗</span></div>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4"><span data-i18n="adj-id">Vehicle
+                    Identity</span></h3>
+
+            <div class="bg-black/40 border border-slate-700 rounded-lg p-3 text-center mb-6">
+                <span class="text-3xl font-black text-white tracking-[0.2em] font-mono">AB 123 CD</span>
+            </div>
+
+            <div class="space-y-3 text-sm">
+                <div class="flex justify-between"><span class="text-slate-400">Model:</span><span
+                        class="font-medium text-white">2021 Audi Q5</span></div>
+                <div class="flex justify-between"><span class="text-slate-400">VIN:</span><span
+                        class="font-medium text-slate-300 font-mono">ZHW89234898234</span></div>
+                <div class="flex justify-between"><span class="text-slate-400">Driver:</span><span
+                        class="font-medium text-white">Marco Rossi</span></div>
+                <div class="flex justify-between items-center border-t border-white/10 pt-3 mt-3">
+                    <span class="text-slate-400">Crash VSI Score:</span>
+                    <span
+                        class="bg-rose-500/20 text-rose-400 border border-rose-500/50 px-2 py-1 rounded font-bold">42/100
+                        (CRITICAL)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-panel rounded-xl p-6 border border-white/5 lg:col-span-2">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6"><span
+                    data-i18n="adj-state">Pre-Crash Telemetry State</span></h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 h-full">
+                <div class="bg-slate-800/50 rounded-lg p-4 border border-rose-500/30 flex flex-col justify-between">
+                    <div>
+                        <span class="text-2xl mb-2 block">🛑</span>
+                        <h4 class="font-bold text-white"><span data-i18n="adj-brakes">Brake Assembly</span></h4>
+                    </div>
+                    <div class="mt-4">
+                        <div class="text-3xl font-black text-rose-500 mb-1">88%</div>
+                        <p class="text-xs text-rose-400 font-semibold uppercase"><span data-i18n="adj-critical">Critical
+                                Wear</span></p>
+                    </div>
+                </div>
+                <div class="bg-slate-800/50 rounded-lg p-4 border border-amber-500/30 flex flex-col justify-between">
+                    <div>
+                        <span class="text-2xl mb-2 block">🛞</span>
+                        <h4 class="font-bold text-white"><span data-i18n="adj-tires">Tire Tread</span></h4>
+                    </div>
+                    <div class="mt-4">
+                        <div class="text-3xl font-black text-amber-500 mb-1">65%</div>
+                        <p class="text-xs text-amber-400 font-semibold uppercase"><span data-i18n="adj-warn">Warning
+                                Level</span></p>
+                    </div>
+                </div>
+                <div class="bg-slate-800/50 rounded-lg p-4 border border-emerald-500/30 flex flex-col justify-between">
+                    <div>
+                        <span class="text-2xl mb-2 block">🔋</span>
+                        <h4 class="font-bold text-white"><span data-i18n="adj-batt">EV Battery</span></h4>
+                    </div>
+                    <div class="mt-4">
+                        <div class="text-3xl font-black text-emerald-500 mb-1">92%</div>
+                        <p class="text-xs text-emerald-400 font-semibold uppercase"><span
+                                data-i18n="adj-ok">Healthy</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-2">
+
+        <div class="glass-panel rounded-xl p-6 border border-white/5">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6"><span
+                    data-i18n="adj-audit">Immutable Audit Trail</span></h3>
+
+            <div class="relative border-l-2 border-slate-700 ml-3 space-y-6">
+                <div class="relative pl-6">
+                    <div
+                        class="absolute w-3 h-3 bg-slate-400 rounded-full -left-[7px] top-1.5 border-2 border-[#0f172a]">
+                    </div>
+                    <p class="text-xs text-slate-500 mb-0.5">Oct 12, 2023 - 14:32</p>
+                    <p class="text-sm font-medium text-white"><span data-i18n="adj-event-1">VSI detects abnormal braking
+                            degradation.</span></p>
+                </div>
+                <div class="relative pl-6">
+                    <div
+                        class="absolute w-3 h-3 bg-brand-500 rounded-full -left-[7px] top-1.5 border-2 border-[#0f172a] shadow-[0_0_10px_rgba(0,229,255,0.8)]">
+                    </div>
+                    <p class="text-xs text-slate-500 mb-0.5">Oct 13, 2023 - 09:00</p>
+                    <p class="text-sm font-medium text-white"><span data-i18n="adj-event-2">Push notification sent to
+                            Driver App (Action Required).</span></p>
+                </div>
+                <div class="relative pl-6">
+                    <div
+                        class="absolute w-3 h-3 bg-amber-500 rounded-full -left-[7px] top-1.5 border-2 border-[#0f172a]">
+                    </div>
+                    <p class="text-xs text-slate-500 mb-0.5">Oct 25, 2023 - 18:15</p>
+                    <p class="text-sm font-medium text-white"><span data-i18n="adj-event-3">Driver manually dismissed
+                            maintenance alert.</span></p>
+                </div>
+                <div class="relative pl-6">
+                    <div
+                        class="absolute w-4 h-4 bg-rose-500 rounded-full -left-[9px] top-1 border-2 border-[#0f172a] shadow-[0_0_10px_rgba(244,63,94,0.8)] animate-pulse">
+                    </div>
+                    <p class="text-xs text-slate-500 mb-0.5">Nov 02, 2023 - 08:45</p>
+                    <p class="text-sm font-bold text-rose-400"><span data-i18n="adj-event-4">Collision reported.
+                            Telemetry locked.</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="glass-panel rounded-xl p-6 border border-rose-500/50 shadow-[0_0_30px_rgba(225,29,72,0.1)] bg-gradient-to-br from-slate-900 to-rose-950/20 flex flex-col relative overflow-hidden">
+            <div class="absolute -right-4 -top-4 opacity-5">
+                <svg class="w-48 h-48 text-rose-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.956 11.956 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                    </path>
+                </svg>
+            </div>
+
+            <div class="flex items-center gap-3 mb-4 border-b border-rose-500/20 pb-4">
+                <span class="text-2xl">🤖</span>
+                <h3 class="text-sm font-bold text-rose-400 uppercase tracking-widest"><span
+                        data-i18n="adj-ai-title">CycleSync AI Adjudicator</span></h3>
+            </div>
+
+            <p class="text-slate-300 leading-relaxed text-sm md:text-base italic flex-1 relative z-10">
+                "<span data-i18n="adj-ai-desc">Claim denial recommended. Immutable telemetry indicates the driver
+                    experienced a 45% loss in braking efficiency over 3 weeks and explicitly dismissed 3 critical
+                    maintenance alerts prior to the rear-end collision. Liability rests entirely on driver negligence,
+                    not sudden mechanical failure.</span>"
+            </p>
+
+            <div class="mt-6 flex gap-3 relative z-10">
+                <button
+                    class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold py-2.5 rounded transition-colors text-sm">
+                    <span data-i18n="adj-btn-deny">Deny Claim</span>
+                </button>
+                <button
+                    class="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded transition-colors text-sm border border-slate-600">
+                    <span data-i18n="adj-btn-investigate">Investigate Further</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
