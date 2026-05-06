@@ -1,3 +1,45 @@
+<style>
+    @keyframes scanline {
+        0% {
+            top: 0%;
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            top: 100%;
+            opacity: 0;
+        }
+    }
+
+    .scanner-line {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: #f43f5e;
+        box-shadow: 0 0 15px #f43f5e, 0 0 30px #f43f5e;
+        animation: scanline 2.5s ease-in-out infinite;
+        z-index: 20;
+    }
+
+    .bounding-box {
+        position: absolute;
+        border: 2px solid #10b981;
+        background: rgba(16, 185, 129, 0.1);
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        z-index: 10;
+        animation: pulse 2s infinite;
+    }
+</style>
+
 <header class="mb-6 md:mb-8">
     <div class="flex items-center gap-3 mb-1 md:mb-2">
         <svg class="w-8 h-8 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,6 +213,10 @@
                     class="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded transition-colors text-sm border border-slate-600"><span
                         data-i18n="adj-btn-investigate">Investigate Further</span></button>
             </div>
+            <button onclick="document.getElementById('cycleVisionModal').classList.remove('hidden')"
+                class="mt-3 w-full bg-transparent border border-rose-500/50 hover:bg-rose-500/20 text-rose-400 font-bold py-2.5 rounded transition-colors text-sm flex items-center justify-center gap-2 relative z-10">
+                <span data-i18n="adj-btn-vision">👁️ Run CycleVision CNN Triage</span>
+            </button>
         </div>
     </div>
 </div>
@@ -433,6 +479,88 @@
                     class="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-bold py-2.5 rounded transition-colors text-sm"><span
                         data-i18n="adj-btn-subrogate">Initiate Rivalsa against Driver</span></button>
             </div>
+        </div>
+    </div>
+</div>
+
+<div id="cycleVisionModal"
+    class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md fade-in">
+    <div
+        class="bg-slate-900 border border-rose-500/50 rounded-2xl w-full max-w-5xl max-h-[90vh] shadow-[0_0_50px_rgba(225,29,72,0.2)] overflow-hidden flex flex-col md:flex-row">
+
+        <div
+            class="w-full md:w-1/2 relative bg-[#0a0a0a] min-h-[30vh] md:min-h-0 flex items-center justify-center overflow-hidden">
+            <img src="/static/img/radiator.jpg" alt="Car Radiator" class="w-full h-full object-cover opacity-80">
+
+            <div class="absolute inset-0 bg-rose-900/20 mix-blend-overlay"></div>
+
+            <div class="bounding-box top-[15%] left-[10%] w-[80%] h-[70%] flex items-start justify-start p-2">
+                <span class="bg-emerald-500 text-black text-[10px] font-bold px-2 py-0.5 rounded shadow">RADIATOR:
+                    INTACT (99%)</span>
+            </div>
+
+            <div class="scanner-line"></div>
+
+            <div class="absolute inset-0 border border-rose-500/30 m-4 md:m-6 pointer-events-none">
+                <div class="absolute top-0 left-1/2 w-px h-4 bg-rose-500"></div>
+                <div class="absolute bottom-0 left-1/2 w-px h-4 bg-rose-500"></div>
+                <div class="absolute left-0 top-1/2 w-4 h-px bg-rose-500"></div>
+                <div class="absolute right-0 top-1/2 w-4 h-px bg-rose-500"></div>
+            </div>
+        </div>
+
+        <div
+            class="w-full md:w-1/2 p-6 md:p-8 flex flex-col bg-gradient-to-br from-slate-900 to-rose-950/30 overflow-y-auto">
+            <div class="flex items-center justify-between mb-6 border-b border-white/10 pb-4 shrink-0">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <span class="text-rose-500">👁️</span> <span data-i18n="cv-title">CycleVision CNN Triage</span>
+                </h2>
+                <button onclick="document.getElementById('cycleVisionModal').classList.add('hidden')"
+                    class="text-slate-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="flex flex-col gap-6 flex-1">
+                <div class="glass-panel p-4 rounded-xl border border-rose-500/20 bg-rose-500/5 shrink-0">
+                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1"><span
+                            data-i18n="cv-mech-claim">Mechanic Request:</span></p>
+                    <p class="text-lg font-bold text-rose-400 font-mono"><span data-i18n="cv-mech-val">Front Radiator
+                            Assembly - €14,000</span></p>
+                </div>
+
+                <div class="glass-panel p-4 rounded-xl border border-emerald-500/20 bg-emerald-500/5 shrink-0">
+                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1"><span
+                            data-i18n="cv-ai-analysis">AI Visual Analysis:</span></p>
+                    <p class="text-lg font-bold text-emerald-400"><span data-i18n="cv-ai-val">0% Structural Damage.
+                            Component intact.</span></p>
+                </div>
+
+                <div class="shrink-0">
+                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1"><span
+                            data-i18n="cv-fraud-risk">Fraud Probability:</span></p>
+                    <p
+                        class="text-4xl font-black text-rose-500 drop-shadow-[0_0_10px_rgba(244,63,94,0.5)] animate-pulse">
+                        <span data-i18n="cv-fraud-val">98% (CRITICAL)</span>
+                    </p>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-rose-500/20 shrink-0">
+                    <p class="text-sm text-slate-300 leading-relaxed italic border-l-2 border-rose-500 pl-3">
+                        <span data-i18n="cv-desc">⚠️ FRAUD ALERT: Visual evidence explicitly contradicts the mechanic's
+                            €14,000 claim. AI confirms the radiator and structural supports are intact. Telemetry
+                            confirms a low-speed impact (< 10km/h). Recommendation: Block payout immediately.</span>
+                    </p>
+                </div>
+            </div>
+
+            <button onclick="document.getElementById('cycleVisionModal').classList.add('hidden')"
+                class="mt-6 w-full shrink-0 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-lg transition-colors border border-slate-600">
+                <span data-i18n="cv-close">Close Scan</span>
+            </button>
         </div>
     </div>
 </div>

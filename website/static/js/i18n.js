@@ -189,6 +189,18 @@ window.translations = {
         "adj-defect-ai": "Third-party payout authorized under mandatory RCA law. However, telemetry proves gross negligence (15% brake capacity ignored for 2 weeks). Initiate 'Rivalsa' (Subrogation) to recover full claim costs from the policyholder.",
         "adj-btn-subrogate": "Initiate Rivalsa against Driver",
 
+        // CycleVision Modal
+        "adj-btn-vision": "👁️ Run CycleVision CNN Triage",
+        "cv-title": "CycleVision CNN Triage",
+        "cv-mech-claim": "Mechanic Request:",
+        "cv-mech-val": "Front Radiator Assembly - €14,000",
+        "cv-ai-analysis": "AI Visual Analysis:",
+        "cv-ai-val": "0% Structural Damage. Component intact.",
+        "cv-fraud-risk": "Fraud Probability:",
+        "cv-fraud-val": "98% (CRITICAL)",
+        "cv-desc": "⚠️ FRAUD ALERT: Visual evidence explicitly contradicts the mechanic's €14,000 claim. AI confirms the radiator and structural supports are intact. Telemetry confirms a low-speed impact (< 10km/h). Recommendation: Block payout immediately.",
+        "cv-close": "Close Scan",
+
         // Driver App
         "driver-hello": "Hi, Andrea",
         "driver-sos": "Quick SOS",
@@ -413,6 +425,18 @@ window.translations = {
         "adj-defect-event-4": "Grave tamponamento segnalato. Telemetria bloccata.",
         "adj-defect-ai": "Pagamento al terzo autorizzato come previsto dalla legge RCA. Tuttavia, la telemetria prova grave negligenza (freni al 15% ignorati per 2 settimane). Avviare 'Rivalsa' per recuperare i costi totali del sinistro dall'assicurato.",
         "adj-btn-subrogate": "Avvia Rivalsa contro Assicurato",
+
+        // CycleVision Modal
+        "adj-btn-vision": "👁️ Esegui Triage Visivo CycleVision",
+        "cv-title": "Triage CNN CycleVision",
+        "cv-mech-claim": "Richiesta Meccanico:",
+        "cv-mech-val": "Gruppo Radiatore Anteriore - €14.000",
+        "cv-ai-analysis": "Analisi Visiva IA:",
+        "cv-ai-val": "0% Danni Strutturali. Componente intatto.",
+        "cv-fraud-risk": "Probabilità di Frode:",
+        "cv-fraud-val": "98% (CRITICO)",
+        "cv-desc": "⚠️ ALLERTA FRODE: L'evidenza visiva contraddice esplicitamente la richiesta di €14.000 del meccanico. L'IA conferma che il radiatore e i supporti strutturali sono intatti. La telemetria conferma un impatto a bassa velocità (< 10km/h). Raccomandazione: Bloccare immediatamente il pagamento.",
+        "cv-close": "Chiudi Scansione",
 
         // Driver App
         "driver-hello": "Ciao, Andrea",
