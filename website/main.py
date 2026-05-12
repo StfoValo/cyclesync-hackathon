@@ -14,16 +14,23 @@ sys.path.insert(0, current_dir)
 
 from routers.insurer_api import router as insurer_router
 from routers.ai_api import router as ai_router
+from routers.vehicle_api import router as vehicle_router
+from database import init_db
 
 app = FastAPI()
 
+@app.on_event("startup")
+def startup():
+    init_db()
+
 app.include_router(insurer_router)
 app.include_router(ai_router)
+app.include_router(vehicle_router)
 
 static_dir = os.path.join(current_dir, "static")
 os.makedirs(static_dir, exist_ok=True)
 
-# --- NEW: Clean Frontpage Routing ---
+# --- Clean Frontpage Routing ---
 @app.get("/")
 def read_root():
     """Serves the new Digital Twin landing page."""
@@ -41,8 +48,3 @@ def read_driver_app():
 
 # Mount static files for JS, CSS, and Images
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
-
-@app.get("/driver")
-def read_driver_app():
-    """Serves the consumer-facing mobile web app."""
-    return FileResponse(os.path.join(static_dir, "user_app.html"))

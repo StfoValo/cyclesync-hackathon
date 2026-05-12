@@ -138,3 +138,155 @@ async def get_esg_dashboard():
         return {"error": "ESG cache not found"}
     except Exception as e:
         return {"error": f"Database error: {str(e)}"}
+
+
+@router.get("/api/esg/components")
+def get_esg_components():
+    """Returns the full second-life component inventory from the database."""
+    from database import get_db
+    import json
+    conn = get_db()
+    rows = conn.execute("""SELECT c.*, v.plate_number FROM components c
+        LEFT JOIN vehicles v ON c.vehicle_vin = v.vin
+        WHERE c.status != 'installed'
+        ORDER BY c.category, c.updated_at DESC""").fetchall()
+    conn.close()
+    result = []
+    for r in rows:
+        specs = {}
+        if r["specs_json"]:
+            try: specs = json.loads(r["specs_json"])
+            except: pass
+        subtype_str = f"{r['brand']} {r['model_name']}"
+        if specs.get("size"): subtype_str += f" {specs['size']}"
+        type_map = {"tire": "Tire", "brake_pad": "Brake Pad", "brake_disc": "Brake Disc", "ev_battery": "EV Battery"}
+        result.append({
+            "serial": r["serial_number"], "type": type_map.get(r["category"], r["category"]),
+            "subtype": subtype_str, "wear_pct": r["wear_percent"],
+            "vehicle": r["plate_number"] or "N/A", "replaced": r["removed_date"] or r["created_at"],
+            "recommendation": r["ai_recommendation"] or "Pending AI Analysis",
+            "facility": r["destination_facility"] or "TBD",
+            "value_eur": r["recovery_value_eur"] or 0, "co2_saved_kg": r["co2_saved_kg"] or 0,
+            "reason": r["ai_reasoning"] or "Analysis pending.",
+        })
+    return result
+
+
+# ── INVESTIGATION / CLAIMS ENDPOINTS ─────────────────────────────────────
+@router.get("/api/db/investigations")
+def list_investigations(status: str = None, priority: str = None):
+    """List all investigations with optional status/priority filters."""
+    from database import get_db
+    import json
+    conn = get_db()
+    where = ["1=1"]
+    params = []
+    if status:
+        where.append("i.status = ?"); params.append(status)
+    if priority:
+        where.append("i.priority = ?"); params.append(priority)
+    rows = conn.execute(f"""SELECT i.*, v.plate_number, cm.model_name, cm.manufacturer
+        FROM investigations i
+        JOIN vehicles v ON i.vehicle_vin = v.vin
+        JOIN car_models cm ON v.model_id = cm.id
+        WHERE {' AND '.join(where)}
+        ORDER BY i.created_at DESC""", params).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+@router.get("/api/db/investigations/{case_id}")
+def get_investigation(case_id: str):
+    """Get full investigation detail with linked vehicle and components."""
+    from database import get_db
+    import json
+    conn = get_db()
+    inv = conn.execute("""SELECT i.*, v.plate_number, v.driver_name, v.color, v.weight_kg, v.power_hp,
+        cm.model_name, cm.manufacturer, cm.powertrain, cm.drivetrain
+        FROM investigations i
+        JOIN vehicles v ON i.vehicle_vin = v.vin
+        JOIN car_models cm ON v.model_id = cm.id
+        WHERE i.case_number = ? OR CAST(i.id AS TEXT) = ?""", (case_id, case_id)).fetchone()
+    if not inv:
+        conn.close()
+        return {"error": f"Investigation '{case_id}' not found"}
+
+    # Get vehicle telemetry
+    telem = conn.execute("SELECT * FROM vehicle_telemetry WHERE vin = ?", (inv["vehicle_vin"],)).fetchone()
+    # Get vehicle components
+    components = conn.execute("SELECT * FROM components WHERE vehicle_vin = ? ORDER BY category, position", (inv["vehicle_vin"],)).fetchall()
+    # Get maintenance history
+    maintenance = conn.execute("SELECT * FROM maintenance_events WHERE vehicle_vin = ? ORDER BY event_date DESC LIMIT 10", (inv["vehicle_vin"],)).fetchall()
+    conn.close()
+
+    result = dict(inv)
+    result["telemetry"] = dict(telem) if telem else None
+    result["components"] = [dict(c) for c in components]
+    result["maintenance"] = [dict(m) for m in maintenance]
+    if result.get("tpms_snapshot_json"):
+        try: result["tpms_snapshot"] = json.loads(result["tpms_snapshot_json"])
+        except: result["tpms_snapshot"] = {}
+    return result
+
+
+@router.get("/api/db/components")
+def list_all_components(
+    category: str = None, status: str = None, brand: str = None,
+    vehicle_vin: str = None, min_wear: float = None, max_wear: float = None,
+    page: int = 1, per_page: int = 50
+):
+    """Browse all components with filters — for ESG enhanced browsing."""
+    from database import get_db
+    import json
+    conn = get_db()
+    where = ["1=1"]
+    params = []
+    if category:
+        where.append("c.category = ?"); params.append(category)
+    if status:
+        where.append("c.status = ?"); params.append(status)
+    if brand:
+        where.append("c.brand = ?"); params.append(brand)
+    if vehicle_vin:
+        where.append("c.vehicle_vin = ?"); params.append(vehicle_vin)
+    if min_wear is not None:
+        where.append("c.wear_percent >= ?"); params.append(min_wear)
+    if max_wear is not None:
+        where.append("c.wear_percent <= ?"); params.append(max_wear)
+
+    total = conn.execute(f"SELECT COUNT(*) FROM components c WHERE {' AND '.join(where)}", params).fetchone()[0]
+    offset = (page - 1) * per_page
+    rows = conn.execute(f"""SELECT c.*, v.plate_number FROM components c
+        LEFT JOIN vehicles v ON c.vehicle_vin = v.vin
+        WHERE {' AND '.join(where)}
+        ORDER BY c.category, c.wear_percent DESC
+        LIMIT ? OFFSET ?""", params + [per_page, offset]).fetchall()
+    conn.close()
+
+    components = []
+    for r in rows:
+        d = dict(r)
+        if d.get("specs_json"):
+            try: d["specs"] = json.loads(d["specs_json"])
+            except: d["specs"] = {}
+        components.append(d)
+    return {"components": components, "total": total, "page": page, "per_page": per_page}
+
+
+@router.get("/api/db/components/stats")
+def get_component_stats():
+    """Aggregate ESG stats for dashboard KPIs."""
+    from database import get_db
+    conn = get_db()
+    total = conn.execute("SELECT COUNT(*) FROM components").fetchone()[0]
+    stocked = conn.execute("SELECT COUNT(*) FROM components WHERE status = 'stocked'").fetchone()[0]
+    installed = conn.execute("SELECT COUNT(*) FROM components WHERE status = 'installed'").fetchone()[0]
+    total_co2 = conn.execute("SELECT COALESCE(SUM(co2_saved_kg), 0) FROM components WHERE status != 'installed'").fetchone()[0]
+    total_value = conn.execute("SELECT COALESCE(SUM(recovery_value_eur), 0) FROM components WHERE status != 'installed'").fetchone()[0]
+    by_category = conn.execute("SELECT category, COUNT(*) as cnt FROM components GROUP BY category").fetchall()
+    conn.close()
+    return {
+        "total_components": total, "stocked": stocked, "installed": installed,
+        "total_co2_saved_kg": round(total_co2, 1), "total_recovery_value_eur": round(total_value, 2),
+        "by_category": {r[0]: r[1] for r in by_category},
+    }

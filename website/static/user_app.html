@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="it" class="dark">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -9,422 +8,225 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        brand: { 400: '#5cffff', 500: '#00E5FF', 600: '#00b8cc' },
-                        darkbg: '#050a11',
-                        cardbg: '#0f1725'
-                    }
-                }
-            }
+            theme: { extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: { brand: { 400: '#5cffff', 500: '#00E5FF', 600: '#00b8cc' }, darkbg: '#050a11', cardbg: '#0f1725' }
+            }}
         }
     </script>
     <style>
-        body {
-            background-color: #050a11;
-            color: #ffffff;
-            font-family: 'Inter', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .glass-card {
-            background: #0f1725;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-        }
-
-        .glow-ring {
-            box-shadow: 0 0 40px rgba(0, 229, 255, 0.15), inset 0 0 20px rgba(0, 229, 255, 0.1);
-            border: 1px solid rgba(0, 229, 255, 0.3);
-        }
-
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        /* Smooth View Transitions */
-        .app-view {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .app-view.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        body { background:#050a11; color:#fff; font-family:'Inter',sans-serif; -webkit-tap-highlight-color:transparent; }
+        .glass-card { background:#0f1725; border:1px solid rgba(255,255,255,0.05); border-radius:16px; }
+        .hide-scrollbar::-webkit-scrollbar { display:none; }
+        .hide-scrollbar { -ms-overflow-style:none; scrollbar-width:none; }
+        .app-view { display:none; animation:fadeIn .3s ease; }
+        .app-view.active { display:flex; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
     </style>
 </head>
-
 <body class="h-[100dvh] w-screen flex flex-col overflow-hidden relative pb-[80px]">
-    <script src="/static/js/i18n.js"></script>
+<script src="/static/js/i18n.js"></script>
 
+<!-- ═══════════════ HOME TAB ═══════════════ -->
+<div id="view-home" class="app-view active flex-col h-full overflow-y-auto hide-scrollbar px-5 pt-5 pb-6 mx-auto max-w-lg w-full">
+    <header class="flex items-center justify-between mb-4">
+        <div>
+            <p class="text-slate-400 text-xs font-medium mb-0.5">CycleSync Driver</p>
+            <h1 class="text-xl font-bold tracking-tight" id="home-vehicle-name">Loading...</h1>
+            <div class="flex items-center gap-2 mt-0.5">
+                <span class="text-xs text-slate-400" id="home-vehicle-plate">—</span>
+                <span id="home-bb-badge" class="text-[10px] font-bold text-slate-500 bg-slate-800 px-2 py-0.5 rounded-full">—</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <div class="flex bg-slate-800/80 backdrop-blur-md rounded-full p-0.5 border border-white/10">
+                <button onclick="window.setLanguage('en')" id="lang-en-app" class="px-2 py-1 rounded-full text-[10px] font-bold bg-brand-500 text-slate-900">EN</button>
+                <button onclick="window.setLanguage('it')" id="lang-it-app" class="px-2 py-1 rounded-full text-[10px] font-bold text-slate-400">IT</button>
+            </div>
+            <a href="/dashboard" class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-800 border border-slate-600 text-slate-300 hover:text-white transition-all text-[10px] font-bold">🏢 Portal</a>
+        </div>
+    </header>
 
+    <!-- Vehicle Strip -->
+    <div id="vehicle-strip" class="flex gap-2 overflow-x-auto hide-scrollbar mb-4 -mx-5 px-5"></div>
 
-    <div id="view-home"
-        class="app-view active flex-col h-full overflow-y-auto hide-scrollbar px-5 pt-6 pb-6 mx-auto max-w-lg w-full">
+    <!-- Quick Actions -->
+    <div class="flex gap-2 mb-4">
+        <button onclick="triggerSOS()" class="bg-rose-600 hover:bg-rose-500 text-white font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.3)] transition-all flex-1 justify-center text-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            🆘 SOS
+        </button>
+        <button onclick="switchView('view-map')" class="bg-slate-800 border border-white/10 text-white font-medium px-4 py-2.5 rounded-xl text-sm flex-1 text-center">🗺️ Network</button>
+    </div>
 
-        <header class="flex items-center justify-between mb-8">
+    <!-- VSI + Policy Row -->
+    <div class="grid grid-cols-2 gap-3 mb-4">
+        <div class="glass-card p-3 flex items-center gap-3">
+            <div class="w-14 h-14 rounded-full flex items-center justify-center relative shrink-0" id="vsi-ring" style="background:conic-gradient(#10b981 240deg, #1e293b 240deg)">
+                <div class="w-11 h-11 rounded-full bg-cardbg flex flex-col items-center justify-center">
+                    <span class="text-lg font-black text-white leading-none" id="home-vsi-score">--</span>
+                </div>
+            </div>
             <div>
-                <p class="text-slate-400 text-sm font-medium mb-1">CycleSync Home</p>
-                <h1 data-i18n="driver-hello" class="text-2xl font-bold tracking-tight">Ciao, Andrea</h1>
-            </div>
-            <div class="flex items-center gap-3">
-                <div class="flex bg-slate-800/80 backdrop-blur-md rounded-full p-0.5 border border-white/10 shadow-lg">
-                    <button onclick="window.setLanguage('en')" id="lang-en-app"
-                        class="px-2.5 py-1 rounded-full text-[10px] font-bold transition-all bg-brand-500 text-slate-900 shadow-[0_0_10px_rgba(0,229,255,0.4)]">EN</button>
-                    <button onclick="window.setLanguage('it')" id="lang-it-app"
-                        class="px-2.5 py-1 rounded-full text-[10px] font-bold transition-all text-slate-400 hover:text-white">IT</button>
-                </div>
-
-                <a href="/dashboard"
-                    class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-800 border border-slate-600 text-slate-300 hover:text-white hover:border-brand-400 transition-all shadow-lg group">
-                    <span class="text-sm group-hover:scale-110 transition-transform">🏢</span>
-                    <span class="text-[10px] font-bold tracking-wide uppercase">Portal</span>
-                </a>
-            </div>
-        </header>
-
-        <div class="flex gap-3 overflow-x-auto hide-scrollbar mb-8 -mx-5 px-5">
-            <button
-                class="bg-brand-600 hover:bg-brand-500 text-black font-semibold px-5 py-2.5 rounded-full whitespace-nowrap transition-colors flex items-center gap-2 shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                </svg>
-                <span data-i18n="driver-sos">Soccorso Rapido</span>
-            </button>
-            <button data-i18n="driver-parking"
-                class="bg-slate-800 border border-white/10 text-white font-medium px-5 py-2.5 rounded-full whitespace-nowrap shrink-0">Parcheggi</button>
-            <button data-i18n="driver-charging"
-                class="bg-slate-800 border border-white/10 text-white font-medium px-5 py-2.5 rounded-full whitespace-nowrap shrink-0">Ricarica
-                EV</button>
-        </div>
-
-        <div onclick="switchView('view-alert')"
-            class="glass-card p-5 mb-6 border border-brand-500/40 relative overflow-hidden group cursor-pointer shadow-[0_0_20px_rgba(0,229,255,0.05)]">
-            <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:scale-110 transition-transform">
-                <svg class="w-16 h-16 text-brand-400" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                        d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
-                </svg>
-            </div>
-            <div class="flex items-center gap-2 mb-3">
-                <span class="flex h-2.5 w-2.5 relative">
-                    <span
-                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-500"></span>
-                </span>
-                <span data-i18n="driver-action-req"
-                    class="text-xs font-bold text-brand-400 uppercase tracking-wider">Azione Richiesta</span>
-            </div>
-            <h3 data-i18n="driver-maint-rec" class="text-lg font-bold text-white mb-1">Manutenzione Consigliata</h3>
-            <p data-i18n="driver-maint-desc" class="text-sm text-slate-400 mb-4 max-w-[80%]">Rilevata usura anomala
-                freni. Intervieni per mantenere lo sconto telematica.</p>
-            <span
-                class="inline-flex items-center text-sm font-semibold text-white bg-white/10 px-3 py-1.5 rounded-lg group-hover:bg-brand-500 group-hover:text-black transition-colors">
-                <span data-i18n="driver-view-details">Vedi dettagli &rarr;</span>
-            </span>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="glass-card p-4 flex flex-col justify-between min-h-[120px]">
-                <div>
-                    <p data-i18n="driver-active-veh" class="text-xs text-slate-400 mb-1">Veicolo Attivo</p>
-                    <h4 data-i18n="driver-your-suv" class="font-bold text-base leading-tight">Il tuo SUV</h4>
-                </div>
-                <div>
-                    <div class="flex items-end gap-1 mb-1">
-                        <span class="text-2xl font-black text-emerald-400">92</span>
-                        <span class="text-xs text-slate-500 pb-1">/100</span>
-                    </div>
-                    <p data-i18n="driver-vsi-score"
-                        class="text-[10px] font-bold text-emerald-500 uppercase tracking-wide">VSI Score: Ottimo</p>
-                </div>
-            </div>
-
-            <div class="glass-card p-4 flex flex-col justify-between min-h-[120px]">
-                <div>
-                    <p data-i18n="driver-policy-disc" class="text-xs text-slate-400 mb-1">Sconto Polizza</p>
-                    <h4 data-i18n="driver-telematics" class="font-bold text-base leading-tight">Telematica</h4>
-                </div>
-                <div>
-                    <div class="flex items-center gap-1 mb-1">
-                        <span class="text-2xl font-black text-brand-400">-14</span>
-                        <span class="text-lg font-bold text-brand-400">%</span>
-                    </div>
-                    <div class="flex items-end gap-1 h-6 mt-2">
-                        <div class="w-1/5 bg-white/10 h-[40%] rounded-t-sm"></div>
-                        <div class="w-1/5 bg-white/10 h-[60%] rounded-t-sm"></div>
-                        <div class="w-1/5 bg-white/10 h-[50%] rounded-t-sm"></div>
-                        <div class="w-1/5 bg-white/10 h-[80%] rounded-t-sm"></div>
-                        <div class="w-1/5 bg-brand-500 h-full rounded-t-sm shadow-[0_0_8px_rgba(0,229,255,0.5)]"></div>
-                    </div>
-                </div>
+                <p class="text-[10px] text-slate-400 mb-0.5">VSI Score</p>
+                <p id="home-vsi-label" class="text-[10px] font-bold text-emerald-400 uppercase">—</p>
+                <p class="text-[10px] text-slate-500" id="home-odometer">—</p>
             </div>
         </div>
-
-        <div class="mb-6">
-            <h3 data-i18n="driver-health-title"
-                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">Stato Componenti</h3>
-            <div class="glass-card p-4 flex flex-col gap-4">
-
-                <div>
-                    <div class="flex justify-between items-end mb-1">
-                        <span data-i18n="driver-brakes" class="text-sm font-semibold text-white">Pastiglie Freni</span>
-                        <span data-i18n="driver-brakes-warn"
-                            class="text-[10px] font-bold text-brand-400 uppercase">Controllo richiesto</span>
-                    </div>
-                    <div class="w-full bg-slate-800 rounded-full h-2">
-                        <div class="bg-brand-400 h-2 rounded-full shadow-[0_0_10px_rgba(0,229,255,0.5)]"
-                            style="width: 25%"></div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex justify-between items-end mb-1">
-                        <span data-i18n="driver-tires" class="text-sm font-semibold text-white">Pneumatici</span>
-                        <span data-i18n="driver-tires-ok"
-                            class="text-[10px] font-bold text-emerald-500 uppercase">Ottimale</span>
-                    </div>
-                    <div class="w-full bg-slate-800 rounded-full h-2">
-                        <div class="bg-emerald-500 h-2 rounded-full" style="width: 82%"></div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex justify-between items-end mb-1">
-                        <span data-i18n="driver-battery" class="text-sm font-semibold text-white">Stato Batteria
-                            EV</span>
-                        <span data-i18n="driver-battery-ok" class="text-[10px] font-bold text-emerald-500 uppercase">In
-                            salute</span>
-                    </div>
-                    <div class="w-full bg-slate-800 rounded-full h-2">
-                        <div class="bg-emerald-500 h-2 rounded-full" style="width: 95%"></div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="mb-4">
-            <h3 data-i18n="driver-eco-title"
-                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">Impatto Eco</h3>
-            <div class="glass-card p-4 flex justify-around items-center border border-emerald-500/20 bg-emerald-500/5">
-                <div class="text-center">
-                    <p class="text-2xl font-bold text-emerald-400">124</p>
-                    <p data-i18n="driver-co2-saved"
-                        class="text-[10px] text-emerald-500 uppercase font-bold tracking-wide">CO2 Risparmiata (kg)</p>
-                </div>
-                <div class="w-px h-10 bg-white/10"></div>
-                <div class="text-center">
-                    <p class="text-2xl font-bold text-emerald-400">5.2</p>
-                    <p data-i18n="driver-trees" class="text-[10px] text-emerald-500 uppercase font-bold tracking-wide">
-                        Alberi Equivalenti</p>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-
-    <div id="view-alert" class="app-view flex-col h-full overflow-y-auto px-5 pb-8 pt-4">
-        <header class="flex items-center justify-between mb-8 shrink-0">
-            <button onclick="switchView('view-home')"
-                class="text-white p-2 -ml-2 hover:text-brand-400 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
-            </button>
-            <h1 data-i18n="driver-alert-details" class="text-[15px] font-semibold tracking-wide text-slate-200">Dettagli
-                Avviso</h1>
-            <div class="w-6"></div>
-        </header>
-
-        <div class="flex justify-center mt-2 mb-8">
-            <div class="w-28 h-28 rounded-full glow-ring flex items-center justify-center relative">
-                <div class="absolute inset-0 rounded-full border border-brand-500/20 scale-110"></div>
-                <div class="absolute inset-0 rounded-full border border-brand-500/10 scale-125"></div>
-                <svg class="w-10 h-10 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
-                    </path>
-                </svg>
-                <div class="absolute top-6 right-6 w-3 h-3 bg-red-500 border-2 border-darkbg rounded-full"></div>
-            </div>
-        </div>
-
-        <div class="text-center mb-8">
-            <h2 data-i18n="driver-maint-rec" class="text-2xl font-bold mb-3 tracking-tight">Manutenzione consigliata
-            </h2>
-            <p data-i18n="driver-alert-desc" class="text-slate-400 text-[15px] leading-relaxed px-2">Abbiamo rilevato
-                un'usura anomala delle pastiglie
-                dei freni. Intervieni per guidare in sicurezza e ottenere un vantaggio sulla tua polizza.</p>
-        </div>
-
-        <div class="glass-card flex flex-col overflow-hidden mb-8">
-            <div class="flex items-start gap-4 p-4 border-b border-white/5">
-                <div class="mt-0.5 opacity-90"><svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7">
-                        </path>
-                    </svg></div>
-                <div>
-                    <h4 data-i18n="driver-discount-active" class="font-semibold text-[15px] mb-0.5 text-white">Sconto
-                        polizza attivabile</h4>
-                    <p class="text-sm text-slate-400"><span data-i18n="driver-discount-after">Dopo l'intervento
-                            riceverai</span> <span class="text-brand-400 font-semibold">-2.7%</span></p>
-                </div>
-            </div>
-            <div class="flex items-start gap-4 p-4 border-b border-white/5">
-                <div class="mt-0.5 opacity-90"><svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.956 11.956 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
-                        </path>
-                    </svg></div>
-                <div>
-                    <h4 data-i18n="driver-risk-red" class="font-semibold text-[15px] mb-0.5 text-white">Riduzione
-                        rischio sinistri</h4>
-                    <p class="text-sm text-slate-400"><span data-i18n="driver-up-to">Fino a</span> <span
-                            class="text-brand-400 font-semibold">-30.8%</span>
-                        <span data-i18n="driver-act-now">intervenendo ora</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex flex-col gap-3 mt-auto">
-            <button onclick="switchView('view-map')"
-                class="w-full bg-brand-500 hover:bg-brand-400 text-black font-semibold py-3.5 rounded-xl flex justify-center items-center gap-2 transition-colors">
-                <span data-i18n="driver-find-shop">Trova officina convenzionata</span>
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-            </button>
-            <button onclick="switchView('view-home')" data-i18n="driver-ignore"
-                class="w-full bg-transparent border border-white/20 text-slate-300 font-semibold py-3.5 rounded-xl hover:bg-white/5 transition-colors">
-                Ignora per ora
-            </button>
+        <div class="glass-card p-3 flex flex-col justify-between" onclick="document.getElementById('tips-section').classList.toggle('hidden')">
+            <p class="text-[10px] text-slate-400">Driving Tips</p>
+            <p class="text-sm font-bold text-brand-400 mt-1">💡 Tap for tips</p>
+            <p class="text-[10px] text-slate-500">Improve your score</p>
         </div>
     </div>
 
+    <!-- VSI Tips (expandable) -->
+    <div id="tips-section" class="hidden glass-card p-3 mb-4 border border-brand-500/20 bg-brand-500/5">
+        <p class="text-xs font-bold text-brand-400 mb-2">🎯 VSI Improvement Tips</p>
+        <div id="vsi-tips"></div>
+    </div>
 
-    <div id="view-map" class="app-view flex-col h-full bg-slate-900">
-        <header class="flex items-center justify-between px-4 py-4 shrink-0 bg-darkbg z-10 border-b border-white/5">
-            <h1 data-i18n="driver-network" class="text-[17px] font-semibold tracking-wide text-white">Rete Convenzionata
-            </h1>
-            <svg class="w-5 h-5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z">
-                </path>
-            </svg>
-        </header>
-        <div class="flex-1 w-full relative">
-            <iframe src="/api/fleet/map?view=suppliers" style="width: 100%; height: 100%; border: none;"></iframe>
-            <div class="absolute bottom-0 w-full h-12 bg-gradient-to-t from-darkbg to-transparent pointer-events-none">
+    <!-- DTC Alerts -->
+    <div id="dtc-section" class="hidden glass-card p-3 mb-4 border border-amber-500/20 bg-amber-500/5">
+        <p class="text-xs font-bold text-amber-400 mb-2">⚠️ Diagnostic Trouble Codes</p>
+        <div id="dtc-list"></div>
+    </div>
+
+    <!-- Maintenance Alert Banner -->
+    <div onclick="switchView('view-alert')" class="glass-card p-4 mb-4 border border-brand-500/30 cursor-pointer group">
+        <div class="flex items-center gap-2 mb-1">
+            <span class="flex h-2 w-2 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span></span>
+            <span class="text-[10px] font-bold text-brand-400 uppercase">Action Required</span>
+        </div>
+        <h3 class="text-sm font-bold text-white mb-0.5">Recommended Maintenance</h3>
+        <p class="text-xs text-slate-400">Tap to view component alerts & get repair quotes →</p>
+    </div>
+
+    <!-- Component Health -->
+    <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 px-1">Component Health</h3>
+    <div id="component-health-grid" class="grid grid-cols-2 gap-2 mb-4">
+        <div class="glass-card p-4 col-span-2 text-center text-slate-500 text-sm">Loading components...</div>
+    </div>
+</div>
+
+<!-- ═══════════════ ALERTS TAB ═══════════════ -->
+<div id="view-alert" class="app-view flex-col h-full overflow-y-auto hide-scrollbar px-5 pb-8 pt-4 mx-auto max-w-lg w-full">
+    <header class="flex items-center justify-between mb-6 shrink-0">
+        <button onclick="switchView('view-home')" class="text-white p-2 -ml-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg></button>
+        <h1 class="text-sm font-semibold text-slate-200">Maintenance Alerts</h1>
+        <div class="w-5"></div>
+    </header>
+    <div id="alerts-list"></div>
+</div>
+
+<!-- ═══════════════ MAP TAB ═══════════════ -->
+<div id="view-map" class="app-view flex-col h-full bg-slate-900">
+    <header class="flex items-center justify-between px-4 py-3 shrink-0 bg-darkbg z-10 border-b border-white/5">
+        <button onclick="switchView('view-home')" class="text-white p-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg></button>
+        <h1 class="text-sm font-semibold text-white">Affiliated Network</h1>
+        <div class="w-5"></div>
+    </header>
+    <div class="flex-1 w-full relative">
+        <iframe src="/api/fleet/map?view=suppliers" style="width:100%;height:100%;border:none;"></iframe>
+    </div>
+</div>
+
+<!-- ═══════════════ PROFILE TAB ═══════════════ -->
+<div id="view-profile" class="app-view flex-col h-full overflow-y-auto hide-scrollbar px-5 pb-8 pt-4 mx-auto max-w-lg w-full">
+    <header class="flex items-center justify-between mb-6 shrink-0">
+        <button onclick="switchView('view-home')" class="text-white p-2 -ml-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg></button>
+        <h1 class="text-sm font-semibold text-slate-200">Profile & Vehicles</h1>
+        <div class="w-5"></div>
+    </header>
+
+    <!-- Account Info -->
+    <div class="glass-card p-4 mb-4">
+        <div class="flex items-center gap-3 mb-3">
+            <div class="w-12 h-12 rounded-full bg-brand-600 flex items-center justify-center text-lg font-bold text-black">AM</div>
+            <div>
+                <p class="font-bold text-white" id="profile-name">—</p>
+                <p class="text-xs text-slate-400" id="profile-email">—</p>
+                <p class="text-[10px] text-slate-500" id="profile-phone">—</p>
             </div>
         </div>
     </div>
 
+    <!-- My Vehicles -->
+    <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 px-1">My Vehicles</h3>
+    <div id="profile-vehicles" class="mb-4"></div>
 
-    <nav
-        class="fixed bottom-0 w-full h-[80px] bg-[#0a111a]/90 backdrop-blur-xl border-t border-white/5 flex justify-around items-center px-2 pb-4 pt-2 z-50">
+    <!-- Add Vehicle -->
+    <div class="glass-card p-4 mb-4">
+        <p class="text-xs font-bold text-white mb-2">➕ Add Vehicle</p>
+        <div class="flex gap-2">
+            <input id="add-vehicle-input" type="text" placeholder="Plate, VIN, or policy #" class="flex-1 bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-brand-500 outline-none">
+            <button onclick="linkVehicle()" class="bg-brand-600 text-black font-bold px-4 py-2 rounded-lg text-sm hover:bg-brand-500 transition-colors">Link</button>
+        </div>
+    </div>
 
-        <button onclick="switchView('view-home')" id="nav-home"
-            class="nav-btn flex flex-col items-center gap-1 w-16 text-brand-400">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-            </svg>
-            <span data-i18n="driver-nav-home" class="text-[10px] font-medium">Home</span>
-        </button>
+    <!-- Log Maintenance -->
+    <div class="glass-card p-4 mb-4">
+        <p class="text-xs font-bold text-white mb-2">🔧 Log Maintenance</p>
+        <select id="maint-type" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white mb-2">
+            <option value="oil_change">🛢️ Oil Change</option>
+            <option value="tire_change">🛞 Tire Change</option>
+            <option value="brake_service">🛑 Brake Service</option>
+            <option value="battery_service">🔋 Battery Check</option>
+            <option value="filter_change">🌬️ Filter Change</option>
+            <option value="scheduled">📋 Scheduled Service</option>
+        </select>
+        <input id="maint-desc" type="text" placeholder="Description (optional)" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 mb-2 outline-none">
+        <input id="maint-km" type="number" placeholder="Current mileage (km)" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 mb-2 outline-none">
+        <button onclick="logMaintenance()" class="w-full bg-brand-600 text-black font-bold py-2.5 rounded-lg text-sm hover:bg-brand-500">Save</button>
+    </div>
+</div>
 
-        <button onclick="switchView('view-map')" id="nav-map"
-            class="nav-btn flex flex-col items-center gap-1 w-16 text-slate-500 hover:text-slate-300 transition-colors">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7">
-                </path>
-            </svg>
-            <span data-i18n="driver-nav-network" class="text-[10px] font-medium">Network</span>
-        </button>
+<!-- ═══════════════ SOS OVERLAY ═══════════════ -->
+<div id="view-sos" class="app-view flex-col h-full overflow-y-auto hide-scrollbar px-5 pb-8 pt-4 mx-auto max-w-lg w-full bg-darkbg">
+    <header class="flex items-center justify-between mb-4 shrink-0">
+        <button onclick="switchView('view-home')" class="text-white p-2 -ml-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+        <h1 class="text-sm font-bold text-rose-400 flex items-center gap-2">🆘 Emergency Response</h1>
+        <div class="w-5"></div>
+    </header>
+    <div class="glass-card p-3 mb-3 border border-rose-500/30 bg-rose-500/5">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></div>
+            <span class="text-xs font-bold text-rose-400" id="sos-status">Connecting to CycleSync Emergency AI...</span>
+        </div>
+    </div>
+    <div id="sos-output" class="glass-card p-4 text-sm text-slate-300 leading-relaxed min-h-[300px] overflow-y-auto border border-rose-500/10"></div>
+    <div class="flex gap-2 mt-4">
+        <a href="tel:112" class="flex-1 bg-rose-600 text-white font-bold py-3 rounded-xl text-center text-sm">📞 Call 112</a>
+        <button onclick="switchView('view-home')" class="flex-1 bg-slate-800 border border-white/10 text-white font-semibold py-3 rounded-xl text-sm">Close</button>
+    </div>
+</div>
 
-        <button onclick="switchView('view-alert')" id="nav-alert"
-            class="nav-btn flex flex-col items-center gap-1 w-16 text-slate-500 hover:text-slate-300 transition-colors relative">
-            <div class="absolute top-0 right-3 w-2 h-2 bg-red-500 rounded-full border border-[#0a111a]"></div>
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
-                </path>
-            </svg>
-            <span data-i18n="driver-nav-alerts" class="text-[10px] font-medium">Avvisi</span>
-        </button>
+<!-- ═══════════════ REPAIR QUOTE MODAL ═══════════════ -->
+<div id="quote-modal" class="hidden fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-end justify-center">
+    <div class="w-full max-w-lg bg-cardbg rounded-t-3xl p-6 border-t border-white/10" id="quote-output"></div>
+</div>
 
-        <button
-            class="nav-btn flex flex-col items-center gap-1 w-16 text-slate-500 hover:text-slate-300 transition-colors">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-            </svg>
-            <span data-i18n="driver-nav-profile" class="text-[10px] font-medium">Profilo</span>
-        </button>
-    </nav>
+<!-- ═══════════════ BOTTOM NAV ═══════════════ -->
+<nav class="fixed bottom-0 w-full h-[80px] bg-[#0a111a]/90 backdrop-blur-xl border-t border-white/5 flex justify-around items-center px-2 pb-4 pt-2 z-50">
+    <button onclick="switchView('view-home')" id="nav-home" class="nav-btn flex flex-col items-center gap-1 w-16 text-brand-400">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span class="text-[10px] font-medium">Home</span>
+    </button>
+    <button onclick="switchView('view-map')" id="nav-map" class="nav-btn flex flex-col items-center gap-1 w-16 text-slate-500 hover:text-slate-300 transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+        <span class="text-[10px] font-medium">Network</span>
+    </button>
+    <button onclick="switchView('view-alert')" id="nav-alert" class="nav-btn flex flex-col items-center gap-1 w-16 text-slate-500 hover:text-slate-300 transition-colors relative">
+        <div class="absolute top-0 right-3 w-2 h-2 bg-rose-500 rounded-full border border-[#0a111a]"></div>
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+        <span class="text-[10px] font-medium">Alerts</span>
+    </button>
+    <button onclick="switchView('view-profile')" id="nav-profile" class="nav-btn flex flex-col items-center gap-1 w-16 text-slate-500 hover:text-slate-300 transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+        <span class="text-[10px] font-medium">Profile</span>
+    </button>
+</nav>
 
-    <script>
-        function switchView(targetId) {
-            // Hide all views
-            document.querySelectorAll('.app-view').forEach(view => {
-                view.classList.remove('active');
-            });
-            // Show target
-            document.getElementById(targetId).classList.add('active');
-
-            // Reset all nav icons to gray
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('text-brand-400');
-                btn.classList.add('text-slate-500');
-            });
-
-            // Color the active nav icon
-            if (targetId === 'view-home') {
-                document.getElementById('nav-home').classList.add('text-brand-400');
-                document.getElementById('nav-home').classList.remove('text-slate-500');
-            } else if (targetId === 'view-map') {
-                document.getElementById('nav-map').classList.add('text-brand-400');
-                document.getElementById('nav-map').classList.remove('text-slate-500');
-            } else if (targetId === 'view-alert') {
-                document.getElementById('nav-alert').classList.add('text-brand-400');
-                document.getElementById('nav-alert').classList.remove('text-slate-500');
-            }
-        }
-
-        // FIX: Force translation sync slightly after the DOM loads to avoid race conditions
-        setTimeout(() => {
-            if (window.setLanguage) {
-                const savedLang = localStorage.getItem('cyclesync_lang') || 'en';
-                window.setLanguage(savedLang);
-            }
-        }, 50);
-    </script>
+<script src="/static/js/driver_app.js"></script>
 </body>
-
 </html>

@@ -1,9 +1,9 @@
-import { initTelemetry } from './views/telemetry.js';
-import { initActuarial } from './views/actuarial.js';
-import { initPredictiveAsset } from './views/predictive_asset.js';
-import { initAIStrategy } from './views/ai_strategy.js';
-import { initESG } from './views/esg.js';
-import { initAdjuster } from './views/adjuster.js';
+import { initTelemetry } from './views/telemetry.js?v=11';
+import { initActuarial } from './views/actuarial.js?v=11';
+import { initPredictiveAsset } from './views/predictive_asset.js?v=11';
+import { initAIStrategy } from './views/ai_strategy.js?v=11';
+import { initESG } from './views/esg.js?v=11';
+import { initAdjuster } from './views/adjuster.js?v=11';
 
 const viewModules = {
     'telemetry-view': { path: '/static/partials/telemetry_tab.html', init: initTelemetry },
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const config = viewModules[targetId];
                 if (!config) return;
 
-                const response = await fetch(config.path);
+                const response = await fetch(config.path + '?v=11');
                 if (!response.ok) throw new Error("Failed to load partial");
                 const html = await response.text();
                 section.innerHTML = html;

@@ -1,3 +1,5 @@
+import { initRiskChat } from './risk_chat.js?v=5';
+
 let cachedSummaryData = null;
 let cachedDemographicsData = null;
 let riskChart, ageChart, genderChart, vehicleChart, behaviorChart, vehicleAgeChart;
@@ -54,6 +56,9 @@ export function initActuarial() {
         isInitialized = true;
         console.log("✅ [Actuarial] Event listeners attached. Loading initial Regional Charts.");
         loadRegionalCharts();
+        
+        // Initialize AI Risk Analyst chatbot
+        initRiskChat();
     } else {
         console.warn("⚠️ [Actuarial] Could not find DOM elements! Check your HTML IDs.");
     }

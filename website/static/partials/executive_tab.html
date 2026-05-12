@@ -105,3 +105,57 @@
         </div>
     </div>
 </div>
+
+<!-- ── AI Risk Analyst Chatbot ──────────────────────────────────────────── -->
+<div class="mt-6 md:mt-8 glass-panel rounded-xl border border-brand-500/20 overflow-hidden shadow-[0_0_30px_rgba(0,229,255,0.05)]">
+    <div class="bg-gradient-to-r from-slate-900 via-brand-950/30 to-slate-900 px-5 py-4 border-b border-white/5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-brand-600/30 flex items-center justify-center border border-brand-500/50">
+                <span class="text-sm">🧠</span>
+            </div>
+            <div>
+                <h3 class="text-sm font-bold text-white">AI Risk Analyst</h3>
+                <p class="text-[10px] text-slate-400">Context-aware actuarial intelligence • Powered by Gemini</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-1.5">
+            <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+            <span class="text-[10px] text-emerald-400 font-medium">Online</span>
+        </div>
+    </div>
+
+    <!-- Chat messages area -->
+    <div id="risk-chat-messages" class="h-[280px] overflow-y-auto p-5 space-y-4 bg-black/20">
+        <!-- Welcome message -->
+        <div class="flex items-start gap-3">
+            <div class="w-7 h-7 rounded-full bg-brand-600/30 flex items-center justify-center shrink-0 border border-brand-500/30 mt-0.5">
+                <span class="text-xs">🧠</span>
+            </div>
+            <div class="bg-slate-800/60 rounded-xl rounded-tl-sm px-4 py-3 max-w-[85%] border border-white/5">
+                <p class="text-sm text-slate-300 leading-relaxed">Welcome to the <strong class="text-brand-400">AI Risk Analyst</strong>. I have access to your fleet's actuarial data, claims history, and behavioral telemetry. Ask me anything about risk exposure, premium optimization, or loss ratio trends.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suggested questions -->
+    <div class="px-5 py-3 border-t border-white/5 bg-black/10 flex flex-wrap gap-2" id="risk-chat-suggestions">
+        <button class="suggested-q text-[10px] bg-slate-800 text-slate-300 px-3 py-1.5 rounded-full border border-white/10 hover:border-brand-500/50 hover:text-brand-400 transition-all cursor-pointer">Which regions have the highest tyre-related claims?</button>
+        <button class="suggested-q text-[10px] bg-slate-800 text-slate-300 px-3 py-1.5 rounded-full border border-white/10 hover:border-brand-500/50 hover:text-brand-400 transition-all cursor-pointer">What's the average VSI for vehicles under 3 years old?</button>
+        <button class="suggested-q text-[10px] bg-slate-800 text-slate-300 px-3 py-1.5 rounded-full border border-white/10 hover:border-brand-500/50 hover:text-brand-400 transition-all cursor-pointer">Show me the top 5 highest-risk drivers</button>
+        <button class="suggested-q text-[10px] bg-slate-800 text-slate-300 px-3 py-1.5 rounded-full border border-white/10 hover:border-brand-500/50 hover:text-brand-400 transition-all cursor-pointer">How much did telematics save in claim payouts last quarter?</button>
+    </div>
+
+    <!-- Input bar -->
+    <div class="px-5 py-4 border-t border-white/5 flex gap-3">
+        <input id="risk-chat-input" type="text" placeholder="Ask about risk exposure, claims patterns, premium optimization..."
+            class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all text-sm"
+            autocomplete="off">
+        <button id="risk-chat-send"
+            class="bg-brand-600 hover:bg-brand-500 text-white px-5 py-2.5 rounded-lg font-bold transition-colors shadow-[0_0_15px_rgba(0,229,255,0.2)] flex items-center gap-2 shrink-0 text-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+            </svg>
+            Send
+        </button>
+    </div>
+</div>
