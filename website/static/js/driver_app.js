@@ -24,11 +24,14 @@ function renderVehicleStrip() {
     strip.innerHTML = driverData.vehicles.map(v => {
         const active = v.vin === activeVin;
         const icon = v.powertrain === 'electric' ? '⚡' : v.powertrain?.includes('hybrid') ? '🔋' : '⛽';
-        return `<button onclick="selectVehicle('${v.vin}')" class="shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-2xl transition-all ${active ? 'bg-brand-600 text-black shadow-[0_0_15px_rgba(0,229,255,0.3)]' : 'bg-slate-800 border border-white/10 text-white'}">
-            <span class="text-lg">${icon}</span>
-            <div class="text-left">
-                <div class="text-xs font-bold leading-tight">${v.manufacturer} ${v.model.replace(v.manufacturer+' ','')}</div>
-                <div class="text-[10px] ${active?'text-black/60':'text-slate-400'}">${v.plate}${v.is_pinned?' ⭐':''}</div>
+        const cls = active
+            ? 'bg-brand-600 border-brand-500 text-black shadow-[0_0_15px_rgba(0,229,255,0.3)]'
+            : 'bg-slate-800 border-white/10 text-white hover:border-white/20';
+        return `<button onclick="selectVehicle('${v.vin}')" class="shrink-0 box-border flex items-center gap-2.5 px-5 h-12 rounded-2xl border ${cls}" style="min-width:200px">
+            <span class="text-lg leading-none">${icon}</span>
+            <div class="text-left min-w-0">
+                <div class="text-xs font-bold leading-tight truncate">${v.manufacturer} ${v.model.replace(v.manufacturer+' ','')}</div>
+                <div class="text-[10px] leading-tight ${active?'text-black/60':'text-slate-400'}">${v.plate}${v.is_pinned?' ⭐':''}</div>
             </div>
         </button>`;
     }).join('');
