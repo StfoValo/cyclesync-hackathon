@@ -89,7 +89,7 @@ export function initRiskChat() {
             console.error('Chat error:', error);
             const thinkingEl = document.getElementById(thinkingId);
             if (thinkingEl) thinkingEl.remove();
-            appendMessage('ai', '⚠️ Connection error. The AI service may be temporarily unavailable. Please try again.');
+            appendMessage('ai', 'Connection error. The AI service may be temporarily unavailable. Please try again.');
         }
     }
 
@@ -104,14 +104,14 @@ export function initRiskChat() {
                     <p class="text-sm text-white leading-relaxed">${escapeHTML(content)}</p>
                 </div>
                 <div class="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center shrink-0 border border-slate-600 mt-0.5">
-                    <span class="text-xs">👤</span>
+                    <svg class="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </div>
             </div>`;
         } else {
             const msgId = id ? `id="${id}"` : '';
             div.innerHTML = `
             <div class="w-7 h-7 rounded-full bg-brand-600/30 flex items-center justify-center shrink-0 border border-brand-500/30 mt-0.5">
-                <span class="text-xs">🧠</span>
+                <svg class="w-3.5 h-3.5 text-brand-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.5H20l-4.6 3.3 1.8 5.5L12 13l-5.2 3.3 1.8-5.5L4 7.5h6.2z"/></svg>
             </div>
             <div class="bg-slate-800/60 rounded-xl rounded-tl-sm px-4 py-3 max-w-[85%] border border-white/5">
                 <p ${msgId} class="text-sm text-slate-300 leading-relaxed">${content}</p>
@@ -128,7 +128,7 @@ export function initRiskChat() {
         div.className = 'flex items-start gap-3';
         div.innerHTML = `
         <div class="w-7 h-7 rounded-full bg-brand-600/30 flex items-center justify-center shrink-0 border border-brand-500/30 mt-0.5">
-            <span class="text-xs">🧠</span>
+            <svg class="w-3.5 h-3.5 text-brand-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.5H20l-4.6 3.3 1.8 5.5L12 13l-5.2 3.3 1.8-5.5L4 7.5h6.2z"/></svg>
         </div>
         <div class="bg-slate-800/60 rounded-xl rounded-tl-sm px-4 py-3 border border-white/5">
             <div class="flex items-center gap-2">

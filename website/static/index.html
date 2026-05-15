@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CycleSync | Sustainability Digital Twin</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -73,11 +74,11 @@
         <div class="flex bg-slate-800/80 backdrop-blur-md rounded-full p-1 border border-white/10 shadow-lg">
             <button onclick="setLanguage('en')" id="lang-en"
                 class="px-3 py-1.5 rounded-full text-xs font-bold transition-all bg-brand-500 text-slate-900 shadow-[0_0_10px_rgba(0,229,255,0.4)]">
-                🇬🇧 EN
+                EN
             </button>
             <button onclick="setLanguage('it')" id="lang-it"
                 class="px-3 py-1.5 rounded-full text-xs font-bold transition-all text-slate-400 hover:text-white">
-                🇮🇹 IT
+                IT
             </button>
         </div>
     </div>
@@ -310,7 +311,7 @@
             <div class="glass-card p-6 md:p-8 rounded-2xl fade-in-section" style="transition-delay: 100ms;">
                 <div
                     class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-brand-500/20 flex items-center justify-center mb-4 md:mb-6 border border-brand-500/30">
-                    <span class="text-xl md:text-2xl">🏭</span>
+                    <i data-lucide="factory" class="w-6 h-6 md:w-7 md:h-7 text-brand-400"></i>
                 </div>
                 <h3 data-i18n="loop-1-title" class="text-xl md:text-2xl font-bold text-white mb-2 md:mb-3">1. Birth</h3>
                 <p data-i18n="loop-1-desc" class="text-sm md:text-base text-slate-400 leading-relaxed">Ingesting fragmented OEM factory
@@ -320,7 +321,7 @@
             <div class="glass-card p-6 md:p-8 rounded-2xl fade-in-section" style="transition-delay: 200ms;">
                 <div
                     class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-brand-500/20 flex items-center justify-center mb-4 md:mb-6 border border-brand-500/30">
-                    <span class="text-xl md:text-2xl">🚗</span>
+                    <i data-lucide="car" class="w-6 h-6 md:w-7 md:h-7 text-brand-400"></i>
                 </div>
                 <h3 data-i18n="loop-2-title" class="text-xl md:text-2xl font-bold text-white mb-2 md:mb-3">2. Life</h3>
                 <p data-i18n="loop-2-desc" class="text-sm md:text-base text-slate-400 leading-relaxed">Monitoring real-world driver behavior via
@@ -330,7 +331,7 @@
             <div class="glass-card p-6 md:p-8 rounded-2xl fade-in-section" style="transition-delay: 300ms;">
                 <div
                     class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-brand-500/20 flex items-center justify-center mb-4 md:mb-6 border border-brand-500/30">
-                    <span class="text-xl md:text-2xl">♻️</span>
+                    <i data-lucide="recycle" class="w-6 h-6 md:w-7 md:h-7 text-brand-400"></i>
                 </div>
                 <h3 data-i18n="loop-3-title" class="text-xl md:text-2xl font-bold text-white mb-2 md:mb-3">3. Second Life</h3>
                 <p data-i18n="loop-3-desc" class="text-sm md:text-base text-slate-400 leading-relaxed">Deploying AI to intelligently triage
@@ -343,7 +344,7 @@
 
             <a href="/dashboard"
                 class="group relative w-full sm:w-1/2 px-6 py-5 bg-slate-800 hover:bg-slate-700 border border-brand-500/30 hover:border-brand-500 text-white rounded-xl shadow-[0_0_15px_rgba(0,229,255,0.1)] hover:shadow-[0_0_25px_rgba(0,229,255,0.3)] transition-all overflow-hidden flex flex-col items-center justify-center gap-2 cursor-pointer text-center">
-                <span class="text-3xl mb-1 group-hover:scale-110 transition-transform">🏢</span>
+                <i data-lucide="building-2" class="w-8 h-8 text-brand-400 mb-1 group-hover:scale-110 transition-transform"></i>
                 <span data-i18n="btn-enterprise" class="font-bold tracking-wide text-base md:text-lg">Enterprise
                     Portal</span>
                 <span data-i18n="btn-enterprise-sub" class="text-xs md:text-sm text-brand-400 font-medium">Insurer & OEM
@@ -352,7 +353,7 @@
 
             <a href="/driver"
                 class="group relative w-full sm:w-1/2 px-6 py-5 bg-brand-600 hover:bg-brand-500 border border-brand-400 hover:border-white text-white rounded-xl shadow-[0_0_20px_rgba(0,229,255,0.2)] hover:shadow-[0_0_35px_rgba(0,229,255,0.5)] transition-all overflow-hidden flex flex-col items-center justify-center gap-2 cursor-pointer text-center">
-                <span class="text-3xl mb-1 group-hover:scale-110 transition-transform">📱</span>
+                <i data-lucide="smartphone" class="w-8 h-8 text-white mb-1 group-hover:scale-110 transition-transform"></i>
                 <span data-i18n="btn-driver" class="font-bold tracking-wide text-base md:text-lg">Driver Hub</span>
                 <span data-i18n="btn-driver-sub" class="text-xs md:text-sm text-brand-100 font-medium">Consumer Mobile
                     App</span>
@@ -362,6 +363,7 @@
     </section>
 
     <script type="module" src="/static/js/landing.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', () => { if(window.lucide) lucide.createIcons(); });</script>
 </body>
 
 </html>

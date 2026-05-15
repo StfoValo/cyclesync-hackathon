@@ -39,7 +39,7 @@ window.translations = {
         "btn-driver-sub": "Consumer Mobile App",
 
         // Dashboard Sidebar
-        "nav-driver-app": "🚗 Driver App",
+        "nav-driver-app": "Driver App",
         "nav-fleet": "Fleet Telemetry",
         "nav-risk": "Risk Summary",
         "nav-asset": "Asset Risk",
@@ -97,12 +97,12 @@ window.translations = {
         // Partials: AI Routing
         "ai-title": "AI Routing Directive",
         "ai-subtitle": "LLM-powered strategic intelligence and policy recommendations.",
-        "ai-sel-region": "📍 Select Target Region:",
+        "ai-sel-region": "Select Target Region:",
         "ai-btn-gen": "Generate Strategy",
         "ai-term-title": "Telematics AI",
         "ai-term-now": "Now",
         "ai-term-wait": "Awaiting actuarial input...",
-        "ai-funnel-title": "📈 Post-Dispatch Conversion Funnel",
+        "ai-funnel-title": "Post-Dispatch Conversion Funnel",
         "ai-kpi-target": "Total Devices Targeted",
         "ai-kpi-open": "Notification Open Rate",
         "ai-kpi-booked": "Repairs Booked (Network)",
@@ -120,7 +120,7 @@ window.translations = {
         "esg-tires": "Tires Recovered",
         "esg-brakes": "Brake Pads Recovered",
         "esg-batts": "EV Batteries Recovered",
-        "esg-triage": "♻️ AI Component Triage & Reverse Logistics",
+        "esg-triage": "AI Component Triage & Reverse Logistics",
         "esg-triage-sub": "Bridging Birth, Life, and Second Life.",
         "esg-sel-region": "Select Region",
         "esg-btn-run": "Run Component Triage",
@@ -190,7 +190,7 @@ window.translations = {
         "adj-btn-subrogate": "Initiate Rivalsa against Driver",
 
         // CycleVision Modal
-        "adj-btn-vision": "👁️ Run CycleVision CNN Triage",
+        "adj-btn-vision": "Run CycleVision CNN Triage",
         "cv-title": "CycleVision CNN Triage",
         "cv-mech-claim": "Mechanic Request:",
         "cv-mech-val": "Front Radiator Assembly - €14,000",
@@ -198,7 +198,7 @@ window.translations = {
         "cv-ai-val": "0% Structural Damage. Component intact.",
         "cv-fraud-risk": "Fraud Probability:",
         "cv-fraud-val": "98% (CRITICAL)",
-        "cv-desc": "⚠️ FRAUD ALERT: Visual evidence explicitly contradicts the mechanic's €14,000 claim. AI confirms the radiator and structural supports are intact. Telemetry confirms a low-speed impact (< 10km/h). Recommendation: Block payout immediately.",
+        "cv-desc": "FRAUD ALERT: Visual evidence explicitly contradicts the mechanic's €14,000 claim. AI confirms the radiator and structural supports are intact. Telemetry confirms a low-speed impact (< 10km/h). Recommendation: Block payout immediately.",
         "cv-close": "Close Scan",
 
         // Driver App
@@ -276,7 +276,7 @@ window.translations = {
         "btn-driver-sub": "App Mobile Utente",
 
         // Dashboard Sidebar
-        "nav-driver-app": "🚗 App Guidatore",
+        "nav-driver-app": "App Guidatore",
         "nav-fleet": "Telemetria Flotta",
         "nav-risk": "Riepilogo Rischi",
         "nav-asset": "Rischio Asset",
@@ -334,12 +334,12 @@ window.translations = {
         // Partials: AI Routing
         "ai-title": "Direttiva di Routing IA",
         "ai-subtitle": "Intelligenza strategica basata su LLM e raccomandazioni di policy.",
-        "ai-sel-region": "📍 Seleziona Regione Target:",
+        "ai-sel-region": "Seleziona Regione Target:",
         "ai-btn-gen": "Genera Strategia",
         "ai-term-title": "IA Telematica",
         "ai-term-now": "Ora",
         "ai-term-wait": "In attesa di input attuariale...",
-        "ai-funnel-title": "📈 Imbuto di Conversione Post-Invio",
+        "ai-funnel-title": "Imbuto di Conversione Post-Invio",
         "ai-kpi-target": "Dispositivi Totali Targettizzati",
         "ai-kpi-open": "Tasso di Apertura Notifiche",
         "ai-kpi-booked": "Riparazioni Prenotate (Rete)",
@@ -357,7 +357,7 @@ window.translations = {
         "esg-tires": "Pneumatici Recuperati",
         "esg-brakes": "Pastiglie Freni Recuperate",
         "esg-batts": "Batterie EV Recuperate",
-        "esg-triage": "♻️ Triage Componenti IA & Logistica Inversa",
+        "esg-triage": "Triage Componenti IA & Logistica Inversa",
         "esg-triage-sub": "Colmare il divario tra Nascita, Vita e Seconda Vita.",
         "esg-sel-region": "Seleziona Regione",
         "esg-btn-run": "Esegui Triage Componenti",
@@ -427,7 +427,7 @@ window.translations = {
         "adj-btn-subrogate": "Avvia Rivalsa contro Assicurato",
 
         // CycleVision Modal
-        "adj-btn-vision": "👁️ Esegui Triage Visivo CycleVision",
+        "adj-btn-vision": "Esegui Triage Visivo CycleVision",
         "cv-title": "Triage CNN CycleVision",
         "cv-mech-claim": "Richiesta Meccanico:",
         "cv-mech-val": "Gruppo Radiatore Anteriore - €14.000",
@@ -435,7 +435,7 @@ window.translations = {
         "cv-ai-val": "0% Danni Strutturali. Componente intatto.",
         "cv-fraud-risk": "Probabilità di Frode:",
         "cv-fraud-val": "98% (CRITICO)",
-        "cv-desc": "⚠️ ALLERTA FRODE: L'evidenza visiva contraddice esplicitamente la richiesta di €14.000 del meccanico. L'IA conferma che il radiatore e i supporti strutturali sono intatti. La telemetria conferma un impatto a bassa velocità (< 10km/h). Raccomandazione: Bloccare immediatamente il pagamento.",
+        "cv-desc": "ALLERTA FRODE: L'evidenza visiva contraddice esplicitamente la richiesta di €14.000 del meccanico. L'IA conferma che il radiatore e i supporti strutturali sono intatti. La telemetria conferma un impatto a bassa velocità (< 10km/h). Raccomandazione: Bloccare immediatamente il pagamento.",
         "cv-close": "Chiudi Scansione",
 
         // Driver App

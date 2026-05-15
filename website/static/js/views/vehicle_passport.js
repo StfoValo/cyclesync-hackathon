@@ -1,6 +1,8 @@
 /**
  * Vehicle Digital Passport — works with new DB-backed API
  */
+import { manufacturerBadge, powertrainIcon, componentIcon, iconBlackboxActive } from '/static/js/icons.js';
+
 let currentPassportData = null;
 
 export function initVehiclePassport() {
@@ -127,17 +129,21 @@ function renderPassport(data) {
     // Header
     document.getElementById('passport-model').textContent = `${id.manufacturer || ''} ${id.model || ''}`.trim() || '—';
     document.getElementById('passport-plate').textContent = data.plate || '—';
-    document.getElementById('passport-driver').textContent = `👤 ${id.driver || '—'}`;
+    document.getElementById('passport-driver').textContent = `${id.driver || '—'}`;
 
-    const ptLabels = {electric:'⚡ Electric',diesel:'🛢️ Diesel',petrol:'⛽ Petrol',hybrid:'🔄 Hybrid',plug_in_hybrid:'🔌 PHEV',gpl:'💨 GPL'};
-    document.getElementById('passport-powertrain').textContent = ptLabels[id.powertrain] || id.powertrain || '—';
+    const ptEl = document.getElementById('passport-powertrain');
+    if (ptEl) ptEl.innerHTML = `<span class="inline-flex items-center gap-1.5">${powertrainIcon(id.powertrain, 'w-3.5 h-3.5')}<span class="text-xs">${({electric:'Electric',diesel:'Diesel',petrol:'Petrol',hybrid:'Hybrid',plug_in_hybrid:'PHEV',gpl:'GPL'})[id.powertrain] || id.powertrain || '—'}</span></span>`;
 
     const bbBadge = document.getElementById('passport-blackbox');
-    if (tel.has_blackbox) { bbBadge.classList.remove('hidden'); bbBadge.className = 'text-xs px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30 font-medium'; bbBadge.textContent = '📡 Blackbox Active'; }
-    else { bbBadge.classList.add('hidden'); }
+    if (tel.has_blackbox) {
+        bbBadge.classList.remove('hidden');
+        bbBadge.className = 'inline-flex items-center gap-1.5 text-xs px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30 font-medium';
+        bbBadge.innerHTML = `<svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Blackbox Active`;
+    } else { bbBadge.classList.add('hidden'); }
 
-    const iconMap = {SUV:'🚙',sedan:'🚗',hatchback:'🚗',wagon:'🚃',van:'🚐',sportcar:'🏎️',coupe:'🏎️'};
-    document.getElementById('passport-icon').textContent = iconMap[id.body_type] || '🚗';
+    // Manufacturer badge in the icon slot
+    const iconEl = document.getElementById('passport-icon');
+    if (iconEl) iconEl.innerHTML = manufacturerBadge(id.manufacturer, 'lg');
 
     // VSI
     const vsiEl = document.getElementById('passport-vsi');
@@ -181,13 +187,11 @@ function renderComponents(components) {
         groups[cat].push(c);
     });
 
-    const catConfig = {
-        tire: {icon:'🛞', label:'Tires'}, brake_pad: {icon:'🛑', label:'Brakes'},
-        ev_battery: {icon:'🔋', label:'Battery'}, brake_disc: {icon:'💿', label:'Discs'}
-    };
+    const catLabels = { tire:'Tires', brake_pad:'Brakes', ev_battery:'Battery', brake_disc:'Discs' };
 
     container.innerHTML = Object.entries(groups).map(([cat, items]) => {
-        const cfg = catConfig[cat] || {icon:'⚙️', label: cat};
+        const icon = componentIcon(cat, 'w-5 h-5');
+        const label = catLabels[cat] || cat;
         const avgWear = Math.round(items.reduce((s,c) => s + (c.wear_percent||0), 0) / items.length);
         const healthPct = 100 - avgWear;
         const worst = items.reduce((w,c) => (c.wear_percent||0) > (w.wear_percent||0) ? c : w, items[0]);
@@ -199,7 +203,7 @@ function renderComponents(components) {
 
         return `<div class="bg-slate-800/50 rounded-lg p-4 border ${borderColor}" title="${detail}">
             <div class="flex items-center justify-between mb-2">
-                <div class="flex items-center gap-2"><span class="text-lg">${cfg.icon}</span><span class="font-semibold text-white text-sm">${cfg.label}</span></div>
+                <div class="flex items-center gap-2 ${color}">${icon}<span class="font-semibold text-white text-sm">${label}</span></div>
                 <span class="text-xs font-bold ${color} uppercase">${status}</span>
             </div>
             <div class="w-full bg-slate-700 rounded-full h-2 mb-2"><div class="${barColor} rounded-full h-2 transition-all duration-1000" style="width:${healthPct}%"></div></div>

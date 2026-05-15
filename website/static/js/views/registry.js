@@ -1,6 +1,8 @@
 /**
  * Vehicle Registry Module — Table, filters, pagination
  */
+import { manufacturerBadge, powertrainIcon, iconBlackboxActive, iconBlackboxNone } from '/static/js/icons.js';
+
 let currentPage = 1;
 let currentSort = 'plate_number';
 let currentOrder = 'asc';
@@ -74,23 +76,34 @@ function renderTable(data) {
     }
     tbody.innerHTML = data.vehicles.map(v => {
         const vsiColor = v.vsi_score >= 70 ? 'text-emerald-400' : v.vsi_score >= 40 ? 'text-amber-400' : 'text-rose-400';
-        const polColor = v.policy_status === 'active' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border-amber-500/30';
-        const ptLabel = {electric:'⚡ EV',diesel:'🛢️ Diesel',petrol:'⛽ Petrol',hybrid:'🔄 Hybrid',plug_in_hybrid:'🔌 PHEV',gpl:'💨 GPL'};
+        const polColor = v.policy_status === 'active'
+            ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+            : 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+        const mfrBadge = manufacturerBadge(v.manufacturer, 'sm');
+        const ptIcon   = powertrainIcon(v.powertrain, 'w-4 h-4');
+        const bbIcon   = v.has_blackbox ? iconBlackboxActive() : iconBlackboxNone();
         return `<tr class="hover:bg-white/[0.03] cursor-pointer transition-colors registry-row" data-vin="${v.vin}">
             <td class="px-4 py-3"><span class="font-mono font-bold text-white text-xs bg-black/40 px-2 py-1 rounded border border-slate-700">${v.plate}</span></td>
-            <td class="px-4 py-3"><div class="text-white font-medium text-sm">${v.model}</div><div class="text-xs text-slate-500">${v.manufacturer} · ${v.year || ''}</div></td>
+            <td class="px-4 py-3">
+                <div class="flex items-center gap-2">
+                    ${mfrBadge}
+                    <div>
+                        <div class="text-white font-medium text-sm">${v.model}</div>
+                        <div class="text-xs text-slate-500">${v.manufacturer} · ${v.year || ''}</div>
+                    </div>
+                </div>
+            </td>
             <td class="px-4 py-3 hidden md:table-cell text-slate-300 text-sm">${v.driver || '—'}</td>
             <td class="px-4 py-3 hidden lg:table-cell text-slate-400 text-sm">${v.region || '—'}</td>
             <td class="px-4 py-3"><span class="font-bold ${vsiColor}">${v.vsi_score ?? '—'}</span></td>
-            <td class="px-4 py-3 hidden md:table-cell text-xs">${ptLabel[v.powertrain] || v.powertrain || '—'}</td>
+            <td class="px-4 py-3 hidden md:table-cell">${ptIcon}</td>
             <td class="px-4 py-3 hidden lg:table-cell"><span class="text-xs px-2 py-0.5 rounded-full border ${polColor} font-medium">${v.policy_status || '—'}</span></td>
-            <td class="px-4 py-3 hidden lg:table-cell text-center">${v.has_blackbox ? '📡' : '—'}</td>
+            <td class="px-4 py-3 hidden lg:table-cell text-center">${bbIcon}</td>
             <td class="px-4 py-3 hidden xl:table-cell text-slate-400 text-sm">${v.odometer_km ? v.odometer_km.toLocaleString()+' km' : '—'}</td>
         </tr>`;
     }).join('');
     updatePagination(data);
 
-    // Row click → open passport
     tbody.querySelectorAll('.registry-row').forEach(row => {
         row.addEventListener('click', () => {
             const vin = row.getAttribute('data-vin');
@@ -127,7 +140,6 @@ function setupFilterListeners() {
     ['filter-manufacturer','filter-powertrain','filter-region','filter-bodytype','filter-policy','filter-blackbox'].forEach(id => {
         document.getElementById(id)?.addEventListener('change', () => { currentPage = 1; loadRegistryTable(); });
     });
-    // Cascading: manufacturer → model
     document.getElementById('filter-manufacturer')?.addEventListener('change', async (e) => {
         const mfr = e.target.value;
         const modelSel = document.getElementById('filter-model');

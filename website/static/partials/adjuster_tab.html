@@ -17,9 +17,9 @@
     <!-- Status filter pills -->
     <div class="flex flex-wrap gap-2 mb-4">
         <button class="adj-filter-btn px-4 py-1.5 rounded-full text-xs font-medium bg-brand-600 text-white border border-brand-500/50" data-status="">All Cases</button>
-        <button class="adj-filter-btn px-4 py-1.5 rounded-full text-xs font-medium text-slate-400 border border-slate-700 hover:border-rose-500/50 hover:text-rose-400 transition-colors" data-status="open">🔴 Open</button>
-        <button class="adj-filter-btn px-4 py-1.5 rounded-full text-xs font-medium text-slate-400 border border-slate-700 hover:border-amber-500/50 hover:text-amber-400 transition-colors" data-status="under_review">🟡 Under Review</button>
-        <button class="adj-filter-btn px-4 py-1.5 rounded-full text-xs font-medium text-slate-400 border border-slate-700 hover:border-emerald-500/50 hover:text-emerald-400 transition-colors" data-status="resolved">🟢 Resolved</button>
+        <button class="adj-filter-btn px-4 py-1.5 rounded-full text-xs font-medium text-slate-400 border border-slate-700 hover:border-rose-500/50 hover:text-rose-400 transition-colors" data-status="open">Open</button>
+        <button class="adj-filter-btn px-4 py-1.5 rounded-full text-xs font-medium text-slate-400 border border-slate-700 hover:border-amber-500/50 hover:text-amber-400 transition-colors" data-status="under_review">Under Review</button>
+        <button class="adj-filter-btn px-4 py-1.5 rounded-full text-xs font-medium text-slate-400 border border-slate-700 hover:border-emerald-500/50 hover:text-emerald-400 transition-colors" data-status="resolved">Resolved</button>
     </div>
 
     <!-- Investigation cards -->
@@ -72,12 +72,12 @@
     <!-- Detail Tabs -->
     <div class="glass-panel border border-white/5 border-b-0">
         <div class="flex border-b border-white/5 overflow-x-auto">
-            <button class="detail-tab px-5 py-3 text-sm font-medium text-white border-b-2 border-brand-500 whitespace-nowrap" data-tab="summary">📋 Summary</button>
-            <button class="detail-tab px-5 py-3 text-sm font-medium text-slate-400 hover:text-white border-b-2 border-transparent whitespace-nowrap" data-tab="telemetry">📡 Telemetry</button>
-            <button class="detail-tab px-5 py-3 text-sm font-medium text-slate-400 hover:text-white border-b-2 border-transparent whitespace-nowrap" data-tab="photos">📸 Photos</button>
-            <button class="detail-tab px-5 py-3 text-sm font-medium text-slate-400 hover:text-white border-b-2 border-transparent whitespace-nowrap" data-tab="ai-analysis">🤖 AI Analysis</button>
-            <button class="detail-tab px-5 py-3 text-sm font-medium text-slate-400 hover:text-white border-b-2 border-transparent whitespace-nowrap" data-tab="components">⚙️ Components</button>
-            <button class="detail-tab px-5 py-3 text-sm font-medium text-slate-400 hover:text-white border-b-2 border-transparent whitespace-nowrap" data-tab="verdict">⚖️ Verdict</button>
+            <button class="detail-tab px-5 py-3 text-sm font-medium text-white border-b-2 border-brand-500 whitespace-nowrap" data-tab="summary">Summary</button>
+            <button class="detail-tab px-5 py-3 text-sm font-medium text-slate-400 hover:text-white border-b-2 border-transparent whitespace-nowrap" data-tab="telemetry">Telemetry</button>
+            <button class="detail-tab px-5 py-3 text-sm font-medium text-slate-400 hover:text-white border-b-2 border-transparent whitespace-nowrap" data-tab="photos">Photos</button>
+            <button class="detail-tab px-5 py-3 text-sm font-medium text-slate-400 hover:text-white border-b-2 border-transparent whitespace-nowrap" data-tab="ai-analysis">AI Analysis</button>
+            <button class="detail-tab px-5 py-3 text-sm font-medium text-slate-400 hover:text-white border-b-2 border-transparent whitespace-nowrap" data-tab="components">Components</button>
+            <button class="detail-tab px-5 py-3 text-sm font-medium text-slate-400 hover:text-white border-b-2 border-transparent whitespace-nowrap" data-tab="verdict">Verdict</button>
         </div>
     </div>
 
@@ -155,7 +155,7 @@
                         <div class="text-xs text-slate-400 mt-1">AI Estimated Total</div>
                     </div>
                     <button id="btn-run-ai-analysis" class="w-full bg-gradient-to-r from-purple-600 to-rose-600 hover:from-purple-500 hover:to-rose-500 text-white px-6 py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 shadow-lg">
-                        🤖 <span>Run AI Fraud & Damage Analysis</span>
+                        <span>Run AI Fraud & Damage Analysis</span>
                     </button>
                 </div>
             </div>
@@ -190,9 +190,9 @@
                     <p class="text-slate-400 text-sm">No verdict issued yet. Run AI analysis first, then issue a verdict.</p>
                 </div>
                 <div class="flex justify-center gap-3 mt-6">
-                    <button class="verdict-btn bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-lg font-bold transition-colors" data-verdict="approved">✅ Approve Claim</button>
-                    <button class="verdict-btn bg-amber-600 hover:bg-amber-500 text-white px-6 py-3 rounded-lg font-bold transition-colors" data-verdict="partial">⚠️ Partial Approval</button>
-                    <button class="verdict-btn bg-rose-600 hover:bg-rose-500 text-white px-6 py-3 rounded-lg font-bold transition-colors" data-verdict="denied">❌ Deny Claim</button>
+                    <button class="verdict-btn bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-lg font-bold transition-colors" data-verdict="approved">Approve Claim</button>
+                    <button class="verdict-btn bg-amber-600 hover:bg-amber-500 text-white px-6 py-3 rounded-lg font-bold transition-colors" data-verdict="partial">Partial Approval</button>
+                    <button class="verdict-btn bg-rose-600 hover:bg-rose-500 text-white px-6 py-3 rounded-lg font-bold transition-colors" data-verdict="denied">Deny Claim</button>
                 </div>
             </div>
         </div>

@@ -1,3 +1,5 @@
+import { componentIcon } from '/static/js/icons.js';
+
 let tiresChart, brakesChart, batteriesChart;
 let cachedEsgData = null;
 let isInitialized = false;
@@ -101,7 +103,7 @@ function setupBatchRecycling() {
             if (statusText) statusText.textContent = 'Analysis complete ✓';
         } catch(e) {
             console.error(e);
-            output.innerHTML = '<div class="text-rose-400 p-4">⚠️ Analysis failed. Try again.</div>';
+            output.innerHTML = '<div class="text-rose-400 p-4">Analysis failed. Try again.</div>';
             if (statusText) statusText.textContent = 'Error';
         } finally {
             btn.disabled = false;
@@ -156,7 +158,6 @@ async function loadComponentTable() {
 function renderTable(comps) {
     const tbody = document.getElementById('component-table-body');
     if (!tbody || !comps.length) { if(tbody) tbody.innerHTML = '<tr><td colspan="9" class="px-4 py-8 text-center text-slate-500">No components</td></tr>'; return; }
-    const icons = { tire:'🛞', brake_pad:'🛑', ev_battery:'🔋' };
     const labels = { tire:'Tire', brake_pad:'Brake Pad', ev_battery:'EV Battery' };
     tbody.innerHTML = comps.map((c,i) => {
         const rec = c.ai_recommendation || '—';
@@ -172,7 +173,7 @@ function renderTable(comps) {
         if(c.specs){if(c.category==='tire'&&c.specs.size)hint=c.specs.size;else if(c.category==='ev_battery'&&c.specs.capacity_kwh)hint=`${c.specs.capacity_kwh}kWh`;else if(c.category==='brake_pad')hint=c.specs.material||'';}
         return `<tr class="${rowB} hover:bg-white/[0.02] cursor-pointer transition-colors component-row" data-index="${i}">
             <td class="px-4 py-3 font-mono text-xs text-slate-300">${c.serial_number}</td>
-            <td class="px-4 py-3"><span class="flex items-center gap-1.5"><span>${icons[c.category]||'⚙️'}</span><span class="text-white text-xs">${labels[c.category]||c.category}</span></span>${c.position?`<span class="text-[10px] text-slate-500 block mt-0.5">${c.position}</span>`:''}</td>
+            <td class="px-4 py-3"><span class="flex items-center gap-1.5">${componentIcon(c.category,'w-4 h-4')}<span class="text-white text-xs">${labels[c.category]||c.category}</span></span>${c.position?`<span class="text-[10px] text-slate-500 block mt-0.5">${c.position}</span>`:''}</td>
             <td class="px-4 py-3"><span class="text-white text-xs">${c.brand||'—'}</span><span class="text-[10px] text-slate-500 block mt-0.5">${c.model_name||'—'}${hint?' · '+hint:''}</span></td>
             <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-16 bg-slate-700 rounded-full h-1.5"><div class="${wC} rounded-full h-1.5" style="width:${w}%"></div></div><span class="text-xs font-bold ${wT}">${w}%</span></div></td>
             <td class="px-4 py-3"><span class="font-mono font-bold text-white text-xs bg-black/40 px-1.5 py-0.5 rounded border border-slate-700">${c.plate_number||'—'}</span></td>
@@ -183,9 +184,9 @@ function renderTable(comps) {
         </tr>
         <tr class="component-detail hidden bg-black/20" data-detail-index="${i}"><td colspan="9" class="px-6 py-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                <div><p class="text-slate-400 font-semibold uppercase tracking-wider mb-1">🤖 AI Reasoning</p><p class="text-slate-300">${c.ai_reasoning||'No AI analysis available.'}</p></div>
-                <div><p class="text-slate-400 font-semibold uppercase tracking-wider mb-1">📍 Lifecycle</p><p class="text-slate-300">Installed: ${c.installed_date||'—'} ${c.installed_km?`at ${c.installed_km.toLocaleString()} km`:''}</p>${c.removed_date?`<p class="text-slate-300">Removed: ${c.removed_date}</p>`:''}${c.destination_facility?`<p class="text-slate-300 mt-1">Facility: <span class="text-brand-400">${c.destination_facility}</span></p>`:''}</div>
-                <div><p class="text-slate-400 font-semibold uppercase tracking-wider mb-1">🔬 Specs</p>${c.specs?Object.entries(c.specs).map(([k,v])=>`<p class="text-slate-300">${k}: <span class="text-white font-medium">${v}</span></p>`).join(''):'<p class="text-slate-500">—</p>'}</div>
+                <div><p class="text-slate-400 font-semibold uppercase tracking-wider mb-1">AI Reasoning</p><p class="text-slate-300">${c.ai_reasoning||'No AI analysis available.'}</p></div>
+                <div><p class="text-slate-400 font-semibold uppercase tracking-wider mb-1">Lifecycle</p><p class="text-slate-300">Installed: ${c.installed_date||'—'} ${c.installed_km?`at ${c.installed_km.toLocaleString()} km`:''}</p>${c.removed_date?`<p class="text-slate-300">Removed: ${c.removed_date}</p>`:''}${c.destination_facility?`<p class="text-slate-300 mt-1">Facility: <span class="text-brand-400">${c.destination_facility}</span></p>`:''}</div>
+                <div><p class="text-slate-400 font-semibold uppercase tracking-wider mb-1">Specs</p>${c.specs?Object.entries(c.specs).map(([k,v])=>`<p class="text-slate-300">${k}: <span class="text-white font-medium">${v}</span></p>`).join(''):'<p class="text-slate-500">—</p>'}</div>
             </div>
         </td></tr>`;
     }).join('');
@@ -270,7 +271,7 @@ function setupReverseLogistics() {
                 const reader=res.body.getReader();const decoder=new TextDecoder();
                 terminal.innerHTML='<div id="manifest-content"></div>';const cd=document.getElementById('manifest-content');let ft="";
                 while(true){const{done,value}=await reader.read();if(done)break;ft+=decoder.decode(value,{stream:true});if(cd)cd.innerHTML=renderMd(ft);terminal.scrollTop=terminal.scrollHeight;}
-            }catch(e){console.error(e);terminal.innerHTML='<div class="text-red-400 p-4 bg-red-400/10 rounded-lg border border-red-400/20">⚠️ System Timeout</div>';}
+            }catch(e){console.error(e);terminal.innerHTML='<div class="text-red-400 p-4 bg-red-400/10 rounded-lg border border-red-400/20">System Timeout</div>';}
             finally{btn.disabled=false;btn.innerHTML=orig;}
         },1800);
     });

@@ -6,10 +6,10 @@
 <!-- ── Sub-Tab Navigation ──────────────────────────────────────────────── -->
 <div class="flex border-b border-white/10 mb-6 gap-1">
     <button class="esg-subtab active px-5 py-2.5 text-sm font-bold text-white border-b-2 border-brand-500 transition-all rounded-t-lg" data-subtab="inventory">
-        📊 Inventory & Ledger
+        Inventory & Ledger
     </button>
     <button class="esg-subtab px-5 py-2.5 text-sm font-bold text-slate-400 border-b-2 border-transparent hover:text-white hover:border-white/30 transition-all rounded-t-lg" data-subtab="triage">
-        ♻️ AI Triage & Recycling
+        AI Triage & Recycling
     </button>
 </div>
 
@@ -100,20 +100,20 @@
 
     <!-- ── Component Inventory Table ───────────────────────────────────── -->
     <div class="mb-8 md:mb-10">
-        <h3 class="text-lg md:text-xl font-bold text-white mb-1 border-b border-white/10 pb-2">📋 Component Inventory & Second-Life Allocation</h3>
+        <h3 class="text-lg md:text-xl font-bold text-white mb-1 border-b border-white/10 pb-2">Component Inventory & Second-Life Allocation</h3>
         <p class="text-xs md:text-sm text-slate-400 mb-4 md:mb-6">Serial-number-level tracking of every component with AI-driven lifecycle pathway — backed by real-time database.</p>
 
         <!-- View Toggle + Filters -->
         <div class="flex flex-wrap items-center gap-2 mb-4">
             <div class="flex bg-slate-800 rounded-lg border border-white/10 overflow-hidden mr-3">
                 <button class="esg-status-toggle px-4 py-2 text-xs font-bold text-white bg-brand-600 transition-all" data-status="">All</button>
-                <button class="esg-status-toggle px-4 py-2 text-xs font-bold text-slate-400 hover:text-white transition-all" data-status="installed">🔧 Installed</button>
-                <button class="esg-status-toggle px-4 py-2 text-xs font-bold text-slate-400 hover:text-white transition-all" data-status="stocked">📦 Stocked</button>
+                <button class="esg-status-toggle px-4 py-2 text-xs font-bold text-slate-400 hover:text-white transition-all" data-status="installed">Installed</button>
+                <button class="esg-status-toggle px-4 py-2 text-xs font-bold text-slate-400 hover:text-white transition-all" data-status="stocked">Stocked</button>
             </div>
             <button class="component-filter active bg-brand-600 text-white text-xs font-bold px-4 py-2 rounded-full transition-all" data-filter="">All Types</button>
-            <button class="component-filter bg-slate-800 text-slate-400 text-xs font-bold px-4 py-2 rounded-full border border-white/10 hover:border-brand-500/50 transition-all" data-filter="tire">🛞 Tires</button>
-            <button class="component-filter bg-slate-800 text-slate-400 text-xs font-bold px-4 py-2 rounded-full border border-white/10 hover:border-brand-500/50 transition-all" data-filter="brake_pad">🛑 Brakes</button>
-            <button class="component-filter bg-slate-800 text-slate-400 text-xs font-bold px-4 py-2 rounded-full border border-white/10 hover:border-brand-500/50 transition-all" data-filter="ev_battery">🔋 EV Batteries</button>
+            <button class="component-filter bg-slate-800 text-slate-400 text-xs font-bold px-4 py-2 rounded-full border border-white/10 hover:border-brand-500/50 transition-all" data-filter="tire">Tires</button>
+            <button class="component-filter bg-slate-800 text-slate-400 text-xs font-bold px-4 py-2 rounded-full border border-white/10 hover:border-brand-500/50 transition-all" data-filter="brake_pad">Brakes</button>
+            <button class="component-filter bg-slate-800 text-slate-400 text-xs font-bold px-4 py-2 rounded-full border border-white/10 hover:border-brand-500/50 transition-all" data-filter="ev_battery">EV Batteries</button>
         </div>
 
         <!-- Table -->
@@ -162,7 +162,7 @@
 
     <!-- ── Batch Recycling Analysis ────────────────────────────────────── -->
     <div class="mb-8 md:mb-10">
-        <h3 class="text-lg md:text-xl font-bold text-white mb-1 border-b border-white/10 pb-2">🤖 AI Batch Recycling & Revenue Analysis</h3>
+        <h3 class="text-lg md:text-xl font-bold text-white mb-1 border-b border-white/10 pb-2">AI Batch Recycling & Revenue Analysis</h3>
         <p class="text-xs md:text-sm text-slate-400 mb-4 md:mb-6">Select a component category to run AI-powered batch analysis on your entire stocked inventory — with revenue projections and optimal recycling strategies.</p>
 
         <!-- Stock Summary Cards -->
@@ -173,17 +173,17 @@
                 <p class="text-[10px] text-slate-500">components</p>
             </div>
             <div class="glass-panel rounded-xl p-4 border border-white/5 cursor-pointer hover:border-emerald-500/50 transition-all batch-category-card" data-category="tire">
-                <p class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">🛞 Tires</p>
+                <p class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Tires</p>
                 <p class="text-xl font-bold text-white" id="batch-kpi-tire">--</p>
                 <p class="text-[10px] text-slate-500">stocked</p>
             </div>
             <div class="glass-panel rounded-xl p-4 border border-white/5 cursor-pointer hover:border-amber-500/50 transition-all batch-category-card" data-category="brake_pad">
-                <p class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">🛑 Brake Pads</p>
+                <p class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Brake Pads</p>
                 <p class="text-xl font-bold text-white" id="batch-kpi-brake_pad">--</p>
                 <p class="text-[10px] text-slate-500">stocked</p>
             </div>
             <div class="glass-panel rounded-xl p-4 border border-white/5 cursor-pointer hover:border-blue-500/50 transition-all batch-category-card" data-category="ev_battery">
-                <p class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">🔋 EV Batteries</p>
+                <p class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">EV Batteries</p>
                 <p class="text-xl font-bold text-white" id="batch-kpi-ev_battery">--</p>
                 <p class="text-[10px] text-slate-500">stocked</p>
             </div>
@@ -193,10 +193,10 @@
         <div class="flex flex-wrap items-center gap-3 mb-4">
             <select id="batch-category-select"
                 class="bg-slate-800 text-white border border-slate-600 rounded-lg px-4 py-2.5 text-sm focus:ring-emerald-500 focus:border-emerald-500 transition-colors">
-                <option value="all">📦 All Stocked Components</option>
-                <option value="tire">🛞 Tires Only</option>
-                <option value="brake_pad">🛑 Brake Pads Only</option>
-                <option value="ev_battery">🔋 EV Batteries Only</option>
+                <option value="all">All Stocked Components</option>
+                <option value="tire">Tires Only</option>
+                <option value="brake_pad">Brake Pads Only</option>
+                <option value="ev_battery">EV Batteries Only</option>
             </select>
             <button id="btn-batch-recycling"
                 class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-2.5 px-6 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all flex items-center gap-2 text-sm">
@@ -227,7 +227,7 @@
 
     <!-- ── Regional Reverse Logistics (original triage) ────────────────── -->
     <div>
-        <h3 class="text-lg md:text-xl font-bold text-white mb-1 border-b border-white/10 pb-2"><span data-i18n="esg-triage">♻️ AI Component Triage & Reverse Logistics</span></h3>
+        <h3 class="text-lg md:text-xl font-bold text-white mb-1 border-b border-white/10 pb-2"><span data-i18n="esg-triage">AI Component Triage & Reverse Logistics</span></h3>
         <p class="text-xs md:text-sm text-slate-400 mb-4 md:mb-6"><span data-i18n="esg-triage-sub">Regional end-of-life routing — Bridging Birth, Life, and Second Life.</span></p>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">

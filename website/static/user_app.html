@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CycleSync | Driver App</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -43,7 +44,7 @@
                 <button onclick="window.setLanguage('en')" id="lang-en-app" class="px-2 py-1 rounded-full text-[10px] font-bold bg-brand-500 text-slate-900">EN</button>
                 <button onclick="window.setLanguage('it')" id="lang-it-app" class="px-2 py-1 rounded-full text-[10px] font-bold text-slate-400">IT</button>
             </div>
-            <a href="/dashboard" class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-800 border border-slate-600 text-slate-300 hover:text-white transition-all text-[10px] font-bold">🏢 Portal</a>
+            <a href="/dashboard" class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-800 border border-slate-600 text-slate-300 hover:text-white transition-all text-[10px] font-bold"><i data-lucide="building-2" class="w-3 h-3"></i> Portal</a>
         </div>
     </header>
 
@@ -53,10 +54,9 @@
     <!-- Quick Actions -->
     <div class="flex gap-2 mb-4">
         <button onclick="triggerSOS()" class="bg-rose-600 hover:bg-rose-500 text-white font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.3)] transition-all flex-1 justify-center text-sm">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-            🆘 SOS
+            <i data-lucide="siren" class="w-4 h-4"></i> SOS
         </button>
-        <button onclick="switchView('view-map')" class="bg-slate-800 border border-white/10 text-white font-medium px-4 py-2.5 rounded-xl text-sm flex-1 text-center">🗺️ Network</button>
+        <button onclick="switchView('view-map')" class="bg-slate-800 border border-white/10 text-white font-medium px-4 py-2.5 rounded-xl text-sm flex-1 flex items-center justify-center gap-1.5"><i data-lucide="map" class="w-4 h-4"></i> Network</button>
     </div>
 
     <!-- VSI + Policy Row -->
@@ -75,20 +75,20 @@
         </div>
         <div class="glass-card p-3 flex flex-col justify-between" onclick="document.getElementById('tips-section').classList.toggle('hidden')">
             <p class="text-[10px] text-slate-400">Driving Tips</p>
-            <p class="text-sm font-bold text-brand-400 mt-1">💡 Tap for tips</p>
+            <p class="text-sm font-bold text-brand-400 mt-1 flex items-center gap-1.5"><i data-lucide="lightbulb" class="w-4 h-4"></i> Tap for tips</p>
             <p class="text-[10px] text-slate-500">Improve your score</p>
         </div>
     </div>
 
     <!-- VSI Tips (expandable) -->
     <div id="tips-section" class="hidden glass-card p-3 mb-4 border border-brand-500/20 bg-brand-500/5">
-        <p class="text-xs font-bold text-brand-400 mb-2">🎯 VSI Improvement Tips</p>
+        <p class="text-xs font-bold text-brand-400 mb-2 flex items-center gap-1.5"><i data-lucide="target" class="w-3.5 h-3.5"></i> VSI Improvement Tips</p>
         <div id="vsi-tips"></div>
     </div>
 
     <!-- DTC Alerts -->
     <div id="dtc-section" class="hidden glass-card p-3 mb-4 border border-amber-500/20 bg-amber-500/5">
-        <p class="text-xs font-bold text-amber-400 mb-2">⚠️ Diagnostic Trouble Codes</p>
+        <p class="text-xs font-bold text-amber-400 mb-2 flex items-center gap-1.5"><i data-lucide="triangle-alert" class="w-3.5 h-3.5"></i> Diagnostic Trouble Codes</p>
         <div id="dtc-list"></div>
     </div>
 
@@ -157,7 +157,7 @@
 
     <!-- Add Vehicle -->
     <div class="glass-card p-4 mb-4">
-        <p class="text-xs font-bold text-white mb-2">➕ Add Vehicle</p>
+        <p class="text-xs font-bold text-white mb-2 flex items-center gap-1.5"><i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Vehicle</p>
         <div class="flex gap-2">
             <input id="add-vehicle-input" type="text" placeholder="Plate, VIN, or policy #" class="flex-1 bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-brand-500 outline-none">
             <button onclick="linkVehicle()" class="bg-brand-600 text-black font-bold px-4 py-2 rounded-lg text-sm hover:bg-brand-500 transition-colors">Link</button>
@@ -166,14 +166,14 @@
 
     <!-- Log Maintenance -->
     <div class="glass-card p-4 mb-4">
-        <p class="text-xs font-bold text-white mb-2">🔧 Log Maintenance</p>
+        <p class="text-xs font-bold text-white mb-2 flex items-center gap-1.5"><i data-lucide="wrench" class="w-3.5 h-3.5"></i> Log Maintenance</p>
         <select id="maint-type" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white mb-2">
-            <option value="oil_change">🛢️ Oil Change</option>
-            <option value="tire_change">🛞 Tire Change</option>
-            <option value="brake_service">🛑 Brake Service</option>
-            <option value="battery_service">🔋 Battery Check</option>
-            <option value="filter_change">🌬️ Filter Change</option>
-            <option value="scheduled">📋 Scheduled Service</option>
+            <option value="oil_change">Oil Change</option>
+            <option value="tire_change">Tire Change</option>
+            <option value="brake_service">Brake Service</option>
+            <option value="battery_service">Battery Check</option>
+            <option value="filter_change">Filter Change</option>
+            <option value="scheduled">Scheduled Service</option>
         </select>
         <input id="maint-desc" type="text" placeholder="Description (optional)" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 mb-2 outline-none">
         <input id="maint-km" type="number" placeholder="Current mileage (km)" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 mb-2 outline-none">
@@ -185,7 +185,7 @@
 <div id="view-sos" class="app-view flex-col h-full overflow-y-auto hide-scrollbar px-5 pb-8 pt-4 mx-auto max-w-lg w-full bg-darkbg">
     <header class="flex items-center justify-between mb-4 shrink-0">
         <button onclick="switchView('view-home')" class="text-white p-2 -ml-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-        <h1 class="text-sm font-bold text-rose-400 flex items-center gap-2">🆘 Emergency Response</h1>
+        <h1 class="text-sm font-bold text-rose-400 flex items-center gap-2"><i data-lucide="siren" class="w-4 h-4"></i> Emergency Response</h1>
         <div class="w-5"></div>
     </header>
     <div class="glass-card p-3 mb-3 border border-rose-500/30 bg-rose-500/5">
@@ -196,7 +196,7 @@
     </div>
     <div id="sos-output" class="glass-card p-4 text-sm text-slate-300 leading-relaxed min-h-[300px] overflow-y-auto border border-rose-500/10"></div>
     <div class="flex gap-2 mt-4">
-        <a href="tel:112" class="flex-1 bg-rose-600 text-white font-bold py-3 rounded-xl text-center text-sm">📞 Call 112</a>
+        <a href="tel:112" class="flex-1 bg-rose-600 text-white font-bold py-3 rounded-xl text-center text-sm flex items-center justify-center gap-1.5"><i data-lucide="phone" class="w-4 h-4"></i> Call 112</a>
         <button onclick="switchView('view-home')" class="flex-1 bg-slate-800 border border-white/10 text-white font-semibold py-3 rounded-xl text-sm">Close</button>
     </div>
 </div>
@@ -227,6 +227,7 @@
     </button>
 </nav>
 
-<script src="/static/js/driver_app.js"></script>
+<script src="/static/js/driver_app.js?v=13"></script>
+<script>document.addEventListener('DOMContentLoaded', () => { if(window.lucide) lucide.createIcons(); });</script>
 </body>
 </html>

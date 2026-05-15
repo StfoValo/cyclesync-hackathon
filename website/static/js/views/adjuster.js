@@ -2,6 +2,7 @@
  * Adjuster Portal — Investigation list → detail workflow
  * Backed by /api/db/investigations endpoints
  */
+import { incidentIcon, componentIcon, iconBrakeDisc, manufacturerBadge } from '/static/js/icons.js';
 
 let currentInvestigation = null;
 
@@ -50,10 +51,16 @@ function renderInvestigationList(investigations) {
             medium: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
             low: 'bg-slate-500/20 text-slate-400 border-slate-500/30'
         };
-        const typeLabels = {
-            collision: '💥 Collision', rear_end: '🚗 Rear-End', side_impact: '🚙 Side Impact',
-            rollover: '🔄 Rollover', pedestrian: '🚶 Pedestrian'
+        // Map type → icon + label
+        const typeConfig = {
+            collision:   { label: 'Collision',    cls: 'text-rose-400' },
+            rear_end:    { label: 'Rear-End',     cls: 'text-orange-400' },
+            side_impact: { label: 'Side Impact',  cls: 'text-amber-400' },
+            rollover:    { label: 'Rollover',     cls: 'text-purple-400' },
+            pedestrian:  { label: 'Pedestrian',   cls: 'text-blue-400' },
         };
+        const tc = typeConfig[inv.incident_type] || { label: inv.incident_type, cls: 'text-slate-400' };
+        const typeHtml = `<span class="inline-flex items-center gap-1 ${tc.cls}">${incidentIcon(inv.incident_type, 'w-3.5 h-3.5')} ${tc.label}</span>`;
         const fraudColor = inv.fraud_risk_score >= 70 ? 'text-rose-400' : inv.fraud_risk_score >= 40 ? 'text-amber-400' : 'text-emerald-400';
         const statusBadge = statusColors[inv.status] || statusColors.open;
         const priorityBadge = priorityColors[inv.priority] || priorityColors.medium;
@@ -70,8 +77,8 @@ function renderInvestigationList(investigations) {
                     <div class="flex flex-wrap items-center gap-3">
                         <span class="font-mono font-bold text-white text-xs bg-black/40 px-2 py-1 rounded border border-slate-700">${inv.plate_number}</span>
                         <span class="text-sm text-slate-300">${inv.manufacturer} ${inv.model_name}</span>
-                        <span class="text-xs text-slate-500">${typeLabels[inv.incident_type] || inv.incident_type}</span>
-                        <span class="text-xs text-slate-500">📅 ${inv.incident_date}</span>
+                        <span class="text-xs text-slate-500">${typeHtml}</span>
+                        <span class="text-xs text-slate-500">${inv.incident_date}</span>
                     </div>
                     <p class="text-xs text-slate-400 mt-2 line-clamp-1">${inv.incident_description || ''}</p>
                 </div>
@@ -138,12 +145,12 @@ function renderInvestigationDetail(inv) {
 
     const prioColors = {critical:'bg-rose-500/20 text-rose-400 border border-rose-500/30', high:'bg-orange-500/20 text-orange-400 border border-orange-500/30', medium:'bg-amber-500/20 text-amber-400 border border-amber-500/30'};
     const pb = document.getElementById('detail-priority-badge');
-    pb.textContent = `⚡ ${inv.priority}`;
+    pb.textContent = `${inv.priority}`;
     pb.className = `text-xs px-2 py-0.5 rounded-full font-medium ${prioColors[inv.priority] || ''}`;
 
     document.getElementById('detail-vehicle').textContent = inv.plate_number;
     document.getElementById('detail-model').textContent = `${inv.manufacturer} ${inv.model_name} · ${inv.driver_name || ''}`;
-    document.getElementById('detail-date').textContent = `📅 ${inv.incident_date}`;
+    document.getElementById('detail-date').textContent = inv.incident_date;
 
     const fraudColor = inv.fraud_risk_score >= 70 ? 'text-rose-400 animate-pulse' : inv.fraud_risk_score >= 40 ? 'text-amber-400' : 'text-emerald-400';
     document.getElementById('detail-fraud-score').className = `text-3xl font-black ${fraudColor}`;
@@ -152,13 +159,18 @@ function renderInvestigationDetail(inv) {
     document.getElementById('detail-gforce').textContent = `${inv.g_force_max || '—'} G`;
 
     // Summary tab
-    const typeLabels = {collision:'💥 Collision', rear_end:'🚗 Rear-End Collision', side_impact:'🚙 Side Impact'};
-    document.getElementById('detail-incident-type').textContent = typeLabels[inv.incident_type] || inv.incident_type;
+    const typeConfig = {
+        collision:   { label: 'Collision',   cls: 'text-rose-400' },
+        rear_end:    { label: 'Rear-End',    cls: 'text-orange-400' },
+        side_impact: { label: 'Side Impact', cls: 'text-amber-400' },
+    };
+    const tc = typeConfig[inv.incident_type] || { label: inv.incident_type, cls: 'text-slate-400' };
+    document.getElementById('detail-incident-type').innerHTML = `<span class="inline-flex items-center gap-1.5 ${tc.cls}">${incidentIcon(inv.incident_type, 'w-4 h-4')} ${tc.label}</span>`;
     document.getElementById('detail-location').textContent = inv.incident_location || '—';
     document.getElementById('detail-description').textContent = inv.incident_description || '—';
 
-    document.getElementById('detail-abs').innerHTML = inv.abs_triggered ? '<span class="text-rose-400">⚠️ YES</span>' : '<span class="text-emerald-400">✅ No</span>';
-    document.getElementById('detail-airbag').innerHTML = inv.airbag_deployed ? '<span class="text-rose-400">⚠️ DEPLOYED</span>' : '<span class="text-emerald-400">✅ Not deployed</span>';
+    document.getElementById('detail-abs').innerHTML = inv.abs_triggered ? '<span class="text-rose-400 font-semibold">YES</span>' : '<span class="text-emerald-400">No</span>';
+    document.getElementById('detail-airbag').innerHTML = inv.airbag_deployed ? '<span class="text-rose-400 font-semibold">DEPLOYED</span>' : '<span class="text-emerald-400">Not deployed</span>';
     document.getElementById('detail-glateral').textContent = `${inv.g_force_lateral || '—'} G`;
     const ct = inv.coolant_temp;
     document.getElementById('detail-coolant').innerHTML = ct ? `<span class="${ct > 95 ? 'text-rose-400' : 'text-emerald-400'}">${ct}°C</span>` : '—';
@@ -228,11 +240,12 @@ function renderDetailComponents(components) {
         const color = status === 'critical' ? 'text-rose-400' : status === 'warning' ? 'text-amber-400' : 'text-emerald-400';
         const barColor = status === 'critical' ? 'bg-rose-500' : status === 'warning' ? 'bg-amber-500' : 'bg-emerald-500';
         const borderColor = status === 'critical' ? 'border-rose-500/30' : status === 'warning' ? 'border-amber-500/30' : 'border-emerald-500/30';
-        const catIcons = {tire:'🛞', brake_pad:'🛑', ev_battery:'🔋', brake_disc:'💿'};
+        const catLabels = {tire:'Tire', brake_pad:'Brake Pad', ev_battery:'Battery', brake_disc:'Brake Disc'};
+        const catIcon = componentIcon(c.category, 'w-4 h-4 inline-block mr-1');
 
         return `<div class="bg-slate-800/50 rounded-lg p-4 border ${borderColor}">
             <div class="flex items-center justify-between mb-2">
-                <span class="text-sm font-medium text-white">${catIcons[c.category] || '⚙️'} ${c.category} ${c.position ? `(${c.position})` : ''}</span>
+                <span class="text-sm font-medium text-white flex items-center gap-1.5">${catIcon} ${catLabels[c.category] || c.category} ${c.position ? `(${c.position})` : ''}</span>
                 <span class="text-xs font-bold ${color} uppercase">${status}</span>
             </div>
             <div class="w-full bg-slate-700 rounded-full h-1.5 mb-2"><div class="${barColor} rounded-full h-1.5" style="width:${health}%"></div></div>
@@ -271,10 +284,15 @@ function setupVerdictButtons() {
     document.querySelectorAll('.verdict-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const verdict = btn.getAttribute('data-verdict');
-            const verdictLabels = {approved:'✅ Claim Approved', partial:'⚠️ Partially Approved', denied:'❌ Claim Denied'};
+            const verdictLabels = {approved:'Claim Approved', partial:'Partially Approved', denied:'Claim Denied'};
             const verdictColors = {approved:'text-emerald-400', partial:'text-amber-400', denied:'text-rose-400'};
             const container = document.getElementById('detail-verdict-content');
-            container.innerHTML = `<div class="text-5xl mb-4">${verdict === 'approved' ? '✅' : verdict === 'denied' ? '❌' : '⚠️'}</div>
+            const verdictIcons = {
+                approved: `<svg class="w-12 h-12 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="9 12 12 15 15 9"/></svg>`,
+                denied:   `<svg class="w-12 h-12 text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
+                partial:  `<svg class="w-12 h-12 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+            };
+            container.innerHTML = `<div class="flex justify-center mb-4">${verdictIcons[verdict]}</div>
                 <p class="text-2xl font-bold ${verdictColors[verdict]} mb-2">${verdictLabels[verdict]}</p>
                 <p class="text-sm text-slate-400 mt-2">Verdict issued on ${new Date().toLocaleDateString()} for case ${currentInvestigation?.case_number || '—'}</p>`;
         });
@@ -352,7 +370,7 @@ async function runAIAnalysis() {
     btn.innerHTML = '<div class="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div> <span>Analyzing...</span>';
 
     // Reset containers
-    fraudContainer.innerHTML = '<p class="text-slate-300 text-sm italic animate-pulse">🔄 AI is analyzing telemetry, components, and incident data...</p>';
+    fraudContainer.innerHTML = '<p class="text-slate-300 text-sm italic animate-pulse">AI is analyzing telemetry, components, and incident data...</p>';
     damageContainer.innerHTML = '';
 
     try {
@@ -381,12 +399,12 @@ async function runAIAnalysis() {
         fraudContainer.style.overflowY = 'auto';
 
     } catch (err) {
-        fraudContainer.innerHTML = `<p class="text-rose-400 text-sm">❌ AI analysis failed: ${err.message}</p>`;
+        fraudContainer.innerHTML = `<p class="text-rose-400 text-sm">AI analysis failed: ${err.message}</p>`;
     }
 
     // Re-enable button
     btn.disabled = false;
-    btn.innerHTML = '🤖 <span>Re-run AI Analysis</span>';
+    btn.innerHTML = '<span>Re-run AI Analysis</span>';
 }
 
 function renderMarkdown(text) {

@@ -4,6 +4,34 @@ let driverData = null;
 let activeVin = null;
 let componentData = null;
 
+// Lucide icon helper — returns <i> tag that lucide.createIcons() will render
+const luc = (name, cls='w-4 h-4') => `<i data-lucide="${name}" class="${cls}"></i>`;
+const refreshIcons = () => { if (window.lucide) setTimeout(() => lucide.createIcons(), 10); };
+
+// Inline SVG icons (component-specific, not in Lucide)
+const svgTyre = (cls='w-4 h-4') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="5"/><line x1="12" y1="2" x2="12" y2="7"/><line x1="12" y1="17" x2="12" y2="22"/><line x1="2" y1="12" x2="7" y2="12"/><line x1="17" y1="12" x2="22" y2="12"/><line x1="4.93" y1="4.93" x2="8.46" y2="8.46"/><line x1="15.54" y1="15.54" x2="19.07" y2="19.07"/><line x1="19.07" y1="4.93" x2="15.54" y2="8.46"/><line x1="8.46" y1="15.54" x2="4.93" y2="19.07"/></svg>`;
+const svgBrakePad = (cls='w-4 h-4') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="12" rx="3"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="12" y1="10" x2="12" y2="14"/><line x1="16" y1="10" x2="16" y2="14"/><line x1="4" y1="18" x2="20" y2="18"/></svg>`;
+const svgBrakeDisc = (cls='w-4 h-4') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><line x1="12" y1="3" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="21"/><line x1="3" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="21" y2="12"/><rect x="1.5" y="9.5" width="4" height="5" rx="1.5" fill="currentColor" stroke="none" opacity="0.7"/></svg>`;
+const svgBattery = (cls='w-4 h-4') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M22 11v2"/><path d="M6 11h4M10 9v6"/></svg>`;
+
+// Manufacturer badge (coloured initials)
+const MFR_COLORS = { BMW:'#1C69D4', Mercedes:'#B0B3B8', Audi:'#BB0A21', Volkswagen:'#001E62', Fiat:'#C8102E', Ferrari:'#D40000', Lamborghini:'#DBA800', Toyota:'#CC0000', Ford:'#003478', Opel:'#FFC200', Renault:'#EFDF00', Peugeot:'#002D62', Tesla:'#CC0000', Volvo:'#003057', Hyundai:'#002C5F', Kia:'#05141F', Smart:'#00A0E2', Dacia:'#005899', Abarth:'#D4000A' };
+const MFR_INITIALS = { BMW:'BMW', Mercedes:'MB', Audi:'AU', Volkswagen:'VW', Fiat:'FI', Ferrari:'FE', Lamborghini:'LB', Toyota:'TY', Ford:'FO', Opel:'OP', Renault:'RE', Peugeot:'PG', Tesla:'T', Volvo:'VO', Hyundai:'HY', Kia:'KI', Smart:'S#', Dacia:'DA', Abarth:'AB' };
+function mfrBadge(manufacturer, size='sm') {
+    const key = Object.keys(MFR_INITIALS).find(k => manufacturer?.toLowerCase().includes(k.toLowerCase()));
+    const initials = key ? MFR_INITIALS[key] : (manufacturer?.substring(0,2).toUpperCase() || '??');
+    const color = key ? (MFR_COLORS[key] || '#475569') : '#475569';
+    const dim = size === 'lg' ? 'w-9 h-9 text-[10px]' : 'w-6 h-6 text-[9px]';
+    return `<span class="${dim} rounded-md flex items-center justify-center font-black tracking-tight shrink-0" style="background:${color}22;border:1px solid ${color}55;color:${color}">${initials}</span>`;
+}
+function compIcon(category, cls='w-4 h-4') {
+    if (category === 'tire') return svgTyre(cls);
+    if (category === 'brake_pad') return svgBrakePad(cls);
+    if (category === 'brake_disc') return svgBrakeDisc(cls);
+    if (category === 'ev_battery') return svgBattery(cls);
+    return luc('settings-2', cls);
+}
+
 // ── Init ─────────────────────────────────────────────────────────────────
 async function initDriverApp() {
     try {
@@ -23,18 +51,19 @@ function renderVehicleStrip() {
     if (!strip || !driverData) return;
     strip.innerHTML = driverData.vehicles.map(v => {
         const active = v.vin === activeVin;
-        const icon = v.powertrain === 'electric' ? '⚡' : v.powertrain?.includes('hybrid') ? '🔋' : '⛽';
+        const badge = mfrBadge(v.manufacturer, 'sm');
         const cls = active
             ? 'bg-brand-600 border-brand-500 text-black shadow-[0_0_15px_rgba(0,229,255,0.3)]'
             : 'bg-slate-800 border-white/10 text-white hover:border-white/20';
-        return `<button onclick="selectVehicle('${v.vin}')" class="shrink-0 box-border flex items-center gap-2.5 px-5 h-12 rounded-2xl border ${cls}" style="min-width:200px">
-            <span class="text-lg leading-none">${icon}</span>
+        return `<button onclick="selectVehicle('${v.vin}')" class="shrink-0 box-border flex items-center gap-2.5 px-4 h-12 rounded-2xl border ${cls}" style="min-width:180px">
+            ${badge}
             <div class="text-left min-w-0">
                 <div class="text-xs font-bold leading-tight truncate">${v.manufacturer} ${v.model.replace(v.manufacturer+' ','')}</div>
-                <div class="text-[10px] leading-tight ${active?'text-black/60':'text-slate-400'}">${v.plate}${v.is_pinned?' ⭐':''}</div>
+                <div class="text-[10px] leading-tight ${active?'text-black/60':'text-slate-400'}">${v.plate}${v.is_pinned?` ${luc('star','w-3 h-3 inline')}`:''}</div>
             </div>
         </button>`;
     }).join('');
+    refreshIcons();
 }
 
 window.selectVehicle = async function(vin) {
@@ -71,8 +100,8 @@ async function loadVehicleData(vin) {
     // Telemetry badge
     const bbBadge = document.getElementById('home-bb-badge');
     if (bbBadge) {
-        if (v.has_blackbox) { bbBadge.textContent = '📡 Full Telemetry'; bbBadge.className = 'text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full'; }
-        else { bbBadge.textContent = '🔌 ECU Only'; bbBadge.className = 'text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full'; }
+        if (v.has_blackbox) { bbBadge.innerHTML = `${luc('satellite-dish','w-3 h-3 inline mr-0.5')} Full Telemetry`; bbBadge.className = 'text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full flex items-center gap-1'; }
+        else { bbBadge.innerHTML = `${luc('plug','w-3 h-3 inline mr-0.5')} ECU Only`; bbBadge.className = 'text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full flex items-center gap-1'; }
     }
 
     // Odometer
@@ -98,8 +127,8 @@ function renderComponentHealth(data) {
     if (!comps.length) { grid.innerHTML = '<p class="text-slate-500 text-sm p-4">No components tracked</p>'; return; }
 
     grid.innerHTML = comps.map(c => {
-        const icon = c.category === 'tire' ? '🛞' : c.category === 'brake_pad' ? '🛑' : '🔋';
-        const label = c.category === 'tire' ? `Tire ${c.position}` : c.category === 'brake_pad' ? `Brake ${c.position}` : 'EV Battery';
+        const icon = compIcon(c.category, 'w-4 h-4');
+        const label = c.category === 'tire' ? `Tire ${c.position}` : c.category === 'brake_pad' ? `Brake ${c.position}` : c.category === 'brake_disc' ? `Disc ${c.position}` : 'EV Battery';
         const wear = c.wear_percent || 0;
         const barColor = c.urgency === 'critical' ? 'bg-rose-500' : c.urgency === 'warning' ? 'bg-amber-500' : 'bg-emerald-500';
         const textColor = c.urgency === 'critical' ? 'text-rose-400' : c.urgency === 'warning' ? 'text-amber-400' : 'text-emerald-400';
@@ -123,13 +152,15 @@ function renderComponentHealth(data) {
             </div>
         </div>`;
     }).join('');
+    refreshIcons();
 }
 
 // ── VSI Tips ─────────────────────────────────────────────────────────────
 function renderVSITips(tips) {
     const el = document.getElementById('vsi-tips');
     if (!el || !tips?.length) return;
-    el.innerHTML = tips.map(t => `<div class="flex items-start gap-2 mb-1"><span class="text-brand-400 mt-0.5">💡</span><span class="text-slate-300 text-xs">${t}</span></div>`).join('');
+    el.innerHTML = tips.map(t => `<div class="flex items-start gap-2 mb-1"><span class="text-brand-400 mt-0.5">${luc('lightbulb','w-3.5 h-3.5')}</span><span class="text-slate-300 text-xs">${t}</span></div>`).join('');
+    refreshIcons();
 }
 
 // ── DTC Alerts ───────────────────────────────────────────────────────────
@@ -154,7 +185,8 @@ function renderAlerts(data) {
     const dtcs = data.dtc_alerts || [];
 
     if (!critical.length && !dtcs.length) {
-        list.innerHTML = '<div class="text-center py-12 text-slate-500"><p class="text-4xl mb-2">✅</p><p class="font-semibold">All clear!</p><p class="text-xs">No maintenance alerts</p></div>';
+        list.innerHTML = `<div class="text-center py-12 text-slate-500"><div class="flex justify-center mb-2">${luc('circle-check','w-10 h-10 text-emerald-500')}</div><p class="font-semibold">All clear!</p><p class="text-xs">No maintenance alerts</p></div>`;
+        refreshIcons();
         return;
     }
 
@@ -162,8 +194,8 @@ function renderAlerts(data) {
     // Component alerts
     critical.sort((a,b) => (a.urgency==='critical'?0:1) - (b.urgency==='critical'?0:1));
     critical.forEach(c => {
-        const icon = c.category === 'tire' ? '🛞' : c.category === 'brake_pad' ? '🛑' : '🔋';
-        const label = c.category === 'tire' ? `Tire ${c.position}` : c.category === 'brake_pad' ? `Brake ${c.position}` : 'EV Battery';
+        const icon = compIcon(c.category, 'w-5 h-5');
+        const label = c.category === 'tire' ? `Tire ${c.position}` : c.category === 'brake_pad' ? `Brake ${c.position}` : c.category === 'brake_disc' ? `Disc ${c.position}` : 'EV Battery';
         const isCrit = c.urgency === 'critical';
         const borderC = isCrit ? 'border-rose-500/30 bg-rose-500/5' : 'border-amber-500/20 bg-amber-500/5';
         const badgeC = isCrit ? 'bg-rose-500 text-white' : 'bg-amber-500 text-black';
@@ -178,18 +210,19 @@ function renderAlerts(data) {
             </div>
             <button onclick="getRepairQuote('${c.category}','${c.position||''}','${c.brand||''}','${c.wear_percent}')" 
                 class="mt-3 w-full bg-brand-600 hover:bg-brand-500 text-black text-xs font-bold py-2 rounded-lg transition-colors flex items-center justify-center gap-1.5">
-                💰 Get Repair Quote
+                ${luc('receipt','w-3.5 h-3.5')} Get Repair Quote
             </button>
         </div>`;
     });
     // DTC alerts
     dtcs.forEach(d => {
         html += `<div class="glass-card p-4 mb-3 border border-amber-500/20 bg-amber-500/5">
-            <div class="flex items-center gap-2 mb-1"><span class="font-mono text-amber-400 text-sm font-bold">⚠️ ${d.code}</span></div>
+            <div class="flex items-center gap-2 mb-1">${luc('triangle-alert','w-4 h-4 text-amber-400')}<span class="font-mono text-amber-400 text-sm font-bold">${d.code}</span></div>
             <p class="text-xs text-slate-300">${d.description}</p>
         </div>`;
     });
     list.innerHTML = html;
+    refreshIcons();
 }
 
 // ── Repair Quote ─────────────────────────────────────────────────────────
@@ -212,7 +245,7 @@ window.getRepairQuote = function(category, position, brand, wear) {
     const discount = Math.round(total * 0.08);
 
     output.innerHTML = `
-        <div class="text-center mb-4"><span class="text-3xl">🔧</span></div>
+        <div class="flex justify-center mb-4">${luc('wrench','w-8 h-8 text-brand-400')}</div>
         <h3 class="text-lg font-bold text-white text-center mb-4">AI Repair Estimate</h3>
         <div class="glass-card p-3 mb-3">
             <div class="flex justify-between text-sm mb-1"><span class="text-slate-400">${label} (${brand})</span><span class="text-white font-bold">€${partCost}</span></div>
@@ -220,13 +253,14 @@ window.getRepairQuote = function(category, position, brand, wear) {
             <div class="flex justify-between text-sm pt-2 border-t border-white/10"><span class="text-slate-300 font-semibold">Subtotal</span><span class="text-white font-bold">€${total}</span></div>
         </div>
         <div class="glass-card p-3 mb-3 border border-emerald-500/20 bg-emerald-500/5">
-            <div class="flex justify-between text-sm"><span class="text-emerald-400 font-semibold">🎫 CycleSync Discount</span><span class="text-emerald-400 font-bold">-€${discount}</span></div>
+            <div class="flex justify-between text-sm"><span class="text-emerald-400 font-semibold flex items-center gap-1">${luc('ticket','w-4 h-4')} CycleSync Discount</span><span class="text-emerald-400 font-bold">-€${discount}</span></div>
             <div class="flex justify-between text-lg pt-2 border-t border-emerald-500/20 mt-2"><span class="text-white font-bold">Total</span><span class="text-emerald-400 font-bold">€${total - discount}</span></div>
         </div>
-        <p class="text-[10px] text-slate-500 text-center mb-3">⚡ AI estimate — final price confirmed by mechanic</p>
+        <p class="text-[10px] text-slate-500 text-center mb-3 flex items-center justify-center gap-1">${luc('zap','w-3 h-3')} AI estimate — final price confirmed by mechanic</p>
         <button onclick="switchView('view-map')" class="w-full bg-brand-500 text-black font-bold py-2.5 rounded-xl text-sm">Find Nearest Mechanic →</button>
         <button onclick="document.getElementById('quote-modal').classList.add('hidden')" class="w-full mt-2 bg-transparent border border-white/20 text-slate-300 font-semibold py-2.5 rounded-xl text-sm">Close</button>
     `;
+    refreshIcons();
 };
 
 // ── SOS ──────────────────────────────────────────────────────────────────
@@ -279,21 +313,22 @@ function renderProfileTab() {
     const list = el('profile-vehicles');
     if (!list) return;
     list.innerHTML = driverData.vehicles.map(v => {
-        const icon = v.powertrain === 'electric' ? '⚡' : v.powertrain?.includes('hybrid') ? '🔋' : '⛽';
+        const badge = mfrBadge(v.manufacturer, 'sm');
         return `<div class="glass-card p-3 mb-2 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <span class="text-2xl">${icon}</span>
+                ${badge}
                 <div>
                     <div class="text-sm font-bold text-white">${v.manufacturer} ${v.model.replace(v.manufacturer+' ','')}</div>
                     <div class="text-[10px] text-slate-400">${v.plate} · ${v.year} · ${(v.odometer_km||0).toLocaleString()} km</div>
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                ${v.is_pinned ? '<span class="text-brand-400 text-sm">⭐</span>' : `<button onclick="pinVehicle('${v.vin}')" class="text-[10px] text-slate-500 hover:text-brand-400">Pin</button>`}
-                <button onclick="unlinkVehicle('${v.vin}')" class="text-[10px] text-slate-500 hover:text-rose-400 ml-1">✕</button>
+                ${v.is_pinned ? `<span class="text-brand-400">${luc('star','w-4 h-4')}</span>` : `<button onclick="pinVehicle('${v.vin}')" class="text-[10px] text-slate-500 hover:text-brand-400">Pin</button>`}
+                <button onclick="unlinkVehicle('${v.vin}')" class="text-[10px] text-slate-500 hover:text-rose-400 ml-1">${luc('x','w-3.5 h-3.5')}</button>
             </div>
         </div>`;
     }).join('');
+    refreshIcons();
 }
 
 window.pinVehicle = async function(vin) {
