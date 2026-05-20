@@ -2,7 +2,7 @@
  * Adjuster Portal — Investigation list → detail workflow
  * Backed by /api/db/investigations endpoints
  */
-import { incidentIcon, componentIcon, iconBrakeDisc, manufacturerBadge } from '/static/js/icons.js';
+import { incidentIcon, componentIcon, iconBrakeDisc, manufacturerBadge } from '/static/js/icons.js?v=17';
 
 let currentInvestigation = null;
 
@@ -76,7 +76,10 @@ function renderInvestigationList(investigations) {
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
                         <span class="font-mono font-bold text-white text-xs bg-black/40 px-2 py-1 rounded border border-slate-700">${inv.plate_number}</span>
-                        <span class="text-sm text-slate-300">${inv.manufacturer} ${inv.model_name}</span>
+                        <span class="inline-flex items-center gap-2 text-sm text-slate-300">
+                            ${manufacturerBadge(inv.manufacturer, 'sm')}
+                            <span>${inv.manufacturer} ${inv.model_name}</span>
+                        </span>
                         <span class="text-xs text-slate-500">${typeHtml}</span>
                         <span class="text-xs text-slate-500">${inv.incident_date}</span>
                     </div>
@@ -149,7 +152,7 @@ function renderInvestigationDetail(inv) {
     pb.className = `text-xs px-2 py-0.5 rounded-full font-medium ${prioColors[inv.priority] || ''}`;
 
     document.getElementById('detail-vehicle').textContent = inv.plate_number;
-    document.getElementById('detail-model').textContent = `${inv.manufacturer} ${inv.model_name} · ${inv.driver_name || ''}`;
+    document.getElementById('detail-model').innerHTML = `<span class="inline-flex items-center gap-2">${manufacturerBadge(inv.manufacturer, 'sm')}<span>${inv.manufacturer} ${inv.model_name} · ${inv.driver_name || ''}</span></span>`;
     document.getElementById('detail-date').textContent = inv.incident_date;
 
     const fraudColor = inv.fraud_risk_score >= 70 ? 'text-rose-400 animate-pulse' : inv.fraud_risk_score >= 40 ? 'text-amber-400' : 'text-emerald-400';

@@ -304,7 +304,7 @@ def get_vehicle_components(vin: str, status: Optional[str] = None):
 def search_vehicles_legacy(q: Optional[str] = ""):
     """Legacy search endpoint — redirects to new DB-backed search."""
     result = list_vehicles(q=q, per_page=50)
-    return [{"plate": v["plate"], "model": v["model"], "vsi": v["vsi_score"], "driver": v["driver"]} for v in result["vehicles"]]
+    return [{"plate": v["plate"], "model": v["model"], "manufacturer": v["manufacturer"], "vsi": v["vsi_score"], "driver": v["driver"]} for v in result["vehicles"]]
 
 @router.get("/api/vehicles/{plate}/passport")
 def get_passport_legacy(plate: str):

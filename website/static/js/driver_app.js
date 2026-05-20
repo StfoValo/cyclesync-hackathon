@@ -8,22 +8,57 @@ let componentData = null;
 const luc = (name, cls='w-4 h-4') => `<i data-lucide="${name}" class="${cls}"></i>`;
 const refreshIcons = () => { if (window.lucide) setTimeout(() => lucide.createIcons(), 10); };
 
-// Inline SVG icons (component-specific, not in Lucide)
+// ── Component icons (shared design with icons.js) ───────────────────────
 const svgTyre = (cls='w-4 h-4') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="5"/><line x1="12" y1="2" x2="12" y2="7"/><line x1="12" y1="17" x2="12" y2="22"/><line x1="2" y1="12" x2="7" y2="12"/><line x1="17" y1="12" x2="22" y2="12"/><line x1="4.93" y1="4.93" x2="8.46" y2="8.46"/><line x1="15.54" y1="15.54" x2="19.07" y2="19.07"/><line x1="19.07" y1="4.93" x2="15.54" y2="8.46"/><line x1="8.46" y1="15.54" x2="4.93" y2="19.07"/></svg>`;
-const svgBrakePad = (cls='w-4 h-4') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="12" rx="3"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="12" y1="10" x2="12" y2="14"/><line x1="16" y1="10" x2="16" y2="14"/><line x1="4" y1="18" x2="20" y2="18"/></svg>`;
-const svgBrakeDisc = (cls='w-4 h-4') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><line x1="12" y1="3" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="21"/><line x1="3" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="21" y2="12"/><rect x="1.5" y="9.5" width="4" height="5" rx="1.5" fill="currentColor" stroke="none" opacity="0.7"/></svg>`;
+
+// Brake pad — two ear mounting tabs (with bolt holes) + curved body with vertical friction grooves
+const svgBrakePad = (cls='w-4 h-4') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 C 3 9.2 4 8.8 5.2 8.8 C 6 8.8 6.6 8.8 7 8.8 C 7 5.8 7.9 4.2 9 4.2 C 10.1 4.2 11 5.8 11 8.8 L 13 8.8 C 13 5.8 13.9 4.2 15 4.2 C 16.1 4.2 17 5.8 17 8.8 C 17.4 8.8 18 8.8 18.8 8.8 C 20 8.8 21 9.2 21 11 L 20.6 14 C 20.2 16.6 18.6 17.2 16.8 17.6 C 13.5 18.4 10.5 18.4 7.2 17.6 C 5.4 17.2 3.8 16.6 3.4 14 Z"/><circle cx="9" cy="6.5" r="0.85"/><circle cx="15" cy="6.5" r="0.85"/><path d="M3.7 11.2 Q12 12.2 20.3 11.2"/><line x1="8" y1="12.5" x2="8" y2="16.7"/><line x1="12" y1="13" x2="12" y2="17.4"/><line x1="16" y1="12.5" x2="16" y2="16.7"/></svg>`;
+
+// Brake disc + caliper — drilled rotor with 5-lug hub + ribbed caliper straddling disc edge
+const svgBrakeDisc = (cls='w-4 h-4') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="12" r="9"/><circle cx="10" cy="12" r="6.5" opacity="0.55"/><circle cx="10" cy="12" r="2.5"/><circle cx="10" cy="12" r="0.55" fill="currentColor" stroke="none"/><circle cx="10" cy="9.7" r="0.42" fill="currentColor" stroke="none"/><circle cx="12.2" cy="11.3" r="0.42" fill="currentColor" stroke="none"/><circle cx="11.3" cy="14" r="0.42" fill="currentColor" stroke="none"/><circle cx="8.7" cy="14" r="0.42" fill="currentColor" stroke="none"/><circle cx="7.8" cy="11.3" r="0.42" fill="currentColor" stroke="none"/><circle cx="5" cy="8.5" r="0.32" fill="currentColor" stroke="none" opacity="0.65"/><circle cx="14" cy="6" r="0.32" fill="currentColor" stroke="none" opacity="0.65"/><circle cx="6" cy="15.5" r="0.32" fill="currentColor" stroke="none" opacity="0.65"/><circle cx="14" cy="18" r="0.32" fill="currentColor" stroke="none" opacity="0.65"/><circle cx="3.5" cy="12" r="0.32" fill="currentColor" stroke="none" opacity="0.65"/><circle cx="16" cy="12" r="0.32" fill="currentColor" stroke="none" opacity="0.65"/><path d="M14 7 L21.5 7 Q22.5 7 22.5 8 L22.5 16 Q22.5 17 21.5 17 L14 17 Z"/><line x1="16" y1="9" x2="16" y2="15"/><line x1="18" y1="9" x2="18" y2="15"/><line x1="20" y1="9" x2="20" y2="15"/><line x1="22.5" y1="12" x2="23.6" y2="12"/></svg>`;
+
 const svgBattery = (cls='w-4 h-4') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M22 11v2"/><path d="M6 11h4M10 9v6"/></svg>`;
 
-// Manufacturer badge (coloured initials)
-const MFR_COLORS = { BMW:'#1C69D4', Mercedes:'#B0B3B8', Audi:'#BB0A21', Volkswagen:'#001E62', Fiat:'#C8102E', Ferrari:'#D40000', Lamborghini:'#DBA800', Toyota:'#CC0000', Ford:'#003478', Opel:'#FFC200', Renault:'#EFDF00', Peugeot:'#002D62', Tesla:'#CC0000', Volvo:'#003057', Hyundai:'#002C5F', Kia:'#05141F', Smart:'#00A0E2', Dacia:'#005899', Abarth:'#D4000A' };
-const MFR_INITIALS = { BMW:'BMW', Mercedes:'MB', Audi:'AU', Volkswagen:'VW', Fiat:'FI', Ferrari:'FE', Lamborghini:'LB', Toyota:'TY', Ford:'FO', Opel:'OP', Renault:'RE', Peugeot:'PG', Tesla:'T', Volvo:'VO', Hyundai:'HY', Kia:'KI', Smart:'S#', Dacia:'DA', Abarth:'AB' };
-function mfrBadge(manufacturer, size='sm') {
-    const key = Object.keys(MFR_INITIALS).find(k => manufacturer?.toLowerCase().includes(k.toLowerCase()));
-    const initials = key ? MFR_INITIALS[key] : (manufacturer?.substring(0,2).toUpperCase() || '??');
-    const color = key ? (MFR_COLORS[key] || '#475569') : '#475569';
-    const dim = size === 'lg' ? 'w-9 h-9 text-[10px]' : 'w-6 h-6 text-[9px]';
-    return `<span class="${dim} rounded-md flex items-center justify-center font-black tracking-tight shrink-0" style="background:${color}22;border:1px solid ${color}55;color:${color}">${initials}</span>`;
+// ── Manufacturer Logos (files under /static/img/logos/) ──────────────────
+const MFR_LOGO_FILES = new Set([
+    'abarth', 'alfa', 'audi', 'bmw', 'dacia', 'ferrari', 'fiat', 'ford',
+    'hyundai', 'kia', 'lamborghini', 'maserati', 'mercedes', 'opel', 'peugeot',
+    'porsche', 'renault', 'skoda', 'smart', 'tesla', 'toyota', 'volkswagen', 'volvo',
+]);
+
+const MFR_ALIASES = {
+    'mercedes-benz': 'mercedes',
+    'mercedes benz': 'mercedes',
+    'vw':            'volkswagen',
+    'alfa romeo':    'alfa',
+    'alfaromeo':     'alfa',
+};
+
+function normalizeMfr(name) {
+    if (!name) return '';
+    const lower = String(name).toLowerCase().trim();
+    if (MFR_ALIASES[lower]) return MFR_ALIASES[lower];
+    if (MFR_LOGO_FILES.has(lower)) return lower;
+    for (const key of MFR_LOGO_FILES) {
+        if (lower.startsWith(key)) return key;
+    }
+    for (const [alias, target] of Object.entries(MFR_ALIASES)) {
+        if (lower.startsWith(alias)) return target;
+    }
+    return '';
 }
+
+function mfrBadge(manufacturer, size='sm') {
+    const dimMap = { xs:'w-5 h-5', sm:'w-7 h-7', md:'w-9 h-9', lg:'w-12 h-12' };
+    const dim = dimMap[size] || dimMap.sm;
+    const key = normalizeMfr(manufacturer);
+    if (key) {
+        return `<span class="${dim} inline-flex items-center justify-center shrink-0" title="${manufacturer || ''}"><img src="/static/img/logos/${key}.svg?v=17" alt="${manufacturer || ''}" class="w-full h-full object-contain" loading="lazy"/></span>`;
+    }
+    const initials = (manufacturer || '??').replace(/[^A-Za-z]/g, '').substring(0, 2).toUpperCase();
+    return `<span class="${dim} rounded-md flex items-center justify-center font-black tracking-tight bg-slate-700/70 border border-slate-500/40 text-slate-200 text-[10px] shrink-0" title="${manufacturer || ''}">${initials}</span>`;
+}
+
 function compIcon(category, cls='w-4 h-4') {
     if (category === 'tire') return svgTyre(cls);
     if (category === 'brake_pad') return svgBrakePad(cls);

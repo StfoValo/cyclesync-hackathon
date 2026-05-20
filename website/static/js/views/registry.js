@@ -1,7 +1,7 @@
 /**
  * Vehicle Registry Module — Table, filters, pagination
  */
-import { manufacturerBadge, powertrainIcon, iconBlackboxActive, iconBlackboxNone } from '/static/js/icons.js';
+import { manufacturerBadge, powertrainIcon, iconBlackboxActive, iconBlackboxNone } from '/static/js/icons.js?v=17';
 
 let currentPage = 1;
 let currentSort = 'plate_number';

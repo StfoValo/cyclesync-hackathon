@@ -1,17 +1,17 @@
-import { initTelemetry } from './views/telemetry.js?v=13';
-import { initActuarial } from './views/actuarial.js?v=13';
-import { initPredictiveAsset } from './views/predictive_asset.js?v=13';
-import { initAIStrategy } from './views/ai_strategy.js?v=13';
-import { initESG } from './views/esg.js?v=13';
-import { initAdjuster } from './views/adjuster.js?v=13';
+import { initTelemetry } from './views/telemetry.js?v=17';
+import { initActuarial } from './views/actuarial.js?v=17';
+import { initPredictiveAsset } from './views/predictive_asset.js?v=17';
+import { initAIStrategy } from './views/ai_strategy.js?v=17';
+import { initESG } from './views/esg.js?v=17';
+import { initAdjuster } from './views/adjuster.js?v=17';
 
 const viewModules = {
-    'telemetry-view':  { path: '/static/partials/telemetry_tab.html?v=13',  init: initTelemetry },
-    'executive-view':  { path: '/static/partials/executive_tab.html?v=13',  init: initActuarial },
-    'asset-view':      { path: '/static/partials/asset_tab.html?v=13',      init: initPredictiveAsset },
-    'ai-view':         { path: '/static/partials/ai_tab.html?v=13',         init: initAIStrategy },
-    'esg-view':        { path: '/static/partials/esg_tab.html?v=13',        init: initESG },
-    'adjuster-view':   { path: '/static/partials/adjuster_tab.html?v=13',   init: initAdjuster }
+    'telemetry-view':  { path: '/static/partials/telemetry_tab.html?v=17',  init: initTelemetry },
+    'executive-view':  { path: '/static/partials/executive_tab.html?v=17',  init: initActuarial },
+    'asset-view':      { path: '/static/partials/asset_tab.html?v=17',      init: initPredictiveAsset },
+    'ai-view':         { path: '/static/partials/ai_tab.html?v=17',         init: initAIStrategy },
+    'esg-view':        { path: '/static/partials/esg_tab.html?v=17',        init: initESG },
+    'adjuster-view':   { path: '/static/partials/adjuster_tab.html?v=17',   init: initAdjuster }
 };
 
 const loadedViews = new Set();
@@ -83,5 +83,5 @@ document.addEventListener('DOMContentLoaded', () => {
         loadView(activeItem.getAttribute('data-target'));
     }
 
-    console.log('CycleSync Frontend Shell Initialized v13.');
+    console.log('CycleSync Frontend Shell Initialized v14.');
 });

@@ -1,4 +1,4 @@
-import { componentIcon } from '/static/js/icons.js';
+import { componentIcon } from '/static/js/icons.js?v=17';
 
 let tiresChart, brakesChart, batteriesChart;
 let cachedEsgData = null;

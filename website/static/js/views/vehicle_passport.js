@@ -1,7 +1,7 @@
 /**
  * Vehicle Digital Passport — works with new DB-backed API
  */
-import { manufacturerBadge, powertrainIcon, componentIcon, iconBlackboxActive } from '/static/js/icons.js';
+import { manufacturerBadge, powertrainIcon, componentIcon, iconBlackboxActive } from '/static/js/icons.js?v=17';
 
 let currentPassportData = null;
 
@@ -77,6 +77,7 @@ function renderDropdown(results) {
         return `<button class="vehicle-search-result w-full flex items-center justify-between px-4 py-3 hover:bg-white/5 transition-colors text-left border-b border-white/5 last:border-0" data-plate="${v.plate}">
             <div class="flex items-center gap-3">
                 <span class="font-mono font-bold text-white text-sm bg-black/40 px-2 py-1 rounded border border-slate-700">${v.plate}</span>
+                ${manufacturerBadge(v.manufacturer, 'sm')}
                 <div><div class="text-sm font-medium text-white">${v.model}</div><div class="text-xs text-slate-400">${v.driver}</div></div>
             </div>
             <span class="font-bold text-sm ${vsiColor}">${v.vsi}/100</span>
